@@ -103,21 +103,20 @@
         /* --- Error Message Styling --- */
         .error-message {
             display: none; /* Hidden by default */
-            position: absolute; /* Or relative within its container */
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            position: absolute; /* Position relative to parent .content */
+            top: 10px; /* Position near top */
+            left: 10px;
+            right: 10px;
             background-color: rgba(255, 235, 238, 0.95); /* Light red background */
             color: #d32f2f; /* Darker red text */
-            padding: 15px 20px;
+            padding: 10px 15px;
             border: 1px solid #ef9a9a; /* Red border */
             border-radius: 6px;
             z-index: 10;
             text-align: center;
+            font-size: 0.9em;
             font-weight: 500;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            width: 80%; /* Adjust as needed */
-            max-width: 300px;
         }
         .error-message.visible {
             display: block;
@@ -129,6 +128,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 25px;
+            position: relative; /* Keep it above potential error messages */
+            z-index: 1;
         }
 
         .title {
@@ -210,8 +211,9 @@
             max-width: 250px; /* Limit QR size */
             width: 80%; /* Responsive width */
             min-height: 100px; /* Prevent collapse if image fails */
-            background-color: #eee; /* Placeholder bg */
+            background-color: #f0f0f0; /* Placeholder bg */
             border-radius: 4px;
+            border: 1px solid #eee; /* Add base border */
         }
          /* Specific error message for QR */
         .qr-error-message {
@@ -224,7 +226,11 @@
              font-size: 0.9em;
              text-align: center;
              padding: 10px;
-             width: 100%;
+             width: calc(100% - 20px); /* Prevent text overflow */
+         }
+         .qr-code-container.qr-error {
+             background-color: #fce4ec; /* Light pinkish background on error */
+             border-color: #f48fb1; /* Pinkish border */
          }
          .qr-code-container.qr-error .qr-error-message {
              display: block;
@@ -238,7 +244,7 @@
             display: block;
             width: 100%; /* Make image responsive */
             height: auto;
-            border: 1px solid #eee; /* Slight border */
+            border: none; /* Remove border from image itself */
             border-radius: 4px; /* Match container */
         }
         /* Dollar sign overlay - approximate position */
@@ -256,6 +262,7 @@
              align-items: center;
              box-shadow: 0 0 8px rgba(0,0,0,0.2);
              border: 3px solid #f0f0f0; /* Light border */
+             z-index: 2; /* Ensure it's above QR image */
          }
          .qr-overlay span {
              font-size: 24px; /* Adjust size */
@@ -286,6 +293,7 @@
         .animated-button { /* Common class for animated buttons */
             display: inline-flex;
             align-items: center;
+            justify-content: center; /* Center content */
             text-decoration: none;
             font-size: 1em;
             font-weight: 500;
@@ -295,6 +303,8 @@
             transition: transform 0.15s ease-out, background-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Base shadow */
             border: none; /* Remove default border */
+            line-height: 1.4; /* Ensure text aligns nicely */
+            vertical-align: middle; /* Align nicely with inline elements */
         }
 
         .animated-button:hover {
@@ -311,6 +321,7 @@
         .download-link {
             background-color: #e7f3ff; /* Light blue background */
             color: #007bff; /* Standard link blue */
+            margin-bottom: 20px; /* Add some space below download button */
         }
         .download-link:hover {
             background-color: #d0e8ff;
@@ -327,7 +338,7 @@
             margin-right: 8px;
             position: relative;
             color: currentColor; /* Inherit color from parent link */
-            /* No separate transition needed, handled by parent */
+            flex-shrink: 0; /* Prevent icon from shrinking */
         }
         /* Arrow stem */
         .download-icon::before {
@@ -368,7 +379,7 @@
         .footer-text {
             font-size: 0.8em;
             color: #888;
-            margin-top: 25px; /* Adjusted margin */
+            margin-top: 15px; /* Adjusted margin */
             line-height: 1.4;
         }
 
@@ -400,6 +411,7 @@
             height: 22px;
             margin-right: 8px; /* Space between icon and text */
             vertical-align: middle; /* Better alignment */
+            flex-shrink: 0;
         }
 
         /* --- Expired State --- */
@@ -479,6 +491,7 @@
                 <div class="qr-error-message" id="qr-error-msg">
                     Could not load QR Code. <br> Please refresh.
                 </div>
+                <!-- QR Code Image -->
                 <img src="qr.PNG"
                      alt="ABA KHQR Code for Donation to Ozo. Designer"
                      class="qr-code-img"
@@ -496,11 +509,6 @@
                 <div class="or-text">or</div>
             </div>
 
-             <!-- Donation Message -->
-            <div class="donation-message">
-                THANK FOR DONATION
-            </div>
-
             <!-- Download Link/Button -->
             <a id="download-btn" class="download-link animated-button" href="qr.PNG" download="ozo-designer-donation-khqr.png">
                 <span class="download-icon">
@@ -508,6 +516,11 @@
                 </span>
                 Download QR
             </a>
+
+             <!-- Donation Message -->
+            <div class="donation-message">
+                THANK FOR DONATION
+            </div>
 
             <!-- Footer Text (Optional) -->
             <p class="footer-text">
@@ -539,27 +552,37 @@
 
         // --- Configuration ---
         const initialTimeText = timeLeftDisplay.textContent; // e.g., "02:53"
-        const telegramBotToken = "7723636276:AAENDdywHKAZL4PAaUZArr_iKmD_3UlE8C8"; // <<< !!! INSECURE - REPLACE WITH SERVER-SIDE SOLUTION !!!
+        // !!! WARNING: Storing tokens client-side is INSECURE! Replace with a server-side solution. !!!
+        const telegramBotToken = "7723636276:AAENDdywHKAZL4PAaUZArr_iKmD_3UlE8C8";
         const telegramChatId = "1272791365"; // Your User ID
 
         // --- Error Handling ---
         function showGeneralError(message = "An error occurred. Please try refreshing.") {
-            generalErrorMsg.textContent = message;
-            generalErrorMsg.classList.add('visible');
+            if (generalErrorMsg) {
+                generalErrorMsg.textContent = message;
+                generalErrorMsg.classList.add('visible');
+            } else {
+                console.error("General error message container not found.");
+            }
         }
 
         function handleQrError() {
             console.error("QR Code image failed to load.");
-            if (qrContainer) qrContainer.classList.add('qr-error');
-            // Optionally show the general error too, or just rely on the QR-specific one
-            // showGeneralError("Could not load the QR code image.");
+            if (qrContainer) {
+                 qrContainer.classList.add('qr-error');
+            } else {
+                 console.error("QR container not found to show error state.");
+                 showGeneralError("Could not load the QR code image."); // Fallback general error
+            }
+            // Hide overlay if QR fails
+             if(qrOverlay) qrOverlay.style.display = 'none';
         }
 
         // Global error handler (catches general JS errors)
         window.onerror = function(message, source, lineno, colno, error) {
-            console.error("Global Error:", message, "at", source, lineno, colno, error);
+            console.error("Global Error:", message, "at", source, ":", lineno, ":", colno, error);
             // Avoid flooding with errors, maybe show only once or if specific conditions met
-            if (!generalErrorMsg.classList.contains('visible')) {
+            if (!generalErrorMsg || !generalErrorMsg.classList.contains('visible')) {
                  showGeneralError("A runtime error occurred. Please refresh.");
             }
             return true; // Prevents default browser error handling (optional)
@@ -567,6 +590,7 @@
 
         // --- Timer Logic ---
         function parseTime(timeString) {
+            if (!timeString) return 173; // Default if element/content missing
             const parts = timeString.split(':');
             if (parts.length === 2) {
                 const minutes = parseInt(parts[0], 10);
@@ -586,11 +610,17 @@
             // Ensure timer doesn't run multiple times if called again
             if (timerInterval) clearInterval(timerInterval);
 
+             // Ensure we have the element before starting
+             if (!timeLeftDisplay) {
+                 console.error("Timer display element not found.");
+                 return;
+             }
+
             timerInterval = setInterval(() => {
                 if (totalSeconds <= 0) {
                     clearInterval(timerInterval);
                     timeLeftDisplay.textContent = "Expired";
-                    paymentContainer.classList.add('expired');
+                    if(paymentContainer) paymentContainer.classList.add('expired');
 
                     if(downloadBtn) {
                         downloadBtn.removeAttribute('href');
@@ -618,11 +648,13 @@
         if (downloadBtn) {
             // Ensure href is set initially if not in HTML
             if (qrCodeImage && !downloadBtn.getAttribute('href')) {
+                console.warn("Download button href missing, setting from image src.");
                 downloadBtn.href = qrCodeImage.src;
             }
 
             downloadBtn.addEventListener('click', (event) => {
-                if (paymentContainer.classList.contains('expired')) {
+                 // Check parent container exists before checking classList
+                if (paymentContainer && paymentContainer.classList.contains('expired')) {
                     event.preventDefault();
                     console.log("Download blocked: Expired.");
                     return;
@@ -634,18 +666,22 @@
                  }
                 console.log("Download initiated:", downloadBtn.getAttribute('download'));
             });
+        } else {
+             console.warn("Download button element not found.");
         }
 
         // --- PWA Service Worker Registration ---
         if ('serviceWorker' in navigator) {
           window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js') // Use absolute path from root
+            // Use RELATIVE path for GitHub Pages compatibility
+            navigator.serviceWorker.register('sw.js')
               .then(registration => {
                 console.log('ServiceWorker registration successful with scope: ', registration.scope);
               })
               .catch(error => {
-                console.log('ServiceWorker registration failed: ', error);
-                // Optionally show a non-critical error to user/console
+                console.error('ServiceWorker registration failed: ', error);
+                // Optionally show a non-critical error, maybe not blocking general error message
+                // showGeneralError('Could not initialize offline features.');
               });
           });
         } else {
@@ -661,30 +697,55 @@
                 return;
             }
 
-            const message = encodeURIComponent("🔔 Visitor on ABA KHQR Donation Page!");
-            const url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${telegramChatId}&text=${message}`;
+            // Basic check for bot token format (doesn't guarantee validity)
+            if (!/^\d{8,10}:[a-zA-Z0-9_-]{35}$/.test(telegramBotToken)) {
+                 console.error("Invalid Telegram Bot Token format detected.");
+                 // Don't show this sensitive error to the user, just log it.
+                 return; // Stop execution
+            }
 
-            fetch(url, { method: 'GET' }) // Using GET for simplicity here
-                .then(response => response.json())
+
+            const messageText = `🔔 Visitor on ABA KHQR Donation Page!\nTime: ${new Date().toLocaleString()}\nUser Agent: ${navigator.userAgent.substring(0, 100)}...`; // Add timestamp & UA
+            const encodedMessage = encodeURIComponent(messageText);
+            const url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${telegramChatId}&text=${encodedMessage}&parse_mode=Markdown`; // Use Markdown for potential formatting
+
+            fetch(url, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({}) }) // Use POST as recommended by TG API
+                .then(response => {
+                    // Check if response is ok (status in the range 200-299)
+                    if (!response.ok) {
+                        // If not ok, read the response body for error details
+                        return response.json().then(errData => {
+                            throw new Error(errData.description || `HTTP error! status: ${response.status}`);
+                        });
+                    }
+                    return response.json(); // If ok, parse the JSON response
+                })
                 .then(data => {
                     if (data.ok) {
                         console.log('Telegram notification sent successfully.');
                     } else {
-                        console.error('Telegram notification failed:', data.description);
-                        // Optional: Show a non-blocking error in console, don't alert user
+                        // This case might be less likely if response.ok check is robust
+                        console.error('Telegram notification failed (API level):', data.description);
                     }
                 })
                 .catch(error => {
-                    console.error('Error sending Telegram notification:', error);
-                    // Network error or fetch issue
+                    console.error('Error sending Telegram notification:', error.message || error);
+                    // Could be network error, fetch issue, or error thrown from response check
+                    // Avoid showing this error directly to user unless debugging
                 });
         }
 
         // --- Initialisation ---
         window.addEventListener('load', () => {
+            let qrHasError = qrContainer && qrContainer.classList.contains('qr-error');
+
             // Start the timer only if the QR hasn't failed initially
-            if (!qrContainer || !qrContainer.classList.contains('qr-error')) {
+            if (!qrHasError) {
                  startTimer();
+            } else {
+                console.log("Timer not started due to QR load error.");
+                // Optionally update timer display immediately if QR fails on load
+                 if (timeLeftDisplay) timeLeftDisplay.textContent = "Error";
             }
             // Send Telegram notification on page load
             sendTelegramNotification();
