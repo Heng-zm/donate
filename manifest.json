@@ -1,0 +1,21 @@
+{
+  "name": "ABA KHQR Donation - Ozo. Designer",
+  "short_name": "KHQR Donate",
+  "description": "Donate to Ozo. Designer via ABA KHQR",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f0f2f5",
+  "theme_color": "#e10a17",
+  "icons": [
+    {
+      "src": "icon-192.png", // <<< YOU MUST CREATE THIS IMAGE (192x192px)
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png", // <<< YOU MUST CREATE THIS IMAGE (512x512px)
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
