@@ -5,7 +5,7 @@
   "start_url": ".",
   "display": "standalone",
   "background_color": "#f0f2f5",
-  "theme_color": "#e10a17",
+  "theme_color": "#e10a1o",
   "icons": [
     {
       "src": "icon-192.png", // <<< YOU MUST CREATE THIS IMAGE (192x192px)
