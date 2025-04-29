@@ -139,29 +139,25 @@
 
         /* Recipient Info */
         .recipient-info {
-            margin-bottom: 20px;
+            margin-bottom: 20px; /* Reduced margin since amount is separate */
         }
 
         .recipient-name {
             font-size: 0.9em;
             color: #666;
-            margin-bottom: 8px; /* Increased spacing */
+            margin-bottom: 8px; /* Spacing */
             text-transform: uppercase; /* Match original */
         }
 
-        .amount {
-            font-size: 1.1em; /* Adjusted size for longer text */
+        /* "THANK FOR DONATION" text - using its own class for clarity */
+        .donation-message {
+            font-size: 1.1em; /* Adjusted size */
             font-weight: bold;
             color: #003366; /* Dark blue */
             line-height: 1.3; /* Adjust line height if text wraps */
             word-wrap: break-word; /* Allow text to wrap */
-        }
-
-        .currency { /* Not used in "THANK FOR DONATION" but kept for structure */
-            font-size: 0.8em;
-            font-weight: normal;
-            color: #555;
-            margin-left: 5px;
+            margin-top: 15px; /* Add space above the message */
+            margin-bottom: 20px; /* Space below the message */
         }
 
         /* Dashed Separator */
@@ -224,7 +220,7 @@
         .or-text {
             font-size: 0.9em;
             color: #777;
-            margin-bottom: 15px;
+            margin-bottom: 15px; /* Space before download link */
         }
 
         /* Download Button/Link */
@@ -238,7 +234,7 @@
             cursor: pointer;
             padding: 8px 15px;
             border-radius: 5px;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s ease, color 0.2s ease; /* Added color transition */
         }
 
         .download-link:hover {
@@ -252,7 +248,8 @@
             height: 18px; /* Slightly taller */
             margin-right: 8px;
             position: relative;
-            color: #007bff; /* Icon color */
+            color: #007bff; /* Icon color - Inherit doesn't work directly with currentColor on pseudos */
+            transition: color 0.2s ease; /* Add transition for icon color */
         }
         /* Arrow stem */
         .download-icon::before {
@@ -263,7 +260,7 @@
             transform: translateX(-50%);
             width: 2px; /* Stem thickness */
             height: 12px; /* Stem height */
-            background-color: currentColor;
+            background-color: currentColor; /* Use parent's color */
         }
         /* Arrowhead */
          .download-icon::after {
@@ -274,8 +271,8 @@
              transform: translateX(-50%) rotate(45deg);
              width: 8px; /* Arrowhead size */
              height: 8px;
-             border-right: 2px solid currentColor;
-             border-bottom: 2px solid currentColor;
+             border-right: 2px solid currentColor; /* Use parent's color */
+             border-bottom: 2px solid currentColor; /* Use parent's color */
          }
          /* Top bar of download tray */
          .download-icon span.tray-top {
@@ -285,7 +282,7 @@
              left: 0;
              width: 100%;
              height: 2px;
-             background-color: currentColor;
+             background-color: currentColor; /* Use parent's color */
          }
 
 
@@ -293,7 +290,7 @@
         .footer-text {
             font-size: 0.8em;
             color: #888;
-            margin-top: 15px; /* Adjusted margin */
+            margin-top: 25px; /* Adjusted margin */
             line-height: 1.4;
         }
 
@@ -327,18 +324,9 @@
             width: 22px; /* Icon size */
             height: 22px;
             margin-right: 8px; /* Space between icon and text */
-            fill: currentColor; /* Use the link's color */
+            /* fill: currentColor; */ /* Fill is for SVG, not relevant for IMG */
+            vertical-align: middle; /* Better alignment */
         }
-
-        /* Optional: Hide text if you only want the icon */
-        /*
-        .telegram-link span {
-            display: none;
-        }
-        .telegram-link svg {
-             margin-right: 0;
-        }
-        */
 
         /* Expired State */
         .expired #qr-code {
@@ -349,8 +337,8 @@
             /* Instead of display:none, we disable it visually/functionally */
             pointer-events: none;
             cursor: default;
-            color: #aaa;
-            background-color: transparent; /* Remove hover effect if any */
+            color: #aaa; /* Grey out text */
+            background-color: transparent; /* Remove hover effect */
         }
          .expired #download-btn .download-icon {
              color: #aaa; /* Grey out icon */
@@ -365,9 +353,15 @@
              display: none; /* Hide overlay when expired */
          }
          .expired .timer {
-            color: #e10a17 !important; /* Make timer text red */
+            color: #e10a17; /* Make timer text red */
          }
-        
+         .expired .timer-icon {
+            border-color: #e10a17; /* Make timer icon border red */
+         }
+         .expired .timer-icon::before {
+            background-color: #e10a17; /* Make timer icon dot red */
+         }
+
 
     </style>
 </head>
@@ -393,7 +387,6 @@
             <!-- Recipient Info -->
             <div class="recipient-info">
                 <div class="recipient-name">Ozo. Designer</div>
-                
             </div>
 
             <!-- Separator -->
@@ -402,11 +395,11 @@
             <!-- QR Code -->
             <div class="qr-code-container">
                 <!--
-                    IMPORTANT: Replace 'qr.png' with the actual URL or path to your
-                    QR code image file. This path needs to be accessible by the browser.
+                    IMPORTANT: Make sure 'qr.PNG' exists in the same directory as this HTML file,
+                    or update the path accordingly. The filename is case-sensitive on some servers.
                 -->
                 <img src="qr.PNG"
-                     alt="ABA KHQR Code for Donation"
+                     alt="ABA KHQR Code for Donation to Ozo. Designer"
                      class="qr-code-img"
                      id="qr-code">
                 <!-- Dollar Sign Overlay -->
@@ -420,24 +413,27 @@
                 <div class="scan-text">Scan to pay</div>
                 <div class="or-text">or</div>
             </div>
-            <div class="amount">
-                    THANK FOR DONATION<span class="currency"></span>
-                </div>
+
+             <!-- Donation Message -->
+            <div class="donation-message">
+                THANK FOR DONATION
+            </div>
+
             <!-- Download Link/Button -->
             <!--
-                IMPORTANT: Update href="qr.png" if your image path is different.
+                IMPORTANT: Update href="qr.PNG" if your image path is different.
                            Update download=".." for the desired filename.
             -->
-            <a id="download-btn" class="download-link" href="qr.png" download="chuo-kimheng-donation-khqr.png">
+            <a id="download-btn" class="download-link" href="qr.PNG" download="ozo-designer-donation-khqr.png">
                 <span class="download-icon">
                     <span class="tray-top"></span> <!-- Element for top bar of icon -->
                 </span>
                 Download QR
             </a>
 
-            <!-- Footer Text -->
+            <!-- Footer Text (Optional - could be removed if not needed) -->
             <p class="footer-text">
-                
+                <!-- Example: This KHQR code is valid for a limited time. -->
             </p>
 
         </main> <!-- End of main content -->
@@ -446,9 +442,10 @@
         <footer class="footer-social">
              <!--
                 IMPORTANT: Replace the href below with your actual Telegram link.
+                Make sure 'telegram.png' exists in the same directory or update the path.
             -->
             <a href="https://t.me/m11mmm112" target="_blank" rel="noopener noreferrer" class="telegram-link" aria-label="Contact us on Telegram">
-                <img src="telegram.png"
+                <img src="telegram.png" alt="Telegram logo"> <!-- Added alt text -->
                 <span>Join on Telegram</span> <!-- Optional Text -->
             </a>
         </footer>
@@ -459,41 +456,47 @@
         // --- Timer Logic ---
         const timeLeftDisplay = document.getElementById('time-left');
         const paymentContainer = document.getElementById('payment-container');
-        const initialTimeText = timeLeftDisplay.textContent; // e.g., "05:53"
         const downloadBtn = document.getElementById('download-btn');
-        const qrCodeImage = document.getElementById('qr-code');
+        const qrCodeImage = document.getElementById('qr-code'); // Needed? Maybe just for download src check
 
+        // Function to parse time string (MM:SS) into seconds
         function parseTime(timeString) {
             const parts = timeString.split(':');
             if (parts.length === 2) {
                 const minutes = parseInt(parts[0], 10);
                 const seconds = parseInt(parts[1], 10);
+                // Check if parsing resulted in valid numbers
                 if (!isNaN(minutes) && !isNaN(seconds)) {
                     return minutes * 60 + seconds;
                 }
             }
-            // Fallback: Default to 2 minutes 53 seconds (173 seconds) if parsing fails
+            // Fallback: Default to 2 minutes 53 seconds (173 seconds) if parsing fails or format is unexpected
+            console.warn("Could not parse initial time string:", timeString, ". Defaulting to 173 seconds.");
             return 173;
         }
 
-        let totalSeconds = parseTime(initialTimeText);
+        let totalSeconds = parseTime(timeLeftDisplay.textContent); // Get initial time from HTML
 
+        // Start the countdown timer
         const timerInterval = setInterval(() => {
+            // Check if timer has run out
             if (totalSeconds <= 0) {
-                clearInterval(timerInterval);
-                timeLeftDisplay.textContent = "Expired";
-                paymentContainer.classList.add('expired'); // Add class to trigger CSS changes
+                clearInterval(timerInterval); // Stop the interval
+                timeLeftDisplay.textContent = "Expired"; // Update display text
+                paymentContainer.classList.add('expired'); // Add 'expired' class to container for CSS changes
 
-                // Fully disable download link (already visually styled via CSS .expired)
+                // Ensure download link is not functional (already styled via CSS .expired)
                 if(downloadBtn) {
-                    downloadBtn.removeAttribute('href'); // Remove link target
+                    downloadBtn.removeAttribute('href'); // Remove the link target
+                    downloadBtn.removeAttribute('download'); // Remove download attribute
                 }
                 console.log("Timer expired.");
-                return;
+                return; // Exit the function
             }
 
             totalSeconds--; // Decrement seconds
 
+            // Calculate remaining minutes and seconds
             const minutes = Math.floor(totalSeconds / 60);
             const seconds = totalSeconds % 60;
 
@@ -501,32 +504,37 @@
             const formattedMinutes = String(minutes).padStart(2, '0');
             const formattedSeconds = String(seconds).padStart(2, '0');
 
+            // Update the display
             timeLeftDisplay.textContent = `${formattedMinutes}:${formattedSeconds}`;
 
-        }, 1000); // Update every second
+        }, 1000); // Run this function every 1000 milliseconds (1 second)
 
         // --- Download QR Logic ---
-        // Ensure the href is initially set correctly (also set in HTML)
-        if (downloadBtn && qrCodeImage) {
-             // Make sure the initial href is the image source
-             if (!downloadBtn.getAttribute('href')) {
-                 downloadBtn.href = qrCodeImage.src;
-             }
+        // Ensure the download link initially points to the correct image source
+        // This acts as a fallback if the HTML href isn't set, but it's better to set it in HTML.
+        if (downloadBtn && qrCodeImage && !downloadBtn.getAttribute('href')) {
+             console.warn("Download button href not set in HTML, setting from image src.");
+             downloadBtn.href = qrCodeImage.src;
         }
 
-        // Add click listener primarily for logging or preventing action when expired
+        // Add click listener to the download button to prevent action when expired
         if (downloadBtn) {
             downloadBtn.addEventListener('click', (event) => {
                 // Check if the container has the 'expired' class
                 if (paymentContainer.classList.contains('expired')) {
-                    event.preventDefault(); // Prevent default link behavior (download)
+                    event.preventDefault(); // Prevent the default link behavior (download/navigation)
                     console.log("Download blocked: QR code has expired.");
+                    // Optionally provide user feedback e.g., alert('This QR code has expired.');
                     return;
                 }
-                console.log("Download initiated for:", downloadBtn.href);
-                // Note: Browser security (CORS) might still prevent direct download
-                // if the image 'qr.png' is hosted on a different domain than the page
-                // and lacks appropriate CORS headers. For local/same-domain images, this works.
+                // Log if download is proceeding (optional)
+                console.log("Download initiated for:", downloadBtn.getAttribute('download'));
+
+                // Note on Cross-Origin Downloads:
+                // If 'qr.PNG' were hosted on a different domain (e.g., a CDN) without proper
+                // CORS (Cross-Origin Resource Sharing) headers (specifically 'Access-Control-Allow-Origin'),
+                // the browser might block the download initiated via JavaScript or even the direct 'download' attribute.
+                // For images served from the same origin as the HTML page, this works reliably.
             });
         }
 
