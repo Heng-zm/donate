@@ -13,9 +13,9 @@
       "type": "image/png"
     },
     {
-      "src": "icon-512.png", // <<< YOU MUST CREATE THIS IMAGE (512x512px)
+      "src": "icon.jpeg", // <<< YOU MUST CREATE THIS IMAGE (512x512px)
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/jpeg"
     }
   ]
 }
