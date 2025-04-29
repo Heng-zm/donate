@@ -4,8 +4,8 @@
   "description": "Donate to Ozo. Designer via ABA KHQR",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#f0f2f5",
-  "theme_color": "#e10a1o",
+  "background_color": "00459D",
+  "theme_color": "00459D",
   "icons": [
     {
       "src": "icon-192.png", // <<< YOU MUST CREATE THIS IMAGE (192x192px)
