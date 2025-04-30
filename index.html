@@ -259,40 +259,61 @@
             margin-bottom: 15px;
         }
 
-        /* Download Button/Link */
-        .download-link {
-            display: inline-flex; /* Align icon and text */
+        /* Container for Action Buttons */
+        .action-buttons {
+            display: flex;
+            flex-direction: column; /* Stack buttons vertically */
+            align-items: center; /* Center buttons horizontally */
+            gap: 15px; /* Space between buttons */
+            margin-bottom: 15px; /* Space below buttons */
+        }
+
+        /* General style for action buttons */
+        .action-button {
+            display: inline-flex;
             align-items: center;
+            justify-content: center; /* Center text */
             text-decoration: none;
-            color: #007bff;
             font-size: 1em;
             font-weight: 500;
             cursor: pointer;
-            padding: 8px 15px;
-            border: 1px solid transparent; /* Add border for focus consistency */
+            padding: 8px 18px; /* Adjust padding */
+            border: 1px solid transparent;
             border-radius: 5px;
-            /* Updated transition for micro-interactions */
-            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-in-out, border-color 0.2s ease-in-out;
-            /* Add focus visible style for accessibility */
-            outline: none; /* Remove default browser outline */
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            outline: none;
+            min-width: 180px; /* Give buttons similar width */
+            text-align: center;
+            width: 90%; /* Make buttons take similar width */
+            max-width: 250px; /* Consistent max width */
+        }
+        .action-button:focus-visible {
+             box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15); /* Generic focus glow */
+        }
+        .action-button:hover {
+             transform: translateY(-2px);
+        }
+        .action-button:active {
+             transform: translateY(1px);
+             transition-duration: 0.05s;
+        }
+
+        /* Download Button/Link specific styles */
+        .download-link {
+             /* Inherits most styles from .action-button */
+            color: #007bff;
         }
         .download-link:focus-visible {
              border-color: #007bff; /* Use border instead of outline for better spacing */
              box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25); /* Optional subtle glow */
         }
-
-
-        /* Download button hover */
         .download-link:hover {
             background-color: #e7f3ff;
-            transform: translateY(-2px); /* Lift effect */
+            /* transform is handled by .action-button:hover */
         }
-
-        /* Download button active */
         .download-link:active {
-            transform: translateY(1px); /* Press down effect */
+            /* transform is handled by .action-button:active */
             background-color: #d0e8ff; /* Slightly darker background when pressed */
-            transition-duration: 0.05s; /* Make press down feel faster */
         }
 
 
@@ -311,34 +332,44 @@
         .download-link:hover .download-icon {
              transform: translateY(-1px); /* Nudge icon slightly */
         }
+        .download-icon::before { content: ''; position: absolute; bottom: 0px; left: 50%; transform: translateX(-50%); width: 2px; height: 12px; background-color: currentColor; }
+        .download-icon::after { content: ''; position: absolute; bottom: 0px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; }
+        .download-icon span.tray-top { display: block; position: absolute; top: -2px; left: 0; width: 100%; height: 2px; background-color: currentColor; }
 
-        /* Arrow stem */
-        .download-icon::before {
-            content: '';
-            position: absolute;
-            bottom: 0px; left: 50%;
-            transform: translateX(-50%);
-            width: 2px; height: 12px;
-            background-color: currentColor;
+
+        /* ABA Scanner Link Styling */
+        .aba-scanner-link {
+             /* Inherits most styles from .action-button */
+             background-color: #003c71; /* ABA Dark Blue */
+             color: white;
+             border-color: #003c71;
         }
-        /* Arrowhead */
-         .download-icon::after {
-             content: '';
-             position: absolute;
-             bottom: 0px; left: 50%;
-             transform: translateX(-50%) rotate(45deg);
-             width: 8px; height: 8px;
-             border-right: 2px solid currentColor;
-             border-bottom: 2px solid currentColor;
+        .aba-scanner-link:hover {
+            background-color: #005099; /* Slightly lighter blue on hover */
+            color: white;
+             /* transform is handled by .action-button:hover */
+        }
+         .aba-scanner-link:active {
+            background-color: #002b50; /* Darker blue on press */
+            color: white;
+            /* transform is handled by .action-button:active */
          }
-         /* Top bar of download tray */
-         .download-icon span.tray-top {
-             display: block;
-             position: absolute;
-             top: -2px; left: 0;
-             width: 100%; height: 2px;
-             background-color: currentColor;
-         }
+        .aba-scanner-link:focus-visible {
+            border-color: #005099;
+            box-shadow: 0 0 0 2px rgba(0, 60, 113, 0.3);
+        }
+
+        /* Disclaimer Text Styling */
+        .disclaimer-text {
+            font-size: 0.75em; /* Make it smaller */
+            color: #777;      /* Grey color */
+            margin-top: 5px;  /* Space above */
+            margin-bottom: 20px; /* Space below */
+            line-height: 1.4;
+            max-width: 90%;    /* Limit width */
+            margin-left: auto;
+            margin-right: auto;
+        }
 
 
         /* Footer Text (inside main content) */
@@ -417,19 +448,21 @@
             cursor: default;
         }
 
-        .expired #download-btn {
+        /* Disable action buttons visually when expired */
+        .expired .action-button {
             pointer-events: none; /* Prevent clicks */
             cursor: default; /* Show default cursor */
-            color: #aaa; /* Grey out text */
-            background-color: transparent; /* Remove hover effect */
-            transform: none; /* Reset any hover/active transforms */
-            border-color: transparent; /* Hide border */
-            box-shadow: none; /* Remove focus shadow */
+            background-color: #cccccc !important; /* Disabled grey background (override specifics) */
+            color: #888888 !important;    /* Disabled grey text */
+            border-color: #cccccc !important;
+            transform: none;
+            box-shadow: none;
         }
-         .expired #download-btn .download-icon {
-             color: #aaa; /* Grey out icon */
-             transform: none; /* Reset any hover transforms */
+         .expired #download-btn .download-icon { /* Also grey out specific icon */
+             color: #aaa;
+             transform: none;
          }
+
          /* Dim instructions and footer text */
         .expired .instructions,
         .expired .footer-text {
@@ -450,10 +483,15 @@
          }
 
          /* Accessibility: Remove focus styles when element is disabled by expiration */
-         .expired #download-btn:focus-visible,
-         .expired .telegram-link:focus-visible { /* Example if you decided to disable this too */
+         .expired .action-button:focus-visible, /* Covers both buttons */
+         .expired .telegram-link:focus-visible { /* Specific case for telegram if needed */
             border-color: transparent;
             box-shadow: none;
+         }
+
+         /* Dim disclaimer when expired */
+         .expired .disclaimer-text {
+             opacity: 0.6;
          }
 
     </style>
@@ -502,7 +540,6 @@
                      alt="ABA KHQR Code for Donation to Ozo. Designer"
                      class="qr-code-img"
                      id="qr-code">
-                 <!-- The invalid comment inside the tag was removed -->
 
                 <!-- Dollar Sign Overlay -->
                  <div class="qr-overlay">
@@ -521,14 +558,37 @@
                     THANK FOR DONATION<span class="currency"></span>
             </div>
 
-            <!-- Download Link/Button -->
-             <!-- IMPORTANT: Ensure 'qr.PNG' path is correct here too for download -->
-            <a id="download-btn" class="download-link" href="qr.PNG" download="ozo-designer-donation-khqr.png">
-                <span class="download-icon">
-                    <span class="tray-top"></span> <!-- Element for top bar of icon -->
-                </span>
-                Download QR
-            </a>
+            <!-- Action Buttons Container -->
+            <div class="action-buttons">
+                <!-- Download Link/Button -->
+                 <!-- IMPORTANT: Ensure 'qr.PNG' path is correct here too for download -->
+                <a id="download-btn" class="action-button download-link" href="qr.PNG" download="ozo-designer-donation-khqr.png">
+                    <span class="download-icon">
+                        <span class="tray-top"></span>
+                    </span>
+                    Download QR
+                </a>
+
+                <!-- Open ABA Scanner Button -->
+                <!--
+                    #################################################################
+                    #                                                               #
+                    #  WARNING: The 'href' below is a *PLACEHOLDER*. You MUST     #
+                    #           find the correct ABA Mobile deep link/URL scheme  #
+                    #           for this to work, if one exists publicly.         #
+                    #                                                               #
+                    #################################################################
+                -->
+                <a id="open-aba-scanner-btn" class="action-button aba-scanner-link" href="abamobile://scankhqr">
+                    <!-- Optional: Add an SVG/Image icon here e.g. <img src="aba-icon.svg"> -->
+                    Open ABA Scanner
+                </a>
+            </div>
+
+             <!-- Disclaimer for ABA Scanner Button -->
+            <p class="disclaimer-text">
+                Requires ABA Mobile app installed. Link may not work on all devices or if the app structure changes. Use 'Scan to pay' in the app manually if needed.
+            </p>
 
             <!-- Footer Text -->
             <p class="footer-text">
@@ -558,6 +618,7 @@
         const initialTimeText = timeLeftDisplay?.textContent || '02:53'; // Safer access with fallback
         const downloadBtn = document.getElementById('download-btn');
         const qrCodeImage = document.getElementById('qr-code'); // Reference to the <img> element
+        const openAbaBtn = document.getElementById('open-aba-scanner-btn'); // Reference to the new button
 
         function parseTime(timeString) {
             const parts = timeString.split(':');
@@ -595,11 +656,18 @@
                         paymentContainer.classList.add('expired'); // Add class to trigger CSS changes
                     }
 
+                    // Ensure buttons are visually disabled by JS as well (belt-and-suspenders)
                     if(downloadBtn) {
-                        downloadBtn.removeAttribute('href'); // Remove link target when expired
-                        downloadBtn.style.pointerEvents = 'none'; // Disable clicks via JS too
+                        downloadBtn.removeAttribute('href');
+                        downloadBtn.style.pointerEvents = 'none';
                         downloadBtn.style.cursor = 'default';
                     }
+                    if(openAbaBtn) {
+                        openAbaBtn.removeAttribute('href');
+                        openAbaBtn.style.pointerEvents = 'none';
+                        openAbaBtn.style.cursor = 'default';
+                    }
+
                     console.log("Timer expired.");
                     return; // Exit the interval function
                 }
@@ -618,27 +686,20 @@
             }, 1000); // Update every second
         }
 
-        // --- Download QR Logic ---
-        if (downloadBtn && qrCodeImage) {
-             // Set initial href if not present (good practice)
-             // Ensure it points to the ACTUAL image file
-             if (!downloadBtn.getAttribute('href')) {
-                 downloadBtn.href = qrCodeImage.src; // Use the image's src attribute
-             }
-             // Event listener to handle clicks (mainly to block when expired)
-             downloadBtn.addEventListener('click', (event) => {
-                if (paymentContainer?.classList.contains('expired')) {
-                    event.preventDefault(); // Prevent default link behavior (download)
-                    console.log("Download blocked: QR code has expired.");
-                    return; // Stop further action
-                }
-                // Only log if not expired
-                console.log("Download initiated for:", downloadBtn.getAttribute('href'));
-             });
-        } else {
-            // Log error if elements aren't found
-            if (!downloadBtn) console.error("Download button element not found.");
-            if (!qrCodeImage) console.error("QR code image element not found.");
+        // --- Button Click Handlers (mainly for logging/blocking when expired) ---
+        function setupButtonClickListeners() {
+            const buttons = document.querySelectorAll('.action-button'); // Select all action buttons
+            buttons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    if (paymentContainer?.classList.contains('expired')) {
+                        event.preventDefault(); // Prevent default link behavior
+                        console.log(`Action blocked: ${button.id || 'Button'} clicked when expired.`);
+                        return; // Stop further action
+                    }
+                    // Only log if not expired
+                    console.log(`Action initiated: ${button.id || 'Button'} clicked. Href: ${button.getAttribute('href')}`);
+                 });
+            });
         }
 
         // --- Service Worker Registration & Timer Start ---
@@ -662,6 +723,9 @@
 
             // Start the timer once the DOM is ready
             startTimer();
+
+            // Setup click listeners for buttons
+            setupButtonClickListeners();
         });
 
     </script>
