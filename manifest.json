@@ -1,21 +1,23 @@
 {
-  "name": "ABA KHQR Donation - Ozo. Designer",
-  "short_name": "KHQR Donate",
-  "description": "Donate to Ozo. Designer via ABA KHQR",
-  "start_url": ".",
-  "display": "standalone",
-  "background_color": "00459D",
-  "theme_color": "00459D",
+  "name": "ABA KHQR Donation Ozo",
+  "short_name": "Ozo Donate",
+  "description": "Scan ABA KHQR to make a donation.",
+  "start_url": ".", // Start in the same directory as the manifest
+  "display": "standalone", // Opens like a native app
+  "background_color": "#ffffff", // Splash screen background
+  "theme_color": "#e10a17", // Browser UI color (matches header)
   "icons": [
     {
-      "src": "icon-192.png", // <<< YOU MUST CREATE THIS IMAGE (192x192px)
+      "src": "192.png", // You need to create this icon file
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable" // "any" allows normal use, "maskable" for adaptive icons
     },
     {
-      "src": "icon.jpeg", // <<< YOU MUST CREATE THIS IMAGE (512x512px)
+      "src": "app.png", // Optional: Larger icon
       "sizes": "512x512",
-      "type": "image/jpeg"
+      "type": "image/png",
+       "purpose": "any maskable"
     }
   ]
 }
