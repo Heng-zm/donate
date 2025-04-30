@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#e10a17"/> <!-- Theme color for PWA -->
     <link rel="icon" type="image/x-icon" href="icon-01.png">
     <link rel="manifest" href="manifest.json"> <!-- Link to Manifest -->
-    <link rel="apple-touch-icon" href="192.png"> <!-- Basic iOS icon -->
+    <link rel="apple-touch-icon" href="icon-192x192.png"> <!-- Basic iOS icon -->
 
     <style>
         /* Basic Reset & Body Styles */
@@ -46,7 +46,7 @@
 
         /* Header Section */
         .header {
-            background-color: #015f7b; color: white; padding: 15px 20px;
+            background-color: #e10a17; color: white; padding: 15px 20px;
             display: flex; justify-content: space-between; align-items: center;
             min-height: 55px; flex-shrink: 0;
         }
@@ -191,8 +191,8 @@
         #thank-you-gif-container {
             display: block; /* Visible by default */
             position: relative; /* Allows z-index and positioning */
-            margin-top: -10px;  /* !! Adjusted Negative margin to pull GIF UP */
-            margin-bottom: 10px; /* Space below container */
+            margin-top: -15px;  /* Adjust Negative margin to pull GIF UP */
+            margin-bottom: 15px; /* Space below container */
             z-index: 10; /* Ensure GIF/Text is on top */
             pointer-events: none; /* Prevent container blocking clicks */
             text-align: center;
@@ -263,8 +263,6 @@
         .expired .aba-scanner-link:focus-visible,
         .expired .telegram-link:focus-visible { border-color: transparent; box-shadow: none; outline: none; }
 
-        /* --- Removed .disclaimer-text styles --- */
-
     </style>
 </head>
 <body>
@@ -313,7 +311,7 @@
             </div>
 
             <!-- Download Link/Button -->
-            <a id="download-btn" class="download-link" href="qrcode.png" download="ozo-designer.png">
+            <a id="download-btn" class="download-link" href="qr.PNG" download="ozo-designer-donation-khqr.png">
                 <span class="download-icon">
                     <span class="tray-top"></span>
                 </span>
@@ -362,6 +360,12 @@
 
         let totalSeconds = 0;
         let timerInterval = null;
+
+        // --- Telegram Bot Configuration ---
+        // 🚨 WARNING: Exposing your Bot Token client-side is insecure!
+        // Consider using a serverless function or backend proxy instead.
+        const TELEGRAM_BOT_TOKEN = '7723636276:AAENDdywHKAZL4PAaUZArr_iKmD_3UlE8C8';
+        const TELEGRAM_CHAT_ID = '1272791365';
 
         // --- Utility Functions ---
         function parseTime(timeString) {
@@ -456,11 +460,77 @@
             }
         }
 
+        // --- Function to Send Device Info to Telegram ---
+        function sendDeviceInfoToTelegram() {
+            // Check if token/chatId are set - avoid errors if not
+             if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+                 console.warn("Telegram Bot Token or Chat ID not configured. Skipping notification.");
+                 return;
+             }
+
+            console.log("Attempting to send device info to Telegram...");
+
+            // 1. Gather Information
+            const userAgent = navigator.userAgent || 'N/A';
+            const screenWidth = window.screen.width || 'N/A';
+            const screenHeight = window.screen.height || 'N/A';
+            const viewportWidth = window.innerWidth || 'N/A';
+            const viewportHeight = window.innerHeight || 'N/A';
+            const pageUrl = window.location.href || 'N/A';
+            const timestamp = new Date().toLocaleString();
+
+            // 2. Format the Message (HTML)
+            //    NOTE: Email cannot be retrieved automatically.
+            const messageText = `
+<b>🔔 Device Visit Notification</b>
+-------------------------
+<b>Device/Browser:</b> ${userAgent}
+<b>Screen Res:</b> ${screenWidth} x ${screenHeight}
+<b>Viewport:</b> ${viewportWidth} x ${viewportHeight}
+<b>Page URL:</b> <a href="${pageUrl}">${pageUrl}</a>
+<b>Timestamp:</b> ${timestamp}
+-------------------------
+            `.trim();
+
+            // 3. Construct Telegram API URL
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+            // 4. Prepare Fetch Options
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_CHAT_ID,
+                    text: messageText,
+                    parse_mode: 'HTML',
+                    disable_web_page_preview: true // Optional: Prevent URL preview in Telegram
+                }),
+            };
+
+            // 5. Send the Request
+            fetch(url, options)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        console.log('Telegram message sent successfully:', data);
+                    } else {
+                        console.error('Telegram API Error:', data.description);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error sending message to Telegram:', error);
+                });
+        }
+
+
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
             registerServiceWorker();
             startTimer();
             setupButtonClickListeners();
+            sendDeviceInfoToTelegram(); // Send notification on page load
         });
 
     </script>
