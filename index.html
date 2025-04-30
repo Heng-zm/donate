@@ -182,22 +182,23 @@
             margin: 20px 0; /* Adjusted margin */
         }
 
-        /* QR Code */
+        /* QR Code Container */
         .qr-code-container {
             margin-bottom: 20px;
-            position: relative;
-            display: inline-block;
-            max-width: 250px;
-            width: 80%;
+            position: relative; /* Needed for overlay positioning */
+            display: inline-block; /* Size container to image */
+            max-width: 250px; /* Limit QR size */
+            width: 80%; /* Responsive width */
             cursor: pointer; /* Indicate it's clickable (for potential modal) */
         }
 
+        /* QR Code Image */
         .qr-code-img {
-            display: block;
-            width: 100%;
-            height: auto;
-            border: 1px solid #eee;
-             box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Default subtle shadow */
+            display: block; /* Remove extra space below image */
+            width: 100%; /* Make image responsive */
+            height: auto; /* Maintain aspect ratio */
+            border: 1px solid #eee; /* Slight border */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Default subtle shadow */
             /* Updated transition for micro-interactions */
             transition: opacity 0.3s ease, filter 0.3s ease, transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
         }
@@ -214,23 +215,23 @@
         }
 
 
-        /* Dollar sign overlay - approximate position */
+        /* Dollar sign overlay */
         .qr-overlay {
              position: absolute;
              top: 50%;
              left: 50%;
-             transform: translate(-50%, -50%);
+             transform: translate(-50%, -50%); /* Center the overlay */
              background-color: white;
              border-radius: 50%;
-             width: 50px; /* Adjust size */
-             height: 50px; /* Adjust size */
+             width: 50px; /* Adjust size as needed */
+             height: 50px; /* Adjust size as needed */
              display: flex;
              justify-content: center;
              align-items: center;
              box-shadow: 0 0 5px rgba(0,0,0,0.2);
              border: 3px solid #f0f0f0; /* Light border */
              transition: opacity 0.3s ease; /* Transition for expired state */
-             pointer-events: none; /* Don't block hover on QR image */
+             pointer-events: none; /* Allow clicks/hovers to pass through to QR image */
          }
          .qr-overlay span {
              font-size: 24px; /* Adjust size */
@@ -260,7 +261,7 @@
 
         /* Download Button/Link */
         .download-link {
-            display: inline-flex;
+            display: inline-flex; /* Align icon and text */
             align-items: center;
             text-decoration: none;
             color: #007bff;
@@ -268,14 +269,16 @@
             font-weight: 500;
             cursor: pointer;
             padding: 8px 15px;
+            border: 1px solid transparent; /* Add border for focus consistency */
             border-radius: 5px;
             /* Updated transition for micro-interactions */
-            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-in-out;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-in-out, border-color 0.2s ease-in-out;
             /* Add focus visible style for accessibility */
-            outline-offset: 2px;
+            outline: none; /* Remove default browser outline */
         }
         .download-link:focus-visible {
-            outline: 2px solid #007bff;
+             border-color: #007bff; /* Use border instead of outline for better spacing */
+             box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25); /* Optional subtle glow */
         }
 
 
@@ -356,22 +359,25 @@
             flex-shrink: 0; /* Prevent footer from shrinking */
         }
 
+        /* Telegram Link */
         .telegram-link {
-            display: inline-flex;
+            display: inline-flex; /* Align icon and text */
             align-items: center;
             text-decoration: none;
             color: #0088cc;
             font-size: 0.9em;
             font-weight: 500;
             padding: 8px 12px;
+            border: 1px solid transparent; /* Add border for focus consistency */
             border-radius: 5px;
             /* Updated transition for micro-interactions */
-            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-in-out;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-in-out, border-color 0.2s ease-in-out;
              /* Add focus visible style for accessibility */
-            outline-offset: 2px;
+            outline: none; /* Remove default browser outline */
         }
         .telegram-link:focus-visible {
-            outline: 2px solid #0088cc;
+            border-color: #0088cc; /* Use border instead of outline */
+            box-shadow: 0 0 0 2px rgba(0, 136, 204, 0.25); /* Optional subtle glow */
         }
 
         /* Telegram link hover */
@@ -393,7 +399,7 @@
             width: 22px;
             height: 22px;
             margin-right: 8px;
-            vertical-align: middle;
+            vertical-align: middle; /* Better alignment */
             /* Updated transition for micro-interactions */
             transition: transform 0.2s ease-in-out;
         }
@@ -403,12 +409,11 @@
         }
 
         /* --- Expired State Styles --- */
-        .expired #qr-code {
+        .expired .qr-code-img { /* Target image directly for filter/opacity */
             opacity: 0.3;
             filter: grayscale(80%);
-            cursor: default; /* Change cursor when expired */
         }
-        .expired .qr-code-container {
+        .expired .qr-code-container { /* Change cursor on container */
             cursor: default;
         }
 
@@ -418,6 +423,8 @@
             color: #aaa; /* Grey out text */
             background-color: transparent; /* Remove hover effect */
             transform: none; /* Reset any hover/active transforms */
+            border-color: transparent; /* Hide border */
+            box-shadow: none; /* Remove focus shadow */
         }
          .expired #download-btn .download-icon {
              color: #aaa; /* Grey out icon */
@@ -442,10 +449,11 @@
              background-color: #e10a17; /* Make inner dot red */
          }
 
-         /* Accessibility: Hide focus styles when element is disabled by expiration */
+         /* Accessibility: Remove focus styles when element is disabled by expiration */
          .expired #download-btn:focus-visible,
          .expired .telegram-link:focus-visible { /* Example if you decided to disable this too */
-            outline: none;
+            border-color: transparent;
+            box-shadow: none;
          }
 
     </style>
@@ -479,9 +487,17 @@
             <!-- Separator -->
             <hr class="separator">
 
-            <!-- QR Code -->
+            <!-- QR Code Container -->
             <div class="qr-code-container" title="Scan QR Code"> <!-- Add title for hover text -->
-                <!-- IMPORTANT: Make sure qr.PNG exists -->
+                <!--
+                    #################################################################
+                    #                                                               #
+                    #  IMPORTANT: Ensure 'qr.PNG' exists in the same directory     #
+                    #             or update the 'src' path below!                 #
+                    #             Check case sensitivity (PNG vs png).             #
+                    #                                                               #
+                    #################################################################
+                -->
                 <img src="qr.PNG"
                      alt="ABA KHQR Code for Donation to Ozo. Designer" <!-- Improved alt text -->
                      class="qr-code-img"
@@ -504,7 +520,7 @@
             </div>
 
             <!-- Download Link/Button -->
-             <!-- IMPORTANT: Make sure qr.PNG exists and update download filename if needed -->
+             <!-- IMPORTANT: Ensure 'qr.PNG' path is correct here too for download -->
             <a id="download-btn" class="download-link" href="qr.PNG" download="ozo-designer-donation-khqr.png">
                 <span class="download-icon">
                     <span class="tray-top"></span> <!-- Element for top bar of icon -->
@@ -523,8 +539,9 @@
 
         <!-- Footer with Social Icon -->
         <footer class="footer-social">
-             <!-- IMPORTANT: Update Telegram link and make sure telegram.png exists -->
+             <!-- IMPORTANT: Update Telegram link and ensure 'telegram.png' exists -->
             <a href="https://t.me/m11mmm112" target="_blank" rel="noopener noreferrer" class="telegram-link" aria-label="Contact us on Telegram">
+                 <!-- IMPORTANT: Ensure 'telegram.png' exists or update src -->
                 <img src="telegram.png" alt="Telegram Icon">
                 <span>Join on Telegram</span> <!-- Optional Text -->
             </a>
@@ -538,7 +555,7 @@
         const paymentContainer = document.getElementById('payment-container');
         const initialTimeText = timeLeftDisplay?.textContent || '02:53'; // Safer access with fallback
         const downloadBtn = document.getElementById('download-btn');
-        const qrCodeImage = document.getElementById('qr-code');
+        const qrCodeImage = document.getElementById('qr-code'); // Reference to the <img> element
 
         function parseTime(timeString) {
             const parts = timeString.split(':');
@@ -577,8 +594,8 @@
                     }
 
                     if(downloadBtn) {
-                        downloadBtn.removeAttribute('href');
-                        downloadBtn.style.pointerEvents = 'none';
+                        downloadBtn.removeAttribute('href'); // Remove link target when expired
+                        downloadBtn.style.pointerEvents = 'none'; // Disable clicks via JS too
                         downloadBtn.style.cursor = 'default';
                     }
                     console.log("Timer expired.");
@@ -590,6 +607,7 @@
                 const minutes = Math.floor(totalSeconds / 60);
                 const seconds = totalSeconds % 60;
 
+                // Format time with leading zeros
                 const formattedMinutes = String(minutes).padStart(2, '0');
                 const formattedSeconds = String(seconds).padStart(2, '0');
 
@@ -600,9 +618,10 @@
 
         // --- Download QR Logic ---
         if (downloadBtn && qrCodeImage) {
-             // Set initial href if not present (good practice, though already in HTML)
+             // Set initial href if not present (good practice)
+             // Ensure it points to the ACTUAL image file
              if (!downloadBtn.getAttribute('href')) {
-                 downloadBtn.href = qrCodeImage.src;
+                 downloadBtn.href = qrCodeImage.src; // Use the image's src attribute
              }
              // Event listener to handle clicks (mainly to block when expired)
              downloadBtn.addEventListener('click', (event) => {
@@ -611,6 +630,7 @@
                     console.log("Download blocked: QR code has expired.");
                     return; // Stop further action
                 }
+                // Only log if not expired
                 console.log("Download initiated for:", downloadBtn.getAttribute('href'));
              });
         } else {
@@ -620,13 +640,13 @@
         }
 
         // --- Service Worker Registration & Timer Start ---
-        // Use 'DOMContentLoaded' which fires earlier than 'load' but after HTML is parsed
+        // Use 'DOMContentLoaded' which fires after HTML is parsed but before all resources (like images) load
         document.addEventListener('DOMContentLoaded', () => {
              // Service Worker Registration
             if ('serviceWorker' in navigator) {
-                // Use window.load event for registration to avoid delaying initial render/paint
+                // Register after the page 'load' event to avoid delaying critical rendering.
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('sw.js') // Path relative to HTML file
+                    navigator.serviceWorker.register('sw.js') // Assumes sw.js is in the root
                         .then(registration => {
                             console.log('Service Worker registered successfully with scope:', registration.scope);
                         })
