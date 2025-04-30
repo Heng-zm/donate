@@ -16,6 +16,11 @@
             padding: 0;
         }
 
+        html {
+             /* Smooth scrolling if page becomes longer */
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: #f0f2f5; /* Light grey background */
@@ -24,7 +29,7 @@
             align-items: flex-start; /* Align items to the top */
             min-height: 100vh;
             padding-top: 20px; /* Add some space at the top */
-            padding-bottom: 20px; /* Add space at the bottom */
+            padding-bottom: 40px; /* Increased bottom padding */
         }
 
         /* Main Container */
@@ -33,7 +38,7 @@
             width: 100%;
             max-width: 400px; /* Limit width for mobile-like view */
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Slightly enhanced shadow */
             overflow: hidden; /* Ensures header/footer background doesn't bleed */
             display: flex; /* Use flexbox for vertical layout */
             flex-direction: column; /* Stack children vertically */
@@ -180,19 +185,35 @@
         /* QR Code */
         .qr-code-container {
             margin-bottom: 20px;
-            position: relative; /* Needed for overlay */
-            display: inline-block; /* Fit container to image */
-            max-width: 250px; /* Limit QR size */
-            width: 80%; /* Responsive width */
+            position: relative;
+            display: inline-block;
+            max-width: 250px;
+            width: 80%;
+            cursor: pointer; /* Indicate it's clickable (for potential modal) */
         }
 
         .qr-code-img {
             display: block;
-            width: 100%; /* Make image responsive */
+            width: 100%;
             height: auto;
-            border: 1px solid #eee; /* Slight border */
-            transition: opacity 0.3s ease, filter 0.3s ease; /* Transition for expired state */
+            border: 1px solid #eee;
+             box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Default subtle shadow */
+            /* Updated transition for micro-interactions */
+            transition: opacity 0.3s ease, filter 0.3s ease, transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
         }
+
+        /* QR Hover Effect (only when not expired) */
+        .container:not(.expired) .qr-code-container:hover .qr-code-img {
+            transform: scale(1.03); /* Slight zoom */
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1); /* Increase shadow */
+        }
+        /* Reset hover effect when expired */
+        .container.expired .qr-code-container:hover .qr-code-img {
+             transform: none;
+             box-shadow: none;
+        }
+
+
         /* Dollar sign overlay - approximate position */
         .qr-overlay {
              position: absolute;
@@ -209,6 +230,7 @@
              box-shadow: 0 0 5px rgba(0,0,0,0.2);
              border: 3px solid #f0f0f0; /* Light border */
              transition: opacity 0.3s ease; /* Transition for expired state */
+             pointer-events: none; /* Don't block hover on QR image */
          }
          .qr-overlay span {
              font-size: 24px; /* Adjust size */
@@ -238,52 +260,71 @@
 
         /* Download Button/Link */
         .download-link {
-            display: inline-flex; /* Use flex to align icon and text */
+            display: inline-flex;
             align-items: center;
             text-decoration: none;
-            color: #007bff; /* Standard link blue */
+            color: #007bff;
             font-size: 1em;
             font-weight: 500;
             cursor: pointer;
             padding: 8px 15px;
             border-radius: 5px;
-            transition: background-color 0.2s ease, color 0.2s ease; /* Smooth transitions */
+            /* Updated transition for micro-interactions */
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-in-out;
+            /* Add focus visible style for accessibility */
+            outline-offset: 2px;
+        }
+        .download-link:focus-visible {
+            outline: 2px solid #007bff;
         }
 
+
+        /* Download button hover */
         .download-link:hover {
-            background-color: #e7f3ff; /* Lighter blue background on hover */
+            background-color: #e7f3ff;
+            transform: translateY(-2px); /* Lift effect */
         }
+
+        /* Download button active */
+        .download-link:active {
+            transform: translateY(1px); /* Press down effect */
+            background-color: #d0e8ff; /* Slightly darker background when pressed */
+            transition-duration: 0.05s; /* Make press down feel faster */
+        }
+
 
         /* Download Icon CSS */
         .download-icon {
             display: inline-block;
             width: 16px;
-            height: 18px; /* Slightly taller */
+            height: 18px;
             margin-right: 8px;
             position: relative;
-            color: #007bff; /* Icon color */
-            transition: color 0.2s ease; /* Smooth transition */
+            color: #007bff;
+            /* Updated transition for micro-interactions */
+            transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
         }
+        /* Download icon nudge on link hover */
+        .download-link:hover .download-icon {
+             transform: translateY(-1px); /* Nudge icon slightly */
+        }
+
         /* Arrow stem */
         .download-icon::before {
             content: '';
             position: absolute;
-            bottom: 0px; /* Start from bottom */
-            left: 50%;
+            bottom: 0px; left: 50%;
             transform: translateX(-50%);
-            width: 2px; /* Stem thickness */
-            height: 12px; /* Stem height */
+            width: 2px; height: 12px;
             background-color: currentColor;
         }
         /* Arrowhead */
          .download-icon::after {
              content: '';
              position: absolute;
-             bottom: 0px; /* Align with stem bottom */
-             left: 50%;
+             bottom: 0px; left: 50%;
              transform: translateX(-50%) rotate(45deg);
-             width: 8px; /* Arrowhead size */
-             height: 8px;
+             width: 8px; height: 8px;
              border-right: 2px solid currentColor;
              border-bottom: 2px solid currentColor;
          }
@@ -291,10 +332,8 @@
          .download-icon span.tray-top {
              display: block;
              position: absolute;
-             top: -2px; /* Position above */
-             left: 0;
-             width: 100%;
-             height: 2px;
+             top: -2px; left: 0;
+             width: 100%; height: 2px;
              background-color: currentColor;
          }
 
@@ -318,42 +357,71 @@
         }
 
         .telegram-link {
-            display: inline-flex; /* Align icon and text */
+            display: inline-flex;
             align-items: center;
             text-decoration: none;
-            color: #0088cc; /* Telegram blue */
+            color: #0088cc;
             font-size: 0.9em;
             font-weight: 500;
             padding: 8px 12px;
             border-radius: 5px;
-            transition: background-color 0.2s ease, color 0.2s ease;
+            /* Updated transition for micro-interactions */
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-in-out;
+             /* Add focus visible style for accessibility */
+            outline-offset: 2px;
+        }
+        .telegram-link:focus-visible {
+            outline: 2px solid #0088cc;
         }
 
+        /* Telegram link hover */
         .telegram-link:hover {
-            background-color: #e9f5ff; /* Light blue background on hover */
-            color: #0077b3; /* Slightly darker blue on hover */
+            background-color: #e9f5ff;
+            color: #0077b3;
+            transform: translateY(-2px); /* Lift effect */
         }
+
+        /* Telegram link active */
+        .telegram-link:active {
+            transform: translateY(1px); /* Press down effect */
+            background-color: #d5effc; /* Slightly darker background when pressed */
+            transition-duration: 0.05s; /* Make press down feel faster */
+        }
+
 
         .telegram-link img {
-            width: 22px; /* Icon size */
+            width: 22px;
             height: 22px;
-            margin-right: 8px; /* Space between icon and text */
-            vertical-align: middle; /* Better alignment */
+            margin-right: 8px;
+            vertical-align: middle;
+            /* Updated transition for micro-interactions */
+            transition: transform 0.2s ease-in-out;
+        }
+        /* Telegram icon scale/rotate on link hover */
+        .telegram-link:hover img {
+            transform: scale(1.1) rotate(-5deg);
         }
 
         /* --- Expired State Styles --- */
         .expired #qr-code {
             opacity: 0.3;
             filter: grayscale(80%);
+            cursor: default; /* Change cursor when expired */
         }
+        .expired .qr-code-container {
+            cursor: default;
+        }
+
         .expired #download-btn {
             pointer-events: none; /* Prevent clicks */
             cursor: default; /* Show default cursor */
             color: #aaa; /* Grey out text */
             background-color: transparent; /* Remove hover effect */
+            transform: none; /* Reset any hover/active transforms */
         }
          .expired #download-btn .download-icon {
              color: #aaa; /* Grey out icon */
+             transform: none; /* Reset any hover transforms */
          }
          /* Dim instructions and footer text */
         .expired .instructions,
@@ -373,6 +441,13 @@
          .expired .timer-icon::before {
              background-color: #e10a17; /* Make inner dot red */
          }
+
+         /* Accessibility: Hide focus styles when element is disabled by expiration */
+         .expired #download-btn:focus-visible,
+         .expired .telegram-link:focus-visible { /* Example if you decided to disable this too */
+            outline: none;
+         }
+
     </style>
 </head>
 <body>
@@ -397,17 +472,18 @@
             <!-- Recipient Info -->
             <div class="recipient-info">
                 <div class="recipient-name">Ozo. Designer</div>
-                <!-- Amount replaced by Donation Text -->
+                <!-- Optional: Add donation purpose text here -->
+                <!-- <p style="font-size: 0.9em; color: #555; margin-top: 5px;">Support my work!</p> -->
             </div>
 
             <!-- Separator -->
             <hr class="separator">
 
             <!-- QR Code -->
-            <div class="qr-code-container">
+            <div class="qr-code-container" title="Scan QR Code"> <!-- Add title for hover text -->
                 <!-- IMPORTANT: Make sure qr.PNG exists -->
                 <img src="qr.PNG"
-                     alt="ABA KHQR Code for Donation"
+                     alt="ABA KHQR Code for Donation to Ozo. Designer" <!-- Improved alt text -->
                      class="qr-code-img"
                      id="qr-code">
                 <!-- Dollar Sign Overlay -->
@@ -439,6 +515,8 @@
             <!-- Footer Text -->
             <p class="footer-text">
                  Generated by Ozo. Designer
+                 <!-- Optional: Add disclaimer/privacy link -->
+                 <!-- <br><a href="/privacy.html" style="color: #888; font-size: 0.9em;">Privacy Policy</a> -->
             </p>
 
         </main> <!-- End of main content -->
@@ -458,7 +536,7 @@
         // --- Timer Logic ---
         const timeLeftDisplay = document.getElementById('time-left');
         const paymentContainer = document.getElementById('payment-container');
-        const initialTimeText = timeLeftDisplay.textContent; // e.g., "02:53"
+        const initialTimeText = timeLeftDisplay?.textContent || '02:53'; // Safer access with fallback
         const downloadBtn = document.getElementById('download-btn');
         const qrCodeImage = document.getElementById('qr-code');
 
@@ -484,11 +562,19 @@
                 clearInterval(timerInterval);
             }
 
+            // Ensure timeLeftDisplay exists before starting
+            if (!timeLeftDisplay) {
+                console.error("Timer display element not found.");
+                return;
+            }
+
             timerInterval = setInterval(() => {
                 if (totalSeconds <= 0) {
                     clearInterval(timerInterval);
                     timeLeftDisplay.textContent = "Expired";
-                    paymentContainer.classList.add('expired'); // Add class to trigger CSS changes
+                    if (paymentContainer) {
+                        paymentContainer.classList.add('expired'); // Add class to trigger CSS changes
+                    }
 
                     if(downloadBtn) {
                         downloadBtn.removeAttribute('href');
@@ -514,39 +600,46 @@
 
         // --- Download QR Logic ---
         if (downloadBtn && qrCodeImage) {
+             // Set initial href if not present (good practice, though already in HTML)
              if (!downloadBtn.getAttribute('href')) {
                  downloadBtn.href = qrCodeImage.src;
              }
+             // Event listener to handle clicks (mainly to block when expired)
              downloadBtn.addEventListener('click', (event) => {
-                if (paymentContainer.classList.contains('expired')) {
-                    event.preventDefault();
+                if (paymentContainer?.classList.contains('expired')) {
+                    event.preventDefault(); // Prevent default link behavior (download)
                     console.log("Download blocked: QR code has expired.");
-                    return;
+                    return; // Stop further action
                 }
                 console.log("Download initiated for:", downloadBtn.getAttribute('href'));
              });
         } else {
-            console.error("Download button or QR code image element not found.");
+            // Log error if elements aren't found
+            if (!downloadBtn) console.error("Download button element not found.");
+            if (!qrCodeImage) console.error("QR code image element not found.");
         }
 
-        // --- Service Worker Registration ---
-        // Make sure this runs after the page loads
-        window.addEventListener('load', () => {
+        // --- Service Worker Registration & Timer Start ---
+        // Use 'DOMContentLoaded' which fires earlier than 'load' but after HTML is parsed
+        document.addEventListener('DOMContentLoaded', () => {
+             // Service Worker Registration
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js') // Path relative to HTML file
-                    .then(registration => {
-                        console.log('Service Worker registered successfully with scope:', registration.scope);
-                    })
-                    .catch(error => {
-                        console.error('Service Worker registration failed:', error);
-                    });
+                // Use window.load event for registration to avoid delaying initial render/paint
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('sw.js') // Path relative to HTML file
+                        .then(registration => {
+                            console.log('Service Worker registered successfully with scope:', registration.scope);
+                        })
+                        .catch(error => {
+                            console.error('Service Worker registration failed:', error);
+                        });
+                });
             } else {
                 console.log('Service Worker not supported in this browser.');
             }
 
-            // --- Start Timer ---
-            // Start the timer only after everything including SW registration attempt is done
-             startTimer();
+            // Start the timer once the DOM is ready
+            startTimer();
         });
 
     </script>
