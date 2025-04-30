@@ -17,482 +17,273 @@
         }
 
         html {
-             /* Smooth scrolling if page becomes longer */
             scroll-behavior: smooth;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f0f2f5; /* Light grey background */
+            background-color: #f0f2f5;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Align items to the top */
+            align-items: flex-start;
             min-height: 100vh;
-            padding-top: 20px; /* Add some space at the top */
-            padding-bottom: 40px; /* Increased bottom padding */
+            padding-top: 20px;
+            padding-bottom: 40px;
         }
 
         /* Main Container */
         .container {
-            background-color: #ffffff; /* White background for the main content */
+            background-color: #ffffff;
             width: 100%;
-            max-width: 400px; /* Limit width for mobile-like view */
+            max-width: 400px;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Slightly enhanced shadow */
-            overflow: hidden; /* Ensures header/footer background doesn't bleed */
-            display: flex; /* Use flexbox for vertical layout */
-            flex-direction: column; /* Stack children vertically */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Header Section */
         .header {
-            background-color: #e10a17; /* ABA Red */
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            min-height: 55px; /* Ensure consistent header height */
-            flex-shrink: 0; /* Prevent header from shrinking */
+            background-color: #e10a17; color: white; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            min-height: 55px; flex-shrink: 0;
         }
-
-        /* Left side text in Header (OZO. DESIGNER) */
         .header-brand {
-            font-size: 0.9em;
-            opacity: 0.9;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-            align-self: center; /* Align vertically */
+            font-size: 0.9em; opacity: 0.9; font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2); align-self: center;
         }
-
-        /* KHQR logo simulation */
         .header-khqr-logo {
-            font-weight: bold;
-            font-size: 1.4em;
-            position: relative;
-            padding-right: 18px; /* Space for lines */
-            line-height: 1; /* Adjust line height for centering */
-            display: flex;
-            align-items: center;
+            font-weight: bold; font-size: 1.4em; position: relative;
+            padding-right: 18px; line-height: 1; display: flex; align-items: center;
         }
-         /* Lines for the KHQR logo simulation */
-        .header-khqr-logo::before,
-        .header-khqr-logo::after {
-            content: '';
-            position: absolute;
-            right: 0;
-            height: 2px; /* Line thickness */
-            background-color: white;
-            width: 12px; /* Line width */
+        .header-khqr-logo::before, .header-khqr-logo::after {
+            content: ''; position: absolute; right: 0; height: 2px;
+            background-color: white; width: 12px;
         }
-        .header-khqr-logo::before {
-            transform: translateY(-4px); /* Position the top line */
-        }
-         .header-khqr-logo::after {
-            transform: translateY(4px); /* Position the bottom line */
-         }
-
+        .header-khqr-logo::before { transform: translateY(-4px); }
+        .header-khqr-logo::after { transform: translateY(4px); }
 
         /* Main Content Area */
         .content {
-            padding: 25px 20px;
-            text-align: center;
-            flex-grow: 1; /* Allow content to take available space */
+            padding: 25px 20px; text-align: center; flex-grow: 1; position: relative; /* Needed for GIF overlay */
         }
 
         /* Top Bar: Title & Timer */
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .title {
-            font-weight: bold;
-            font-size: 1.4em;
-            color: #333;
-            text-align: left; /* Align title left */
-        }
-
-        .timer {
-            display: flex;
-            align-items: center;
-            font-size: 1em;
-            font-weight: 500;
-            color: #555;
-            transition: color 0.3s ease; /* Smooth color transition for expired */
-        }
-
-        /* Timer Icon - Circle with inner dot */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .title { font-weight: bold; font-size: 1.4em; color: #333; text-align: left; }
+        .timer { display: flex; align-items: center; font-size: 1em; font-weight: 500; color: #555; transition: color 0.3s ease; }
         .timer-icon {
-            width: 20px;
-            height: 20px;
-            border: 3px solid #00a2e8; /* Light blue */
-            border-radius: 50%;
-            margin-right: 8px;
-            position: relative; /* Needed for pseudo-element */
-            display: flex; /* For centering the inner dot */
-            justify-content: center;
-            align-items: center;
-            transition: border-color 0.3s ease; /* Smooth color transition */
+            width: 20px; height: 20px; border: 3px solid #00a2e8; border-radius: 50%;
+            margin-right: 8px; position: relative; display: flex; justify-content: center;
+            align-items: center; transition: border-color 0.3s ease;
         }
-         /* Inner dot for the timer icon */
-         .timer-icon::before {
-            content: '';
-            display: block;
-            width: 8px; /* Size of the inner dot */
-            height: 8px;
-            background-color: #00a2e8;
-            border-radius: 50%;
-            transition: background-color 0.3s ease; /* Smooth color transition */
+        .timer-icon::before {
+            content: ''; display: block; width: 8px; height: 8px; background-color: #00a2e8;
+            border-radius: 50%; transition: background-color 0.3s ease;
         }
-
 
         /* Recipient Info */
-        .recipient-info {
-            margin-bottom: 20px;
-        }
+        .recipient-info { margin-bottom: 20px; }
+        .recipient-name { font-size: 0.9em; color: #666; margin-bottom: 8px; text-transform: uppercase; }
 
-        .recipient-name {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 8px; /* Spacing */
-            text-transform: uppercase; /* Match original */
-        }
+        /* Separator */
+        .separator { border: none; border-top: 2px dashed #ddd; margin: 20px 0; }
 
-        .amount {
-            font-size: 1.1em; /* Adjusted size for longer text */
-            font-weight: bold;
-            color: #003366; /* Dark blue */
-            line-height: 1.3; /* Adjust line height if text wraps */
-            word-wrap: break-word; /* Allow text to wrap */
-            margin-top: 10px; /* Add space above donation text */
-            margin-bottom: 25px; /* Add space below donation text */
-        }
-
-        .currency { /* Not used directly but kept for potential structure */
-             /* Styles removed as it's empty */
-        }
-
-        /* Dashed Separator */
-        .separator {
-            border: none;
-            border-top: 2px dashed #ddd;
-            margin: 20px 0; /* Adjusted margin */
-        }
-
-        /* QR Code Container */
+        /* QR Code */
         .qr-code-container {
-            margin-bottom: 20px;
-            position: relative; /* Needed for overlay positioning */
-            display: inline-block; /* Size container to image */
-            max-width: 250px; /* Limit QR size */
-            width: 80%; /* Responsive width */
-            cursor: pointer; /* Indicate it's clickable (for potential modal) */
+            margin-bottom: 20px; position: relative; display: inline-block;
+            max-width: 250px; width: 80%; cursor: pointer;
         }
-
-        /* QR Code Image */
         .qr-code-img {
-            display: block; /* Remove extra space below image */
-            width: 100%; /* Make image responsive */
-            height: auto; /* Maintain aspect ratio */
-            border: 1px solid #eee; /* Slight border */
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Default subtle shadow */
-            /* Updated transition for micro-interactions */
+            display: block; width: 100%; height: auto; border: 1px solid #eee;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             transition: opacity 0.3s ease, filter 0.3s ease, transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
         }
-
-        /* QR Hover Effect (only when not expired) */
         .container:not(.expired) .qr-code-container:hover .qr-code-img {
-            transform: scale(1.03); /* Slight zoom */
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1); /* Increase shadow */
+            transform: scale(1.03); box-shadow: 0 6px 15px rgba(0,0,0,0.1);
         }
-        /* Reset hover effect when expired */
-        .container.expired .qr-code-container:hover .qr-code-img {
-             transform: none;
-             box-shadow: none;
-        }
-
-
-        /* Dollar sign overlay */
+        .container.expired .qr-code-container:hover .qr-code-img { transform: none; box-shadow: none; }
         .qr-overlay {
-             position: absolute;
-             top: 50%;
-             left: 50%;
-             transform: translate(-50%, -50%); /* Center the overlay */
-             background-color: white;
-             border-radius: 50%;
-             width: 50px; /* Adjust size as needed */
-             height: 50px; /* Adjust size as needed */
-             display: flex;
-             justify-content: center;
-             align-items: center;
-             box-shadow: 0 0 5px rgba(0,0,0,0.2);
-             border: 3px solid #f0f0f0; /* Light border */
-             transition: opacity 0.3s ease; /* Transition for expired state */
-             pointer-events: none; /* Allow clicks/hovers to pass through to QR image */
-         }
-         .qr-overlay span {
-             font-size: 24px; /* Adjust size */
-             font-weight: bold;
-             color: black; /* Black dollar sign */
-         }
-
+             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+             background-color: white; border-radius: 50%; width: 50px; height: 50px;
+             display: flex; justify-content: center; align-items: center;
+             box-shadow: 0 0 5px rgba(0,0,0,0.2); border: 3px solid #f0f0f0;
+             transition: opacity 0.3s ease; pointer-events: none;
+        }
+        .qr-overlay span { font-size: 24px; font-weight: bold; color: black; }
 
         /* Instructions */
-        .instructions {
-            margin-bottom: 15px; /* Adjusted margin */
-            transition: opacity 0.3s ease; /* Transition for expired state */
-        }
+        .instructions { margin-bottom: 15px; transition: opacity 0.3s ease; }
+        .scan-text { font-size: 1.1em; font-weight: 500; color: #333; margin-bottom: 5px; }
+        .or-text { font-size: 0.9em; color: #777; margin-bottom: 15px; }
 
-        .scan-text {
-            font-size: 1.1em;
-            font-weight: 500;
-            color: #333;
-            margin-bottom: 5px;
+        /* --- Button Styles (Individual) --- */
+        .download-link, .aba-scanner-link {
+             display: inline-flex; align-items: center; justify-content: center;
+             text-decoration: none; font-size: 1em; font-weight: 500; cursor: pointer;
+             border: 1px solid transparent; border-radius: 5px;
+             transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, opacity 0.2s ease-in-out;
+             outline: none; margin-bottom: 15px; /* Space below each button */
+             width: 90%; max-width: 250px; /* Consistent width */
+             padding: 10px 18px;
         }
-
-        .or-text {
-            font-size: 0.9em;
-            color: #777;
-            margin-bottom: 15px;
+        .download-link:focus-visible, .aba-scanner-link:focus-visible {
+             box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15);
         }
-
-        /* Container for Action Buttons */
-        .action-buttons {
-            display: flex;
-            flex-direction: column; /* Stack buttons vertically */
-            align-items: center; /* Center buttons horizontally */
-            gap: 15px; /* Space between buttons */
-            margin-bottom: 15px; /* Space below buttons */
-        }
-
-        /* General style for action buttons */
-        .action-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center; /* Center text */
-            text-decoration: none;
-            font-size: 1em;
-            font-weight: 500;
-            cursor: pointer;
-            padding: 8px 18px; /* Adjust padding */
-            border: 1px solid transparent;
-            border-radius: 5px;
-            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            outline: none;
-            min-width: 180px; /* Give buttons similar width */
-            text-align: center;
-            width: 90%; /* Make buttons take similar width */
-            max-width: 250px; /* Consistent max width */
-        }
-        .action-button:focus-visible {
-             box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15); /* Generic focus glow */
-        }
-        .action-button:hover {
+        .download-link:hover, .aba-scanner-link:hover {
              transform: translateY(-2px);
         }
-        .action-button:active {
+         .download-link:active, .aba-scanner-link:active {
              transform: translateY(1px);
              transition-duration: 0.05s;
         }
 
-        /* Download Button/Link specific styles */
+
+        /* Download Link specific style */
         .download-link {
-             /* Inherits most styles from .action-button */
             color: #007bff;
-        }
-        .download-link:focus-visible {
-             border-color: #007bff; /* Use border instead of outline for better spacing */
-             box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25); /* Optional subtle glow */
+            background-color: transparent;
+            border-color: transparent; /* No border */
+            padding: 8px 15px; /* Adjust padding if needed for link look */
+            width: auto; /* Let it size naturally */
+            max-width: none;
+            margin-bottom: 10px; /* Less space below link */
         }
         .download-link:hover {
-            background-color: #e7f3ff;
-            /* transform is handled by .action-button:hover */
+            color: #0056b3;
+            text-decoration: underline; /* Underline on hover for link feel */
+            background-color: transparent; /* Ensure no background on hover */
+            transform: none; /* Remove lift effect if desired for links */
         }
-        .download-link:active {
-            /* transform is handled by .action-button:active */
-            background-color: #d0e8ff; /* Slightly darker background when pressed */
+         .download-link:active {
+            color: #0056b3;
+            transform: none; /* Remove press effect if desired */
+         }
+        .download-link:focus-visible {
+            /* Optional: different focus for link */
+             box-shadow: none;
+             outline: 1px dotted #007bff;
+             outline-offset: 2px;
+             border-color: transparent;
         }
-
 
         /* Download Icon CSS */
         .download-icon {
-            display: inline-block;
-            width: 16px;
-            height: 18px;
-            margin-right: 8px;
-            position: relative;
-            color: #007bff;
-            /* Updated transition for micro-interactions */
+            display: inline-block; width: 16px; height: 18px; margin-right: 8px;
+            position: relative; color: #007bff;
             transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
         }
-        /* Download icon nudge on link hover */
-        .download-link:hover .download-icon {
-             transform: translateY(-1px); /* Nudge icon slightly */
-        }
+        .download-link:hover .download-icon { color: #0056b3; transform: none; } /* Match link hover color, remove transform */
         .download-icon::before { content: ''; position: absolute; bottom: 0px; left: 50%; transform: translateX(-50%); width: 2px; height: 12px; background-color: currentColor; }
         .download-icon::after { content: ''; position: absolute; bottom: 0px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; }
         .download-icon span.tray-top { display: block; position: absolute; top: -2px; left: 0; width: 100%; height: 2px; background-color: currentColor; }
 
-
-        /* ABA Scanner Link Styling */
+        /* ABA Scanner Link specific style */
         .aba-scanner-link {
-             /* Inherits most styles from .action-button */
-             background-color: #003c71; /* ABA Dark Blue */
-             color: white;
-             border-color: #003c71;
+             background-color: #003c71; color: white; border-color: #003c71;
+             width: 90%; max-width: 250px; /* Keep button width */
+             margin-left: auto; margin-right: auto; /* Center */
         }
-        .aba-scanner-link:hover {
-            background-color: #005099; /* Slightly lighter blue on hover */
-            color: white;
-             /* transform is handled by .action-button:hover */
-        }
-         .aba-scanner-link:active {
-            background-color: #002b50; /* Darker blue on press */
-            color: white;
-            /* transform is handled by .action-button:active */
-         }
-        .aba-scanner-link:focus-visible {
-            border-color: #005099;
-            box-shadow: 0 0 0 2px rgba(0, 60, 113, 0.3);
+        .aba-scanner-link:hover { background-color: #005099; color: white; }
+        .aba-scanner-link:active { background-color: #002b50; color: white; }
+        .aba-scanner-link:focus-visible { border-color: #005099; box-shadow: 0 0 0 2px rgba(0, 60, 113, 0.3); }
+
+        /* Thank You Text */
+        .amount { /* This class now holds "THANK FOR DONATION" */
+            font-size: 1.1em; font-weight: bold; color: #003366;
+            line-height: 1.3; word-wrap: break-word;
+            margin-top: 25px; /* Space above */
+            margin-bottom: 10px; /* Space below before disclaimer */
         }
 
-        /* Disclaimer Text Styling */
+        /* Disclaimer Text */
         .disclaimer-text {
-            font-size: 0.75em; /* Make it smaller */
-            color: #777;      /* Grey color */
-            margin-top: 5px;  /* Space above */
-            margin-bottom: 20px; /* Space below */
-            line-height: 1.4;
-            max-width: 90%;    /* Limit width */
-            margin-left: auto;
-            margin-right: auto;
+            font-size: 0.75em; color: #777; margin-top: 0; margin-bottom: 20px;
+            line-height: 1.4; max-width: 90%; margin-left: auto; margin-right: auto;
+            transition: opacity 0.3s ease;
         }
 
-
-        /* Footer Text (inside main content) */
-        .footer-text {
-            font-size: 0.8em;
-            color: #888;
-            margin-top: 25px; /* More space above footer text */
-            line-height: 1.4;
-            transition: opacity 0.3s ease; /* Transition for expired state */
-        }
-
-        /* Footer Social Section (Separate Footer) */
-        .footer-social {
-            background-color: #f8f9fa; /* Slightly different background */
-            padding: 15px 20px;
+        /* Thank You GIF Container */
+        #thank-you-gif-container {
+            display: block; /* Visible by default */
+            position: relative; /* Allows z-index and positioning */
+            margin-top: -60px;  /* !! Negative margin to pull GIF UP over text below it */
+            margin-bottom: -40px; /* !! Adjust margin to control overlap spacing */
+            z-index: 10; /* Ensure GIF is on top of text */
+            pointer-events: none; /* Prevent GIF blocking clicks on elements behind if needed */
             text-align: center;
-            border-top: 1px solid #eee; /* Separator line */
-            flex-shrink: 0; /* Prevent footer from shrinking */
+        }
+        #thank-you-gif {
+            max-width: 150px;   /* Adjust max width of GIF */
+            max-height: 150px; /* Adjust max height of GIF */
+            height: auto;
+            border-radius: 5px;
+            display: inline-block; /* Center within container */
+            pointer-events: auto; /* Allow interaction with GIF if needed */
+        }
+        /* Hide the text within the GIF container now */
+        .thank-you-text { display: none; }
+
+
+        /* Footer Text */
+        .footer-text {
+            font-size: 0.8em; color: #888; margin-top: 60px; /* Increased top margin */
+             line-height: 1.4; position: relative; z-index: 5; /* Ensure footer text is below GIF */
+            transition: opacity 0.3s ease;
+        }
+
+        /* Footer Social Section */
+        .footer-social {
+            background-color: #f8f9fa; padding: 15px 20px; text-align: center;
+            border-top: 1px solid #eee; flex-shrink: 0;
         }
 
         /* Telegram Link */
         .telegram-link {
-            display: inline-flex; /* Align icon and text */
-            align-items: center;
-            text-decoration: none;
-            color: #0088cc;
-            font-size: 0.9em;
-            font-weight: 500;
-            padding: 8px 12px;
-            border: 1px solid transparent; /* Add border for focus consistency */
-            border-radius: 5px;
-            /* Updated transition for micro-interactions */
+            display: inline-flex; align-items: center; text-decoration: none;
+            color: #0088cc; font-size: 0.9em; font-weight: 500;
+            padding: 8px 12px; border: 1px solid transparent; border-radius: 5px;
             transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-in-out, border-color 0.2s ease-in-out;
-             /* Add focus visible style for accessibility */
-            outline: none; /* Remove default browser outline */
+            outline: none;
         }
-        .telegram-link:focus-visible {
-            border-color: #0088cc; /* Use border instead of outline */
-            box-shadow: 0 0 0 2px rgba(0, 136, 204, 0.25); /* Optional subtle glow */
-        }
-
-        /* Telegram link hover */
-        .telegram-link:hover {
-            background-color: #e9f5ff;
-            color: #0077b3;
-            transform: translateY(-2px); /* Lift effect */
-        }
-
-        /* Telegram link active */
-        .telegram-link:active {
-            transform: translateY(1px); /* Press down effect */
-            background-color: #d5effc; /* Slightly darker background when pressed */
-            transition-duration: 0.05s; /* Make press down feel faster */
-        }
-
-
+        .telegram-link:focus-visible { border-color: #0088cc; box-shadow: 0 0 0 2px rgba(0, 136, 204, 0.25); }
+        .telegram-link:hover { background-color: #e9f5ff; color: #0077b3; transform: translateY(-2px); }
+        .telegram-link:active { transform: translateY(1px); background-color: #d5effc; transition-duration: 0.05s; }
         .telegram-link img {
-            width: 22px;
-            height: 22px;
-            margin-right: 8px;
-            vertical-align: middle; /* Better alignment */
-            /* Updated transition for micro-interactions */
+            width: 22px; height: 22px; margin-right: 8px; vertical-align: middle;
             transition: transform 0.2s ease-in-out;
         }
-        /* Telegram icon scale/rotate on link hover */
-        .telegram-link:hover img {
-            transform: scale(1.1) rotate(-5deg);
-        }
+        .telegram-link:hover img { transform: scale(1.1) rotate(-5deg); }
 
-        /* --- Expired State Styles --- */
-        .expired .qr-code-img { /* Target image directly for filter/opacity */
-            opacity: 0.3;
-            filter: grayscale(80%);
+        /* --- State: Expired --- */
+        .expired .qr-code-img { opacity: 0.3; filter: grayscale(80%); }
+        .expired .qr-code-container { cursor: default; }
+        /* Disable buttons visually when expired */
+        .expired .download-link,
+        .expired .aba-scanner-link {
+            pointer-events: none; cursor: default;
+            opacity: 0.5; /* Fade disabled buttons */
+            transform: none; box-shadow: none;
         }
-        .expired .qr-code-container { /* Change cursor on container */
-            cursor: default;
-        }
+        /* Specific overrides for disabled look */
+        .expired .download-link { color: #aaa !important; text-decoration: none; }
+        .expired .download-link .download-icon { color: #aaa !important; }
+        .expired .aba-scanner-link { background-color: #cccccc !important; color: #888888 !important; border-color: #cccccc !important; }
 
-        /* Disable action buttons visually when expired */
-        .expired .action-button {
-            pointer-events: none; /* Prevent clicks */
-            cursor: default; /* Show default cursor */
-            background-color: #cccccc !important; /* Disabled grey background (override specifics) */
-            color: #888888 !important;    /* Disabled grey text */
-            border-color: #cccccc !important;
-            transform: none;
-            box-shadow: none;
-        }
-         .expired #download-btn .download-icon { /* Also grey out specific icon */
-             color: #aaa;
-             transform: none;
-         }
-
-         /* Dim instructions and footer text */
         .expired .instructions,
-        .expired .footer-text {
-             opacity: 0.5;
-        }
-         .expired .qr-overlay {
-             opacity: 0; /* Fade out overlay */
-             pointer-events: none; /* Make sure it doesn't interfere */
-         }
-         .expired .timer {
-            color: #e10a17 !important; /* Make timer text red */
-         }
-         .expired .timer-icon {
-            border-color: #e10a17; /* Make icon border red */
-         }
-         .expired .timer-icon::before {
-             background-color: #e10a17; /* Make inner dot red */
-         }
-
-         /* Accessibility: Remove focus styles when element is disabled by expiration */
-         .expired .action-button:focus-visible, /* Covers both buttons */
-         .expired .telegram-link:focus-visible { /* Specific case for telegram if needed */
-            border-color: transparent;
-            box-shadow: none;
-         }
-
-         /* Dim disclaimer when expired */
-         .expired .disclaimer-text {
-             opacity: 0.6;
-         }
+        .expired .footer-text,
+        .expired .disclaimer-text,
+        .expired .amount { opacity: 0.6; } /* Dim text */
+        .expired .qr-overlay { opacity: 0; pointer-events: none; }
+        .expired #thank-you-gif-container { opacity: 0.6; } /* Dim GIF */
+        .expired .timer { color: #e10a17 !important; }
+        .expired .timer-icon { border-color: #e10a17; }
+        .expired .timer-icon::before { background-color: #e10a17; }
+        /* Accessibility: Remove focus styles when disabled */
+        .expired .download-link:focus-visible,
+        .expired .aba-scanner-link:focus-visible,
+        .expired .telegram-link:focus-visible { border-color: transparent; box-shadow: none; outline: none; }
 
     </style>
 </head>
@@ -518,8 +309,6 @@
             <!-- Recipient Info -->
             <div class="recipient-info">
                 <div class="recipient-name">Ozo. Designer</div>
-                <!-- Optional: Add donation purpose text here -->
-                <!-- <p style="font-size: 0.9em; color: #555; margin-top: 5px;">Support my work!</p> -->
             </div>
 
             <!-- Separator -->
@@ -527,20 +316,10 @@
 
             <!-- QR Code Container -->
             <div class="qr-code-container" title="Scan QR Code">
-                <!--
-                    #################################################################
-                    #                                                               #
-                    #  IMPORTANT: Ensure 'qr.PNG' exists in the same directory     #
-                    #             or update the 'src' path below!                 #
-                    #             Check case sensitivity (PNG vs png).             #
-                    #                                                               #
-                    #################################################################
-                -->
                 <img src="qr.PNG"
                      alt="ABA KHQR Code for Donation to Ozo. Designer"
                      class="qr-code-img"
                      id="qr-code">
-
                 <!-- Dollar Sign Overlay -->
                  <div class="qr-overlay">
                     <span>$</span>
@@ -553,37 +332,22 @@
                 <div class="or-text">or</div>
             </div>
 
+            <!-- Download Link/Button -->
+            <a id="download-btn" class="download-link" href="qr.PNG" download="ozo-designer-donation-khqr.png">
+                <span class="download-icon">
+                    <span class="tray-top"></span>
+                </span>
+                Download QR
+            </a>
 
-            <!-- Action Buttons Container -->
-            <div class="action-buttons">
-                <!-- Download Link/Button -->
-                 <!-- IMPORTANT: Ensure 'qr.PNG' path is correct here too for download -->
-                <a id="download-btn" class="action-button download-link" href="qr.PNG" download="ozo-designer-donation-khqr.png">
-                    <span class="download-icon">
-                        <span class="tray-top"></span>
-                    </span>
-                    Download QR
-                </a>
+            <!-- Open ABA Scanner Button -->
+            <a id="open-aba-scanner-btn" class="aba-scanner-link" href="https://pay.ababank.com/j87hqyxC5ntRmRjX9">
+                Open ABA Scanner
+            </a>
 
-                <!-- Open ABA Scanner Button -->
-                <!--
-                    #################################################################
-                    #                                                               #
-                    #  WARNING: The 'href' below is a *PLACEHOLDER*. You MUST     #
-                    #           find the correct ABA Mobile deep link/URL scheme  #
-                    #           for this to work, if one exists publicly.         #
-                    #                                                               #
-                    #################################################################
-                -->
-                <a id="open-aba-scanner-btn" class="action-button aba-scanner-link" href="https://pay.ababank.com/j87hqyxC5ntRmRjX9">
-                    <!-- Optional: Add an SVG/Image icon here e.g. <img src="aba-icon.svg"> -->
-                    Open ABA Scanner
-                </a>
-
-                <!-- Donation Text -->
+            <!-- Donation Text -->
              <div class="amount">
                     THANK FOR DONATION<span class="currency"></span>
-            </div>
             </div>
 
              <!-- Disclaimer for ABA Scanner Button -->
@@ -591,38 +355,44 @@
                 Requires ABA Mobile app installed. Link may not work on all devices or if the app structure changes. Use 'Scan to pay' in the app manually if needed.
             </p>
 
+            <!-- Thank You GIF Container (Visible by default) -->
+            <div id="thank-you-gif-container">
+                 <!-- IMPORTANT: Ensure 'Os luy hy.gif' exists -->
+                <img id="thank-you-gif" src="Os luy hy.gif" alt="Thank You!">
+                <!-- Removed thank you text paragraph -->
+            </div>
+
+
             <!-- Footer Text -->
             <p class="footer-text">
                  Generated by Ozo. Designer
-                 <!-- Optional: Add disclaimer/privacy link -->
-                 <!-- <br><a href="/privacy.html" style="color: #888; font-size: 0.9em;">Privacy Policy</a> -->
             </p>
 
         </main> <!-- End of main content -->
 
-        
-       
         <!-- Footer with Social Icon -->
         <footer class="footer-social">
-             <!-- IMPORTANT: Update Telegram link and ensure 'telegram.png' exists -->
             <a href="https://t.me/m11mmm112" target="_blank" rel="noopener noreferrer" class="telegram-link" aria-label="Contact us on Telegram">
-                 <!-- IMPORTANT: Ensure 'telegram.png' exists or update src -->
                 <img src="telegram.png" alt="Telegram Icon">
-                <span>Join on Telegram</span> <!-- Optional Text -->
+                <span>Join on Telegram</span>
             </a>
         </footer>
 
     </div> <!-- End of container -->
 
     <script>
-        // --- Timer Logic ---
+        // --- DOM Element References ---
         const timeLeftDisplay = document.getElementById('time-left');
         const paymentContainer = document.getElementById('payment-container');
-        const initialTimeText = timeLeftDisplay?.textContent || '02:53'; // Safer access with fallback
+        const initialTimeText = timeLeftDisplay?.textContent || '02:53';
         const downloadBtn = document.getElementById('download-btn');
-        const qrCodeImage = document.getElementById('qr-code'); // Reference to the <img> element
-        const openAbaBtn = document.getElementById('open-aba-scanner-btn'); // Reference to the new button
+        const openAbaBtn = document.getElementById('open-aba-scanner-btn');
+        // No longer need references to confirm button or gif container/image for dynamic changes
 
+        let totalSeconds = 0;
+        let timerInterval = null;
+
+        // --- Utility Functions ---
         function parseTime(timeString) {
             const parts = timeString.split(':');
             if (parts.length === 2) {
@@ -633,86 +403,79 @@
                 }
             }
             console.warn("Could not parse time string:", timeString, "Defaulting to 173 seconds.");
-            return 173; // Fallback: 2 minutes 53 seconds
+            return 173;
         }
 
-        let totalSeconds = parseTime(initialTimeText);
-        let timerInterval = null; // Declare interval variable
-
+        // --- Timer Logic ---
         function startTimer() {
-            // Clear any existing interval before starting a new one
-            if (timerInterval) {
-                clearInterval(timerInterval);
-            }
-
-            // Ensure timeLeftDisplay exists before starting
+            if (timerInterval) clearInterval(timerInterval);
             if (!timeLeftDisplay) {
                 console.error("Timer display element not found.");
                 return;
             }
+
+            totalSeconds = parseTime(initialTimeText);
 
             timerInterval = setInterval(() => {
                 if (totalSeconds <= 0) {
                     clearInterval(timerInterval);
                     timeLeftDisplay.textContent = "Expired";
                     if (paymentContainer) {
-                        paymentContainer.classList.add('expired'); // Add class to trigger CSS changes
+                        paymentContainer.classList.add('expired');
                     }
 
-                    // Ensure buttons are visually disabled by JS as well (belt-and-suspenders)
-                    if(downloadBtn) {
-                        downloadBtn.removeAttribute('href');
-                        downloadBtn.style.pointerEvents = 'none';
-                        downloadBtn.style.cursor = 'default';
-                    }
-                    if(openAbaBtn) {
-                        openAbaBtn.removeAttribute('href');
-                        openAbaBtn.style.pointerEvents = 'none';
-                        openAbaBtn.style.cursor = 'default';
-                    }
+                    // Disable buttons via JS on expiry
+                    [downloadBtn, openAbaBtn].forEach(btn => { // Removed confirmBtn
+                        if (btn) {
+                            btn.removeAttribute('href'); // Only relevant for links
+                            btn.style.pointerEvents = 'none';
+                            btn.style.cursor = 'default';
+                            // Disabled attribute is useful for actual <button> elements
+                            // btn.setAttribute('disabled', 'disabled');
+                        }
+                    });
 
                     console.log("Timer expired.");
-                    return; // Exit the interval function
+                    return;
                 }
 
-                totalSeconds--; // Decrement seconds
+                totalSeconds--;
 
                 const minutes = Math.floor(totalSeconds / 60);
                 const seconds = totalSeconds % 60;
 
-                // Format time with leading zeros
                 const formattedMinutes = String(minutes).padStart(2, '0');
                 const formattedSeconds = String(seconds).padStart(2, '0');
 
                 timeLeftDisplay.textContent = `${formattedMinutes}:${formattedSeconds}`;
 
-            }, 1000); // Update every second
+            }, 1000);
         }
 
-        // --- Button Click Handlers (mainly for logging/blocking when expired) ---
+        // --- Event Listeners ---
         function setupButtonClickListeners() {
-            const buttons = document.querySelectorAll('.action-button'); // Select all action buttons
-            buttons.forEach(button => {
-                button.addEventListener('click', (event) => {
-                    if (paymentContainer?.classList.contains('expired')) {
-                        event.preventDefault(); // Prevent default link behavior
-                        console.log(`Action blocked: ${button.id || 'Button'} clicked when expired.`);
-                        return; // Stop further action
-                    }
-                    // Only log if not expired
-                    console.log(`Action initiated: ${button.id || 'Button'} clicked. Href: ${button.getAttribute('href')}`);
-                 });
+            // Listener for Download and ABA buttons (prevents action if expired)
+            [downloadBtn, openAbaBtn].forEach(button => {
+                 if (button) {
+                    button.addEventListener('click', (event) => {
+                        if (paymentContainer?.classList.contains('expired')) {
+                            event.preventDefault();
+                            console.log(`Action blocked: ${button.id || 'Button'} clicked when expired.`);
+                            return;
+                        }
+                        console.log(`Action initiated: ${button.id || 'Button'} clicked. Href: ${button.getAttribute('href')}`);
+                    });
+                 } else {
+                     console.warn(`Button element not found during setup: ${button === downloadBtn ? 'downloadBtn' : 'openAbaBtn'}`);
+                 }
             });
+            // No listener needed for confirm button anymore
         }
 
-        // --- Service Worker Registration & Timer Start ---
-        // Use 'DOMContentLoaded' which fires after HTML is parsed but before all resources (like images) load
-        document.addEventListener('DOMContentLoaded', () => {
-             // Service Worker Registration
+        function registerServiceWorker() {
             if ('serviceWorker' in navigator) {
-                // Register after the page 'load' event to avoid delaying critical rendering.
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('sw.js') // Assumes sw.js is in the root
+                    navigator.serviceWorker.register('sw.js')
                         .then(registration => {
                             console.log('Service Worker registered successfully with scope:', registration.scope);
                         })
@@ -723,12 +486,14 @@
             } else {
                 console.log('Service Worker not supported in this browser.');
             }
+        }
 
-            // Start the timer once the DOM is ready
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            registerServiceWorker();
             startTimer();
-
-            // Setup click listeners for buttons
             setupButtonClickListeners();
+            // No need to dynamically set GIF source if hardcoded in HTML
         });
 
     </script>
