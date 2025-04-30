@@ -139,33 +139,18 @@
              transition-duration: 0.05s;
         }
 
-
         /* Download Link specific style */
         .download-link {
-            color: #007bff;
-            background-color: transparent;
-            border-color: transparent; /* No border */
-            padding: 8px 15px; /* Adjust padding if needed for link look */
-            width: auto; /* Let it size naturally */
-            max-width: none;
-            margin-bottom: 10px; /* Less space below link */
+            color: #007bff; background-color: transparent; border-color: transparent;
+            padding: 8px 15px; width: auto; max-width: none; margin-bottom: 10px;
         }
         .download-link:hover {
-            color: #0056b3;
-            text-decoration: underline; /* Underline on hover for link feel */
-            background-color: transparent; /* Ensure no background on hover */
-            transform: none; /* Remove lift effect if desired for links */
+            color: #0056b3; text-decoration: underline; background-color: transparent;
+            transform: none;
         }
-         .download-link:active {
-            color: #0056b3;
-            transform: none; /* Remove press effect if desired */
-         }
+         .download-link:active { color: #0056b3; transform: none; }
         .download-link:focus-visible {
-            /* Optional: different focus for link */
-             box-shadow: none;
-             outline: 1px dotted #007bff;
-             outline-offset: 2px;
-             border-color: transparent;
+             box-shadow: none; outline: 1px dotted #007bff; outline-offset: 2px; border-color: transparent;
         }
 
         /* Download Icon CSS */
@@ -174,7 +159,7 @@
             position: relative; color: #007bff;
             transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
         }
-        .download-link:hover .download-icon { color: #0056b3; transform: none; } /* Match link hover color, remove transform */
+        .download-link:hover .download-icon { color: #0056b3; transform: none; }
         .download-icon::before { content: ''; position: absolute; bottom: 0px; left: 50%; transform: translateX(-50%); width: 2px; height: 12px; background-color: currentColor; }
         .download-icon::after { content: ''; position: absolute; bottom: 0px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; }
         .download-icon span.tray-top { display: block; position: absolute; top: -2px; left: 0; width: 100%; height: 2px; background-color: currentColor; }
@@ -189,47 +174,47 @@
         .aba-scanner-link:active { background-color: #002b50; color: white; }
         .aba-scanner-link:focus-visible { border-color: #005099; box-shadow: 0 0 0 2px rgba(0, 60, 113, 0.3); }
 
+
+         <!-- /* ** MOVED TO BE INSIDE #thank-you-gif-container below ** */ -->
         /* Thank You Text */
-        .amount { /* This class now holds "THANK FOR DONATION" */
+        .amount {
             font-size: 1.1em; font-weight: bold; color: #003366;
             line-height: 1.3; word-wrap: break-word;
-            margin-top: 25px; /* Space above */
-            margin-bottom: 10px; /* Space below before disclaimer */
+            margin-top: 15px; /* Space below GIF */
+            margin-bottom: 0; /* No space needed below */
+            transition: opacity 0.3s ease;
         }
+
 
         /* Disclaimer Text */
         .disclaimer-text {
-            font-size: 0.75em; color: #777; margin-top: 0; margin-bottom: 20px;
+            font-size: 0.75em; color: #777; margin-top: 15px; margin-bottom: 10px; /* Adjusted margins */
             line-height: 1.4; max-width: 90%; margin-left: auto; margin-right: auto;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s ease; position: relative; z-index: 5; /* Below GIF */
         }
 
         /* Thank You GIF Container */
         #thank-you-gif-container {
             display: block; /* Visible by default */
             position: relative; /* Allows z-index and positioning */
-            margin-top: -60px;  /* !! Negative margin to pull GIF UP over text below it */
-            margin-bottom: -40px; /* !! Adjust margin to control overlap spacing */
-            z-index: 10; /* Ensure GIF is on top of text */
-            pointer-events: none; /* Prevent GIF blocking clicks on elements behind if needed */
+            margin-top: -30px;  /* Pull GIF UP slightly */
+            margin-bottom: 10px; /* Space below container */
+            z-index: 10; /* Ensure GIF/Text is on top */
+            pointer-events: none; /* Prevent container blocking clicks */
             text-align: center;
         }
         #thank-you-gif {
             max-width: 150px;   /* Adjust max width of GIF */
             max-height: 150px; /* Adjust max height of GIF */
-            height: auto;
-            border-radius: 5px;
-            display: inline-block; /* Center within container */
-            pointer-events: auto; /* Allow interaction with GIF if needed */
+            height: auto; border-radius: 5px; display: inline-block;
+            pointer-events: auto; /* Allow interaction with GIF */
         }
-        /* Hide the text within the GIF container now */
-        .thank-you-text { display: none; }
 
 
         /* Footer Text */
         .footer-text {
-            font-size: 0.8em; color: #888; margin-top: 60px; /* Increased top margin */
-             line-height: 1.4; position: relative; z-index: 5; /* Ensure footer text is below GIF */
+            font-size: 0.8em; color: #888; margin-top: 20px; /* Adjusted top margin */
+             line-height: 1.4; position: relative; z-index: 5; /* Ensure footer text is below GIF container */
             transition: opacity 0.3s ease;
         }
 
@@ -273,10 +258,10 @@
 
         .expired .instructions,
         .expired .footer-text,
-        .expired .disclaimer-text,
-        .expired .amount { opacity: 0.6; } /* Dim text */
+        .expired .disclaimer-text { opacity: 0.6; } /* Dim text */
+        .expired .amount { opacity: 0.6; } /* Dim thank you text */
         .expired .qr-overlay { opacity: 0; pointer-events: none; }
-        .expired #thank-you-gif-container { opacity: 0.6; } /* Dim GIF */
+        .expired #thank-you-gif-container { opacity: 0.6; } /* Dim GIF container */
         .expired .timer { color: #e10a17 !important; }
         .expired .timer-icon { border-color: #e10a17; }
         .expired .timer-icon::before { background-color: #e10a17; }
@@ -345,18 +330,19 @@
                 Open ABA Scanner
             </a>
 
-            <!-- Donation Text -->
-             <div class="amount">
-                    THANK FOR DONATION<span class="currency"></span>
-            </div>
-
-             
+             <!-- Disclaimer for ABA Scanner Button -->
+            <p class="disclaimer-text">
+                Requires ABA Mobile app installed. Link may not work on all devices or if the app structure changes. Use 'Scan to pay' in the app manually if needed.
+            </p>
 
             <!-- Thank You GIF Container (Visible by default) -->
             <div id="thank-you-gif-container">
-                 <!-- IMPORTANT: Ensure 'Os luy hy.gif' exists -->
+                 <!-- IMPORTANT: Ensure 'Thank.gif' exists -->
                 <img id="thank-you-gif" src="Thank.gif" alt="Thank You!">
-                <!-- Removed thank you text paragraph -->
+                 <!-- Donation Text Moved Below GIF -->
+                 <div class="amount">
+                        THANK FOR DONATION<span class="currency"></span>
+                </div>
             </div>
 
 
@@ -384,7 +370,6 @@
         const initialTimeText = timeLeftDisplay?.textContent || '02:53';
         const downloadBtn = document.getElementById('download-btn');
         const openAbaBtn = document.getElementById('open-aba-scanner-btn');
-        // No longer need references to confirm button or gif container/image for dynamic changes
 
         let totalSeconds = 0;
         let timerInterval = null;
@@ -422,13 +407,11 @@
                     }
 
                     // Disable buttons via JS on expiry
-                    [downloadBtn, openAbaBtn].forEach(btn => { // Removed confirmBtn
+                    [downloadBtn, openAbaBtn].forEach(btn => {
                         if (btn) {
                             btn.removeAttribute('href'); // Only relevant for links
                             btn.style.pointerEvents = 'none';
                             btn.style.cursor = 'default';
-                            // Disabled attribute is useful for actual <button> elements
-                            // btn.setAttribute('disabled', 'disabled');
                         }
                     });
 
@@ -466,7 +449,6 @@
                      console.warn(`Button element not found during setup: ${button === downloadBtn ? 'downloadBtn' : 'openAbaBtn'}`);
                  }
             });
-            // No listener needed for confirm button anymore
         }
 
         function registerServiceWorker() {
@@ -490,7 +472,6 @@
             registerServiceWorker();
             startTimer();
             setupButtonClickListeners();
-            // No need to dynamically set GIF source if hardcoded in HTML
         });
 
     </script>
