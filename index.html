@@ -139,6 +139,7 @@
              transition-duration: 0.05s;
         }
 
+
         /* Download Link specific style */
         .download-link {
             color: #007bff; background-color: transparent; border-color: transparent;
@@ -175,7 +176,6 @@
         .aba-scanner-link:focus-visible { border-color: #005099; box-shadow: 0 0 0 2px rgba(0, 60, 113, 0.3); }
 
 
-         <!-- /* ** MOVED TO BE INSIDE #thank-you-gif-container below ** */ -->
         /* Thank You Text */
         .amount {
             font-size: 1.1em; font-weight: bold; color: #003366;
@@ -186,19 +186,12 @@
         }
 
 
-        /* Disclaimer Text */
-        .disclaimer-text {
-            font-size: 0.75em; color: #777; margin-top: 15px; margin-bottom: 10px; /* Adjusted margins */
-            line-height: 1.4; max-width: 90%; margin-left: auto; margin-right: auto;
-            transition: opacity 0.3s ease; position: relative; z-index: 5; /* Below GIF */
-        }
-
         /* Thank You GIF Container */
         #thank-you-gif-container {
             display: block; /* Visible by default */
             position: relative; /* Allows z-index and positioning */
-            margin-top: -30px;  /* Pull GIF UP slightly */
-            margin-bottom: 10px; /* Space below container */
+            margin-top: -15px;  /* !! Adjusted Negative margin to pull GIF UP */
+            margin-bottom: 15px; /* Space below container */
             z-index: 10; /* Ensure GIF/Text is on top */
             pointer-events: none; /* Prevent container blocking clicks */
             text-align: center;
@@ -258,8 +251,7 @@
 
         .expired .instructions,
         .expired .footer-text,
-        .expired .disclaimer-text { opacity: 0.6; } /* Dim text */
-        .expired .amount { opacity: 0.6; } /* Dim thank you text */
+        .expired .amount { opacity: 0.6; } /* Dim text */
         .expired .qr-overlay { opacity: 0; pointer-events: none; }
         .expired #thank-you-gif-container { opacity: 0.6; } /* Dim GIF container */
         .expired .timer { color: #e10a17 !important; }
@@ -269,6 +261,8 @@
         .expired .download-link:focus-visible,
         .expired .aba-scanner-link:focus-visible,
         .expired .telegram-link:focus-visible { border-color: transparent; box-shadow: none; outline: none; }
+
+        /* --- Removed .disclaimer-text styles --- */
 
     </style>
 </head>
@@ -339,7 +333,6 @@
                         THANK FOR DONATION<span class="currency"></span>
                 </div>
             </div>
-
 
             <!-- Footer Text -->
             <p class="footer-text">
