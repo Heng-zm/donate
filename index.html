@@ -3,11 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#e10a17"/>
-    <link rel="manifest" href="manifest.json"> <!-- Make sure manifest.json exists -->
-    <link rel="apple-touch-icon" href="icon-192.png"> <!-- Make sure icon-192.png exists -->
-
     <title>ABA KHQR Donation</title>
     <style>
         /* Basic Reset & Body Styles */
@@ -17,10 +12,6 @@
             padding: 0;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: #f0f2f5; /* Light grey background */
@@ -28,7 +19,8 @@
             justify-content: center;
             align-items: flex-start; /* Align items to the top */
             min-height: 100vh;
-            padding: 20px 10px; /* Add horizontal padding for smaller screens */
+            padding-top: 20px; /* Add some space at the top */
+            padding-bottom: 20px; /* Add space at the bottom */
         }
 
         /* Main Container */
@@ -36,12 +28,11 @@
             background-color: #ffffff; /* White background for the main content */
             width: 100%;
             max-width: 400px; /* Limit width for mobile-like view */
-            border-radius: 10px; /* Slightly more rounded corners */
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1); /* Softer, deeper shadow */
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             overflow: hidden; /* Ensures header/footer background doesn't bleed */
             display: flex; /* Use flexbox for vertical layout */
             flex-direction: column; /* Stack children vertically */
-            margin-bottom: 20px; /* Space below the container */
         }
 
         /* Header Section */
@@ -54,18 +45,18 @@
             align-items: center;
             min-height: 55px; /* Ensure consistent header height */
             flex-shrink: 0; /* Prevent header from shrinking */
-            background-image: linear-gradient(to bottom, #f11a27, #d10915);
-            border-bottom: 1px solid rgba(0,0,0,0.1); /* Subtle line below header */
         }
 
+        /* Left side text in Header (OZO. DESIGNER) */
         .header-brand {
             font-size: 0.9em;
             opacity: 0.9;
-            font-weight: 600; /* Slightly bolder */
+            font-weight: bold;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-            align-self: center;
+            align-self: center; /* Align vertically */
         }
 
+        /* KHQR logo simulation */
         .header-khqr-logo {
             font-weight: bold;
             font-size: 1.4em;
@@ -75,304 +66,313 @@
             display: flex;
             align-items: center;
         }
-         .header-khqr-logo::before,
-         .header-khqr-logo::after {
+         /* Lines for the KHQR logo simulation */
+        .header-khqr-logo::before,
+        .header-khqr-logo::after {
             content: '';
             position: absolute;
             right: 0;
-            height: 2.5px; /* Slightly thicker line */
+            height: 2px; /* Line thickness */
             background-color: white;
             width: 12px; /* Line width */
-            border-radius: 1px; /* Slightly rounded ends */
         }
-        .header-khqr-logo::before { transform: translateY(-4.5px); }
-        .header-khqr-logo::after { transform: translateY(4.5px); }
+        .header-khqr-logo::before {
+            transform: translateY(-4px); /* Position the top line */
+        }
+         .header-khqr-logo::after {
+            transform: translateY(4px); /* Position the bottom line */
+         }
+
 
         /* Main Content Area */
         .content {
             padding: 25px 20px;
             text-align: center;
             flex-grow: 1; /* Allow content to take available space */
-            position: relative; /* Needed for error overlay */
         }
 
-        /* General Error Message */
-        .error-message {
-            display: none; /* Hidden by default */
-            position: absolute; /* Position relative to parent .content */
-            top: 10px; /* Position near top */
-            left: 10px;
-            right: 10px;
-            background-color: rgba(255, 235, 238, 0.95); /* Light red background */
-            color: #c62828; /* Stronger red text */
-            padding: 12px 15px;
-            border: 1px solid #ef9a9a; /* Red border */
-            border-radius: 6px;
-            z-index: 10;
-            text-align: center;
-            font-size: 0.9em;
-            font-weight: 500;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            animation: fadeIn 0.3s ease-out; /* Fade in animation */
-        }
-        .error-message.visible { display: block; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Top Bar */
+        /* Top Bar: Title & Timer */
         .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px; /* Reduced margin */
-            position: relative; /* Keep it above potential error messages */
-            z-index: 1;
+            margin-bottom: 25px;
         }
+
         .title {
             font-weight: bold;
             font-size: 1.4em;
-            color: #212529; /* Darker grey */
+            color: #333;
             text-align: left; /* Align title left */
         }
+
         .timer {
             display: flex;
             align-items: center;
             font-size: 1em;
-            font-weight: 600; /* Bolder timer */
-            color: #495057; /* Mid grey */
-        }
-        .timer-icon {
-            width: 20px; height: 20px; border: 3px solid #007bff; /* Standard blue */
-            border-radius: 50%; margin-right: 8px; position: relative;
-            display: flex; justify-content: center; align-items: center;
-            transition: border-color 0.3s ease, background-color 0.3s ease;
-        }
-         .timer-icon::before {
-            content: ''; display: block; width: 8px; height: 8px;
-            background-color: #007bff; /* Standard blue */ border-radius: 50%;
-            transition: background-color 0.3s ease;
-        }
-
-        /* Recipient Info & Copy Button */
-        .recipient-info {
-            margin-bottom: 15px; /* Reduced margin */
-            text-align: center; /* Center align content */
-        }
-        .recipient-name {
-            font-size: 1.05em; color: #343a40; font-weight: 600;
-            margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;
-            display: block; /* Make it block for centering */
-        }
-        .account-details {
-            font-size: 0.95em;
-            color: #495057;
-            margin-bottom: 10px;
-            word-spacing: 2px; /* Add space between numbers */
-        }
-        /* --- UPDATED COPY BUTTON STYLES --- */
-        .copy-button {
-            font-size: 0.75em; /* Reduced font size */
-            padding: 4px 8px;   /* Reduced padding */
-            background-color: #f8f9fa; /* Very light grey */
-            color: #495057;
-            border: 1px solid #dee2e6; /* Light border */
-            margin-left: 5px; /* Space next to account number if inline */
-            vertical-align: middle; /* Align with text */
-            border-radius: 4px; /* Slightly smaller radius to match */
-            line-height: 1.2; /* Adjust line height if needed */
-            cursor: pointer; /* Ensure cursor is pointer */
-            transition: background-color 0.2s ease, border-color 0.2s ease; /* Add transitions */
-        }
-        .copy-button:hover { background-color: #e9ecef; }
-        .copy-button:active { background-color: #dee2e6; }
-        /* --- END OF UPDATED STYLES --- */
-
-        #copy-feedback {
-            display: none;
-            font-size: 0.85em;
-            margin-top: 8px;
             font-weight: 500;
+            color: #555;
+            transition: color 0.3s ease; /* Smooth color transition for expired */
         }
-        #copy-feedback.success { color: #28a745; } /* Green */
-        #copy-feedback.error { color: #dc3545; } /* Red */
+
+        /* Timer Icon - Circle with inner dot */
+        .timer-icon {
+            width: 20px;
+            height: 20px;
+            border: 3px solid #00a2e8; /* Light blue */
+            border-radius: 50%;
+            margin-right: 8px;
+            position: relative; /* Needed for pseudo-element */
+            display: flex; /* For centering the inner dot */
+            justify-content: center;
+            align-items: center;
+            transition: border-color 0.3s ease; /* Smooth color transition */
+        }
+         /* Inner dot for the timer icon */
+         .timer-icon::before {
+            content: '';
+            display: block;
+            width: 8px; /* Size of the inner dot */
+            height: 8px;
+            background-color: #00a2e8;
+            border-radius: 50%;
+            transition: background-color 0.3s ease; /* Smooth color transition */
+        }
 
 
-        /* Separator */
+        /* Recipient Info */
+        .recipient-info {
+            margin-bottom: 20px;
+        }
+
+        .recipient-name {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 8px; /* Spacing */
+            text-transform: uppercase; /* Match original */
+        }
+
+        .amount {
+            font-size: 1.1em; /* Adjusted size for longer text */
+            font-weight: bold;
+            color: #003366; /* Dark blue */
+            line-height: 1.3; /* Adjust line height if text wraps */
+            word-wrap: break-word; /* Allow text to wrap */
+            margin-top: 10px; /* Add space above donation text */
+            margin-bottom: 25px; /* Add space below donation text */
+        }
+
+        .currency { /* Not used directly but kept for potential structure */
+             /* Styles removed as it's empty */
+        }
+
+        /* Dashed Separator */
         .separator {
-            border: none; border-top: 2px dashed #ced4da; /* Lighter dashed line */
+            border: none;
+            border-top: 2px dashed #ddd;
             margin: 20px 0; /* Adjusted margin */
         }
 
-        /* QR Code Area */
+        /* QR Code */
         .qr-code-container {
-            margin-bottom: 20px; position: relative; display: inline-block;
-            max-width: 250px; width: 75%; min-height: 150px; /* Increased min-height */
-            background-color: #f8f9fa; border-radius: 6px; border: 1px solid #dee2e6;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-            vertical-align: top; /* Align top if other elements wrap */
+            margin-bottom: 20px;
+            position: relative; /* Needed for overlay */
+            display: inline-block; /* Fit container to image */
+            max-width: 250px; /* Limit QR size */
+            width: 80%; /* Responsive width */
         }
-
-        /* QR Loading State */
-        #qr-loading {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            display: none; /* Hidden by default */
-            font-size: 0.9em; color: #6c757d;
-            width: 40px; height: 40px; border: 4px solid #f3f3f3; /* Light grey */
-            border-top: 4px solid #007bff; /* Blue */ border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
-
-        /* QR Error State */
-        .qr-error-message {
-             display: none; position: absolute; top: 50%; left: 50%;
-             transform: translate(-50%, -50%); color: #6c757d;
-             font-size: 0.9em; text-align: center; padding: 10px;
-             width: calc(100% - 20px); line-height: 1.4;
-        }
-        .qr-code-container.qr-loading #qr-loading { display: block; }
-        .qr-code-container.qr-loading .qr-code-img,
-        .qr-code-container.qr-loading .qr-overlay,
-        .qr-code-container.qr-loading .qr-error-message { display: none; }
-
-        .qr-code-container.qr-error {
-             background-color: #f8d7da; border-color: #f5c6cb;
-             min-height: 100px; /* Reset min-height for error message */
-        }
-         .qr-code-container.qr-error #qr-loading,
-         .qr-code-container.qr-error .qr-code-img,
-         .qr-code-container.qr-error .qr-overlay { display: none; }
-         .qr-code-container.qr-error .qr-error-message { display: block; }
 
         .qr-code-img {
-            display: block; width: 100%; height: auto; border: none;
-            border-radius: 5px; transition: opacity 0.3s ease, filter 0.3s ease;
+            display: block;
+            width: 100%; /* Make image responsive */
+            height: auto;
+            border: 1px solid #eee; /* Slight border */
+            transition: opacity 0.3s ease, filter 0.3s ease; /* Transition for expired state */
         }
+        /* Dollar sign overlay - approximate position */
         .qr-overlay {
-             position: absolute; top: 50%; left: 50%;
-             transform: translate(-50%, -50%); background-color: white;
-             border-radius: 50%; width: 50px; height: 50px; display: flex;
-             justify-content: center; align-items: center;
-             box-shadow: 0 2px 10px rgba(0,0,0,0.15); border: 3px solid #f8f9fa;
-             z-index: 2; transition: opacity 0.3s ease;
+             position: absolute;
+             top: 50%;
+             left: 50%;
+             transform: translate(-50%, -50%);
+             background-color: white;
+             border-radius: 50%;
+             width: 50px; /* Adjust size */
+             height: 50px; /* Adjust size */
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             box-shadow: 0 0 5px rgba(0,0,0,0.2);
+             border: 3px solid #f0f0f0; /* Light border */
+             transition: opacity 0.3s ease; /* Transition for expired state */
          }
-         .qr-overlay span { font-size: 24px; font-weight: bold; color: #212529; line-height: 1;}
+         .qr-overlay span {
+             font-size: 24px; /* Adjust size */
+             font-weight: bold;
+             color: black; /* Black dollar sign */
+         }
 
 
         /* Instructions */
-        .instructions { margin-bottom: 15px; }
-        .scan-text { font-size: 1.1em; font-weight: 500; color: #343a40; margin-bottom: 5px;}
-        .or-text { font-size: 0.9em; color: #6c757d; margin-bottom: 15px; }
-
-        /* --- Button Styles & Animations --- */
-        .animated-button { /* Common class - NOT applied to copy-button anymore for distinct size */
-            display: inline-flex; align-items: center; justify-content: center;
-            text-decoration: none; font-size: 1em; font-weight: 500; cursor: pointer;
-            padding: 10px 18px; border-radius: 6px;
-            transition: transform 0.15s cubic-bezier(0.25, 0.1, 0.25, 1), background-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.08); border: 1px solid transparent;
-            line-height: 1.4; vertical-align: middle; -webkit-tap-highlight-color: transparent;
+        .instructions {
+            margin-bottom: 15px; /* Adjusted margin */
+            transition: opacity 0.3s ease; /* Transition for expired state */
         }
-        .animated-button:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.12); }
-        .animated-button:active { transform: translateY(0px); box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
 
-        /* Download Button */
+        .scan-text {
+            font-size: 1.1em;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .or-text {
+            font-size: 0.9em;
+            color: #777;
+            margin-bottom: 15px;
+        }
+
+        /* Download Button/Link */
         .download-link {
-            background-color: #e7f3ff; color: #0056b3; border-color: #b8daff;
-            margin-bottom: 20px; /* Space below download button */
+            display: inline-flex; /* Use flex to align icon and text */
+            align-items: center;
+            text-decoration: none;
+            color: #007bff; /* Standard link blue */
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.2s ease, color 0.2s ease; /* Smooth transitions */
         }
-        .download-link:hover { background-color: #d0e8ff; border-color: #a1cfff; color: #004085; }
-        .download-link:active { background-color: #b9daff; border-color: #8fc2ff; }
 
-        /* Download Icon */
+        .download-link:hover {
+            background-color: #e7f3ff; /* Lighter blue background on hover */
+        }
+
+        /* Download Icon CSS */
         .download-icon {
-            display: inline-block; width: 16px; height: 18px; margin-right: 8px;
-            position: relative; color: currentColor; flex-shrink: 0;
+            display: inline-block;
+            width: 16px;
+            height: 18px; /* Slightly taller */
+            margin-right: 8px;
+            position: relative;
+            color: #007bff; /* Icon color */
+            transition: color 0.2s ease; /* Smooth transition */
         }
-        .download-icon::before { /* Stem */
-            content: ''; position: absolute; bottom: 0px; left: 50%; transform: translateX(-50%);
-            width: 2.5px; height: 12px; background-color: currentColor; border-radius: 1px;
+        /* Arrow stem */
+        .download-icon::before {
+            content: '';
+            position: absolute;
+            bottom: 0px; /* Start from bottom */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px; /* Stem thickness */
+            height: 12px; /* Stem height */
+            background-color: currentColor;
         }
-        .download-icon::after { /* Arrowhead */
-             content: ''; position: absolute; bottom: 0px; left: 50%;
-             transform: translateX(-50%) rotate(45deg); width: 8px; height: 8px;
-             border-right: 2.5px solid currentColor; border-bottom: 2.5px solid currentColor;
-             box-sizing: border-box;
+        /* Arrowhead */
+         .download-icon::after {
+             content: '';
+             position: absolute;
+             bottom: 0px; /* Align with stem bottom */
+             left: 50%;
+             transform: translateX(-50%) rotate(45deg);
+             width: 8px; /* Arrowhead size */
+             height: 8px;
+             border-right: 2px solid currentColor;
+             border-bottom: 2px solid currentColor;
          }
-         .download-icon span.tray-top { /* Tray */
-             display: block; position: absolute; top: -2px; left: 0; width: 100%;
-             height: 2.5px; background-color: currentColor; border-radius: 1px;
+         /* Top bar of download tray */
+         .download-icon span.tray-top {
+             display: block;
+             position: absolute;
+             top: -2px; /* Position above */
+             left: 0;
+             width: 100%;
+             height: 2px;
+             background-color: currentColor;
          }
 
-        /* Restart Button */
-        .restart-button {
-            background-color: #e6f7ff; /* Light cyan/blue */
-            color: #005f87;
-            border-color: #b3e5fc;
-            margin-top: 15px; /* Space above */
-            display: none; /* Hidden by default */
-        }
-        .restart-button:hover { background-color: #dcf1fa; border-color: #a1dcf7; }
-        .restart-button:active { background-color: #c9e9f7; border-color: #8bd3f5; }
 
-        /* Donation Message */
-        .donation-message {
-            font-size: 1.2em; font-weight: bold; color: #003366; line-height: 1.3;
-            word-wrap: break-word; margin-top: 15px; margin-bottom: 20px;
-            transition: opacity 0.3s ease;
-        }
-
-        /* Footer Text */
+        /* Footer Text (inside main content) */
         .footer-text {
-            font-size: 0.8em; color: #6c757d; margin-top: 15px; line-height: 1.4;
-            transition: opacity 0.3s ease;
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 25px; /* More space above footer text */
+            line-height: 1.4;
+            transition: opacity 0.3s ease; /* Transition for expired state */
         }
 
-        /* Footer Social Section */
+        /* Footer Social Section (Separate Footer) */
         .footer-social {
-            background-color: #f8f9fa; padding: 15px 20px; text-align: center;
-            border-top: 1px solid #dee2e6; flex-shrink: 0;
+            background-color: #f8f9fa; /* Slightly different background */
+            padding: 15px 20px;
+            text-align: center;
+            border-top: 1px solid #eee; /* Separator line */
+            flex-shrink: 0; /* Prevent footer from shrinking */
         }
+
         .telegram-link {
-            background-color: #eaf6ff; color: #0077cc; border-color: #bce0ff;
+            display: inline-flex; /* Align icon and text */
+            align-items: center;
+            text-decoration: none;
+            color: #0088cc; /* Telegram blue */
+            font-size: 0.9em;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
-        .telegram-link:hover { background-color: #d6edff; border-color: #a6d5ff; color: #005fa3; }
-        .telegram-link:active { background-color: #c4e2ff; border-color: #91caff; }
-        .telegram-link img { width: 22px; height: 22px; margin-right: 8px; vertical-align: middle; flex-shrink: 0;}
 
-        /* --- Expired State --- */
-        .expired .qr-code-img { opacity: 0.3; filter: grayscale(90%); }
-        .expired .qr-overlay { opacity: 0; pointer-events: none; }
-        .expired .download-link {
-            pointer-events: none; cursor: default; background-color: #e9ecef;
-            color: #adb5bd; border-color: #ced4da; box-shadow: none; transform: none;
+        .telegram-link:hover {
+            background-color: #e9f5ff; /* Light blue background on hover */
+            color: #0077b3; /* Slightly darker blue on hover */
         }
-        .expired .scan-text, .expired .or-text,
-        .expired .footer-text, .expired .donation-message { opacity: 0.4; }
-        .expired .timer { color: #dc3545 !important; font-weight: 700; }
-        .expired .timer-icon { border-color: #dc3545; }
-        .expired .timer-icon::before { background-color: #dc3545; }
-        /* Show Restart button when expired */
-        .expired .restart-button { display: inline-flex; }
 
-        /* --- Media Queries --- */
-         @media (max-width: 360px) {
-            .header-brand { font-size: 0.8em; } .header-khqr-logo { font-size: 1.3em; }
-            .title { font-size: 1.3em; } .timer { font-size: 0.95em; }
-            .qr-code-container { width: 80%; }
-            .animated-button { font-size: 0.9em; padding: 8px 14px; } /* Affects Download, Restart, Telegram */
-            .copy-button { /* Specific smaller size for copy button */
-                font-size: 0.7em; /* Even smaller on very small screens */
-                padding: 3px 6px;   /* Further reduced padding */
-            }
-            .telegram-link img { width: 20px; height: 20px; margin-right: 6px; }
-            .donation-message { font-size: 1.1em; }
-            .recipient-name { font-size: 1em; }
-            .account-details { font-size: 0.9em; }
+        .telegram-link img {
+            width: 22px; /* Icon size */
+            height: 22px;
+            margin-right: 8px; /* Space between icon and text */
+            /* Removed fill: currentColor as it's an img, not SVG */
+            vertical-align: middle; /* Better alignment */
+        }
+
+        /* --- Expired State Styles --- */
+        .expired #qr-code {
+            opacity: 0.3;
+            filter: grayscale(80%);
+        }
+        .expired #download-btn {
+            /* Instead of display:none, we disable it visually/functionally */
+            pointer-events: none; /* Prevent clicks */
+            cursor: default; /* Show default cursor */
+            color: #aaa; /* Grey out text */
+            background-color: transparent; /* Remove hover effect */
+        }
+         .expired #download-btn .download-icon {
+             color: #aaa; /* Grey out icon */
          }
+         /* Dim instructions and footer text */
+        .expired .instructions,
+        .expired .footer-text {
+             opacity: 0.5;
+        }
+         .expired .qr-overlay {
+             opacity: 0; /* Fade out overlay */
+             pointer-events: none; /* Make sure it doesn't interfere */
+         }
+         .expired .timer {
+            color: #e10a17 !important; /* Make timer text red */
+         }
+         .expired .timer-icon {
+            border-color: #e10a17; /* Make icon border red */
+         }
+         .expired .timer-icon::before {
+             background-color: #e10a17; /* Make inner dot red */
+         }
+
+
     </style>
 </head>
 <body>
@@ -385,51 +385,39 @@
 
         <!-- Main Content -->
         <main class="content">
-            <!-- General Error Message Area -->
-            <div id="general-error-msg" class="error-message" role="alert">
-                An error occurred. Please try refreshing the page.
-            </div>
-
             <!-- Top Bar -->
             <div class="top-bar">
                 <span class="title">ABA KHQR</span>
                 <div class="timer">
-                    <span class="timer-icon" aria-hidden="true"></span>
-                    <span id="time-left" aria-live="polite">02:53</span> <!-- Initial Time -->
+                    <span class="timer-icon"></span>
+                    <span id="time-left">02:53</span> <!-- Initial Time -->
                 </div>
             </div>
 
             <!-- Recipient Info -->
             <div class="recipient-info">
                 <div class="recipient-name">Ozo. Designer</div>
-                <div class="account-details">
-                    Acc: <span id="account-number">005 989 777</span>
-                    <button id="copy-btn" class="copy-button" title="Copy Account Number">Copy</button> <!-- Removed animated-button class -->
-                </div>
-                 <div id="copy-feedback">Copied!</div> <!-- Feedback message -->
+                <!-- Amount replaced by Donation Text -->
             </div>
 
             <!-- Separator -->
             <hr class="separator">
 
             <!-- QR Code -->
-            <div class="qr-code-container" id="qr-container">
-                 <!-- Loading Indicator -->
-                 <div id="qr-loading" aria-label="Loading QR Code"></div>
-                 <!-- QR Error Message Area -->
-                 <div class="qr-error-message" id="qr-error-msg" role="alert">
-                     Could not load QR Code. <br> Please refresh.
-                 </div>
-                 <!-- QR Code Image -->
-                 <img src="qr.PNG" <!-- Make sure qr.PNG exists -->
-                      alt="ABA KHQR Code for Donation to Ozo. Designer"
-                      class="qr-code-img"
-                      id="qr-code">
-                 <!-- Dollar Sign Overlay -->
-                  <div class="qr-overlay" id="qr-overlay" aria-hidden="true">
-                     <span>$</span>
-                 </div>
-             </div>
+            <div class="qr-code-container">
+                <!--
+                    IMPORTANT: Replace 'qr.PNG' with the actual URL or path to your
+                    QR code image file. This path needs to be accessible by the browser.
+                -->
+                <img src="qr.PNG"
+                     alt="ABA KHQR Code for Donation"
+                     class="qr-code-img"
+                     id="qr-code">
+                <!-- Dollar Sign Overlay -->
+                 <div class="qr-overlay">
+                    <span>$</span>
+                </div>
+            </div>
 
             <!-- Instructions -->
             <div class="instructions">
@@ -437,362 +425,126 @@
                 <div class="or-text">or</div>
             </div>
 
+             <!-- Donation Text -->
+             <div class="amount">
+                    THANK FOR DONATION<span class="currency"></span>
+            </div>
+
             <!-- Download Link/Button -->
-            <a id="download-btn" class="download-link animated-button" href="qr.PNG" download="ozo-designer-donation-khqr.png">
-                <span class="download-icon" aria-hidden="true">
-                    <span class="tray-top"></span>
+            <!--
+                IMPORTANT: Update href="qr.PNG" if your image path is different.
+                           Update download=".." for the desired filename.
+            -->
+            <a id="download-btn" class="download-link" href="qr.PNG" download="ozo-designer-donation-khqr.png">
+                <span class="download-icon">
+                    <span class="tray-top"></span> <!-- Element for top bar of icon -->
                 </span>
                 Download QR
             </a>
 
-             <!-- Restart Button (Initially Hidden) -->
-             <button id="restart-btn" class="restart-button animated-button">
-                 Generate New QR <!-- Text implies new, but just restarts timer -->
-             </button>
-
-             <!-- Donation Message -->
-            <div class="donation-message">
-                THANK FOR DONATION
-            </div>
-
             <!-- Footer Text -->
             <p class="footer-text">
-                Verify recipient 'Ozo. Designer' (005 989 777) in your app before payment.
+                <!-- You can add optional text here if needed -->
+                 Generated by Ozo. Designer
             </p>
 
         </main> <!-- End of main content -->
 
         <!-- Footer with Social Icon -->
         <footer class="footer-social">
-            <a href="https://t.me/m11mmm112" target="_blank" rel="noopener noreferrer" class="telegram-link animated-button" aria-label="Contact Ozo Designer on Telegram">
-                <img src="telegram.png" alt="Telegram logo"> <!-- Make sure telegram.png exists -->
-                <span>Join on Telegram</span>
+             <!--
+                IMPORTANT: Replace the href below with your actual Telegram link.
+                           Ensure telegram.png is in the correct path.
+            -->
+            <a href="https://t.me/m11mmm112" target="_blank" rel="noopener noreferrer" class="telegram-link" aria-label="Contact us on Telegram">
+                <img src="telegram.png" alt="Telegram Icon">
+                <span>Join on Telegram</span> <!-- Optional Text -->
             </a>
         </footer>
 
     </div> <!-- End of container -->
 
     <script>
-        // --- Elements ---
+        // --- Timer Logic ---
         const timeLeftDisplay = document.getElementById('time-left');
         const paymentContainer = document.getElementById('payment-container');
+        const initialTimeText = timeLeftDisplay.textContent; // e.g., "02:53"
         const downloadBtn = document.getElementById('download-btn');
         const qrCodeImage = document.getElementById('qr-code');
-        const qrContainer = document.getElementById('qr-container');
-        const qrErrorMsg = document.getElementById('qr-error-msg');
-        const generalErrorMsg = document.getElementById('general-error-msg');
-        const qrOverlay = document.getElementById('qr-overlay');
-        const timerIcon = document.querySelector('.timer-icon'); // Might be null
-        const copyBtn = document.getElementById('copy-btn');
-        const accountNumberSpan = document.getElementById('account-number');
-        const copyFeedback = document.getElementById('copy-feedback');
-        const restartBtn = document.getElementById('restart-btn');
-        const qrLoading = document.getElementById('qr-loading');
 
-        // --- Configuration ---
-        const initialTimeText = timeLeftDisplay?.textContent || "02:53";
-        const defaultDownloadHref = downloadBtn?.href || 'qr.PNG'; // Store original href
-        const defaultDownloadName = downloadBtn?.download || 'ozo-designer-donation-khqr.png';
-        const accountNumberToCopy = accountNumberSpan?.textContent?.trim() || '005 989 777'; // Get from span or default
-
-        // !!! SECURITY WARNING: Telegram Token should be handled Server-Side !!!
-        const telegramBotToken = "7723636276:AAENDdywHKAZL4PAaUZArr_iKmD_3UlE8C8"; // Replace
-        const telegramChatId = "1272791365"; // Replace
-
-        // --- State ---
-        let totalSeconds = 0;
-        let timerInterval = null;
-        let hasQrError = false;
-        let hasExpired = false;
-        let hasGeneralError = false;
-        let isQrLoading = false; // Track loading state
-
-        // --- Utility Functions ---
-        function showFeedback(element, message, type = 'success', duration = 2000) {
-            if (!element) return;
-            element.textContent = message;
-            element.className = type; // Use class for styling success/error
-            element.style.display = 'block';
-            setTimeout(() => {
-                element.style.display = 'none';
-            }, duration);
-        }
-
-        // --- Error Handling ---
-        function showGeneralError(message = "An error occurred. Please try refreshing.") {
-            if (hasGeneralError) return;
-            if (generalErrorMsg) {
-                generalErrorMsg.textContent = message;
-                generalErrorMsg.classList.add('visible');
-                hasGeneralError = true;
-            } else {
-                console.error("General error message container not found. Message:", message);
-            }
-        }
-
-        function handleQrError() {
-            if (hasQrError || !qrContainer) return; // Prevent multiple calls or if container missing
-            hasQrError = true;
-            isQrLoading = false; // Loading finished (with error)
-            console.error("QR Code image failed to load.");
-
-            qrContainer.classList.remove('qr-loading');
-            qrContainer.classList.add('qr-error');
-
-            // Stop timer if running
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-                console.log("Timer stopped due to QR error.");
-            }
-            if(timeLeftDisplay) timeLeftDisplay.textContent = "Error";
-            if(paymentContainer) paymentContainer.classList.add('expired'); // Use expired style
-            disableDownloadButton();
-            // No restart button if QR itself failed
-            if(restartBtn) restartBtn.style.display = 'none';
-        }
-
-        // --- QR Code Loading/Display Logic ---
-        function setupQrCode() {
-             if (!qrCodeImage || !qrContainer) {
-                 console.error("QR Code Image or Container not found.");
-                 handleQrError(); // Trigger error state if elements are missing
-                 return;
-             }
-
-             // Ensure image has a src attribute
-             const qrSrc = qrCodeImage.getAttribute('src');
-             if (!qrSrc) {
-                 console.error("QR Code image 'src' attribute is missing.");
-                 handleQrError(); // Trigger error if no source
-                 return;
-             }
-
-             // Reset state before loading checks
-             qrContainer.classList.remove('qr-error', 'qr-loading');
-             hasQrError = false;
-             isQrLoading = true;
-             qrContainer.classList.add('qr-loading'); // Show loading spinner
-
-             // Clear previous handlers if any (useful for restart)
-             qrCodeImage.onload = null;
-             qrCodeImage.onerror = null;
-
-             // Add new handlers
-             qrCodeImage.onload = () => {
-                 if (!hasQrError) { // Only proceed if no error occurred during loading
-                     console.log("QR Code image loaded successfully.");
-                     isQrLoading = false;
-                     qrContainer.classList.remove('qr-loading');
-                     // If timer hasn't started yet (initial load), start it now
-                     if (!timerInterval && !hasExpired) {
-                         startTimer();
-                     }
-                 }
-             };
-
-             qrCodeImage.onerror = () => {
-                 handleQrError(); // Use the dedicated error handler
-             };
-
-             // Check if image is already loaded (from cache) - trigger onload manually
-             if (qrCodeImage.complete && qrCodeImage.naturalWidth > 0) {
-                  qrCodeImage.onload(); // Manually trigger onload if already complete
-             } else if (qrCodeImage.complete && qrCodeImage.naturalWidth === 0) {
-                  // If complete but no width, it likely failed before JS attached handlers
-                  handleQrError();
-             }
-        }
-
-
-        // Global error handlers (less critical now with specific handlers)
-        window.onerror = function(message, source, lineno, colno, error) { console.error("Global Error:", message, "at", source, ":", lineno); if (!hasGeneralError && !hasQrError) { showGeneralError("Runtime error. Please refresh."); } return true; };
-        window.onunhandledrejection = function(event) { console.error("Unhandled Rejection:", event.reason); if (!hasGeneralError && !hasQrError) { showGeneralError("Async error. Please refresh."); }};
-
-
-        // --- Timer Logic ---
         function parseTime(timeString) {
-             if (!timeString) return 173;
-             const parts = timeString.split(':');
-             if (parts.length === 2) {
-                 const minutes = parseInt(parts[0], 10);
-                 const seconds = parseInt(parts[1], 10);
-                 if (!isNaN(minutes) && !isNaN(seconds)) { return minutes * 60 + seconds; }
+            const parts = timeString.split(':');
+            if (parts.length === 2) {
+                const minutes = parseInt(parts[0], 10);
+                const seconds = parseInt(parts[1], 10);
+                if (!isNaN(minutes) && !isNaN(seconds)) {
+                    return minutes * 60 + seconds;
+                }
+            }
+            // Fallback: Default to 2 minutes 53 seconds (173 seconds) if parsing fails or format is unexpected
+            console.warn("Could not parse time string:", timeString, "Defaulting to 173 seconds.");
+            return 173;
+        }
+
+        let totalSeconds = parseTime(initialTimeText);
+
+        const timerInterval = setInterval(() => {
+            if (totalSeconds <= 0) {
+                clearInterval(timerInterval);
+                timeLeftDisplay.textContent = "Expired";
+                paymentContainer.classList.add('expired'); // Add class to trigger CSS changes
+
+                // Fully disable download link (already visually styled via CSS .expired)
+                if(downloadBtn) {
+                    downloadBtn.removeAttribute('href'); // Remove link target
+                    downloadBtn.style.pointerEvents = 'none'; // Ensure JS also blocks clicks
+                    downloadBtn.style.cursor = 'default';
+                }
+                console.log("Timer expired.");
+                return; // Exit the interval function
+            }
+
+            totalSeconds--; // Decrement seconds
+
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+
+            // Format numbers to always have two digits (e.g., 05 instead of 5)
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            const formattedSeconds = String(seconds).padStart(2, '0');
+
+            timeLeftDisplay.textContent = `${formattedMinutes}:${formattedSeconds}`;
+
+        }, 1000); // Update every second
+
+        // --- Download QR Logic ---
+        // Ensure the href is initially set correctly (also set in HTML)
+        if (downloadBtn && qrCodeImage) {
+             // Make sure the initial href is the image source if not already set
+             if (!downloadBtn.getAttribute('href')) {
+                 downloadBtn.href = qrCodeImage.src;
+                 console.log("Download button href set from image src.");
              }
-             console.warn("Could not parse time:", timeString, ". Defaulting."); return 173;
         }
 
-        function disableDownloadButton() {
-             if(downloadBtn) {
-                 downloadBtn.removeAttribute('href');
-                 downloadBtn.removeAttribute('download');
-                 // Apply styles directly AND rely on .expired class rules
-                 downloadBtn.style.pointerEvents = 'none';
-                 downloadBtn.style.cursor = 'default';
-            }
-        }
-        function enableDownloadButton() {
-            if(downloadBtn) {
-                downloadBtn.href = defaultDownloadHref;
-                downloadBtn.download = defaultDownloadName;
-                downloadBtn.style.pointerEvents = 'auto';
-                downloadBtn.style.cursor = 'pointer';
-           }
-        }
-
-         function startTimer() {
-            if (timerInterval || hasQrError || hasExpired || isQrLoading) return; // Don't start if running, error, expired, or QR loading
-
-            if (!timeLeftDisplay) {
-                 console.error("Timer display element not found.");
-                 showGeneralError("Timer element missing."); return;
-            }
-
-            totalSeconds = parseTime(initialTimeText);
-            if (totalSeconds <= 0) { handleExpiry(); return; }
-
-            updateTimerDisplay(); // Show initial time immediately
-
-            timerInterval = setInterval(() => {
-                totalSeconds--;
-                updateTimerDisplay();
-                if (totalSeconds <= 0) { handleExpiry(); }
-            }, 1000);
-            console.log("Timer started.");
-         }
-
-         function updateTimerDisplay() {
-             if (!timeLeftDisplay) return;
-             const minutes = Math.floor(totalSeconds / 60);
-             const seconds = totalSeconds % 60;
-             timeLeftDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-         }
-
-         function handleExpiry() {
-            if (hasExpired || hasQrError) return; // Prevent multiple calls or if QR errored
-            hasExpired = true;
-            if (timerInterval) clearInterval(timerInterval);
-            timerInterval = null;
-
-            console.log("Timer expired.");
-            if(timeLeftDisplay) timeLeftDisplay.textContent = "Expired";
-            if(paymentContainer) paymentContainer.classList.add('expired');
-            // Restart button is shown via CSS when .expired class is added
-            disableDownloadButton();
-            if(qrOverlay) qrOverlay.style.opacity = '0'; // Hide overlay
-         }
-
-        // --- Event Listeners ---
-
-        // Copy Button
-        if (copyBtn && accountNumberSpan && copyFeedback) {
-            copyBtn.addEventListener('click', () => {
-                navigator.clipboard.writeText(accountNumberToCopy).then(() => {
-                    showFeedback(copyFeedback, 'Account number copied!', 'success');
-                    console.log('Account number copied:', accountNumberToCopy);
-                }).catch(err => {
-                    console.error('Failed to copy account number:', err);
-                    showFeedback(copyFeedback, 'Could not copy!', 'error');
-                });
-            });
-        } else {
-            console.warn("Copy button, account number, or feedback element not found.");
-        }
-
-        // Restart Button
-        if (restartBtn && paymentContainer) {
-            restartBtn.addEventListener('click', () => {
-                if (hasQrError) {
-                    console.log("Restart blocked: QR Code has an error.");
-                    showGeneralError("Cannot restart, QR code failed to load. Please refresh.");
-                    return; // Don't restart if the QR itself failed
-                }
-
-                console.log("Restarting timer...");
-                hasExpired = false;
-                paymentContainer.classList.remove('expired'); // This hides the restart button via CSS
-
-                // Restore visual elements only if QR is okay
-                if (!hasQrError) {
-                    if(qrOverlay) qrOverlay.style.opacity = '1';
-                    enableDownloadButton(); // Re-enable download
-                }
-
-                startTimer(); // Start the timer again
-            });
-        } else {
-            console.warn("Restart button or payment container not found.");
-        }
-
-
-        // Download Button
+        // Add click listener primarily for logging or preventing action when expired
         if (downloadBtn) {
-            // Initial state check
-            if (hasExpired || hasQrError) {
-                disableDownloadButton();
-            }
-
             downloadBtn.addEventListener('click', (event) => {
-                if (hasExpired || hasQrError || (paymentContainer && paymentContainer.classList.contains('expired'))) {
-                    event.preventDefault();
-                    console.log("Download blocked: Expired or QR error.");
-                    return;
+                // Check if the container has the 'expired' class
+                if (paymentContainer.classList.contains('expired')) {
+                    event.preventDefault(); // Prevent default link behavior (download)
+                    console.log("Download blocked: QR code has expired.");
+                    return; // Stop further action
                 }
-                 if (!downloadBtn.getAttribute('href') || downloadBtn.getAttribute('href') === '#') {
-                     event.preventDefault();
-                     console.log("Download blocked: No valid QR source.");
-                     showGeneralError("Cannot download: QR code not available.");
-                     return;
-                 }
-                console.log("Download initiated:", downloadBtn.getAttribute('download'));
-                // Optional: sendTelegramNotification("QR Code downloaded.", false);
+                // Only log if not expired
+                console.log("Download initiated for:", downloadBtn.getAttribute('href'));
+                // Note: Browser security (CORS) might still prevent direct download
+                // if the image 'qr.PNG' is hosted on a different domain than the page
+                // and lacks appropriate CORS headers. For local/same-domain images, this works.
             });
         } else {
-             console.warn("Download button element not found.");
+            console.error("Download button element not found.");
         }
-
-        // --- PWA Service Worker ---
-        function registerServiceWorker() {
-             if ('serviceWorker' in navigator) {
-                 navigator.serviceWorker.register('sw.js') // Make sure sw.js exists
-                   .then(reg => console.log('SW registered!', reg.scope))
-                   .catch(err => console.error('SW registration failed:', err));
-             } else { console.log('Service Worker not supported.'); }
-        }
-
-        // --- Telegram Notification ---
-        function sendTelegramNotification(customMessage = null, isError = false) {
-            if (!telegramBotToken || !telegramChatId) { console.warn("Telegram Bot Token/Chat ID missing."); return; }
-            if (!/^\d{8,12}:[a-zA-Z0-9_-]{35,}$/.test(telegramBotToken)) { console.error("Invalid Telegram Bot Token format."); return; }
-
-             let messageText = customMessage || `${isError ? "❗️" : "🔔"} Visitor on ABA KHQR Page - Time: ${new Date().toLocaleTimeString()}`;
-             const url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
-
-             fetch(url, { method: 'POST', headers: {'Content-Type': 'application/json'},
-                 body: JSON.stringify({ chat_id: telegramChatId, text: messageText }) })
-                 .then(response => {
-                     if (!response.ok) {
-                         return response.json().then(err => { throw new Error(err.description || `TG API Error ${response.status}`); });
-                     }
-                     return response.json();
-                 })
-                 .then(data => {
-                     if (data.ok) { console.log('Telegram notification sent.'); }
-                     else { console.error('Telegram notification failed (API):', data.description); }
-                 })
-                 .catch(error => {
-                     console.error('Error sending Telegram notification:', error.message || error);
-                 });
-        }
-
-        // --- Initialisation ---
-        document.addEventListener('DOMContentLoaded', () => {
-            setupQrCode(); // Setup QR image loading and error handling
-            // Timer will be started by setupQrCode's onload if successful
-
-            sendTelegramNotification(); // Initial visitor notification
-            registerServiceWorker(); // Register PWA worker
-        });
 
     </script>
 </body>
