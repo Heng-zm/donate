@@ -36,7 +36,7 @@
         @keyframes fadeSlideUp {
             from {
                 opacity: 0;
-                transform: translateY(20px); /* Start 20px lower */
+                transform: translateY(15px); /* Start slightly lower */
             }
             to {
                 opacity: 1;
@@ -48,17 +48,65 @@
         .container {
             background-color: #ffffff;
             width: 100%;
-            max-width: 400px; /* <-- This constrains the view on desktop */
+            max-width: 400px;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            overflow: hidden; /* Important for smooth animation appearance */
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            margin-left: auto;  /* Center the container on wider screens */
-            margin-right: auto; /* Center the container on wider screens */
+            margin-left: auto;
+            margin-right: auto;
+            /* No animation on the container itself now */
+        }
 
-            /* --- Apply Animation --- */
-            animation: fadeSlideUp 0.6s ease-out forwards;
+        /* --- Staggered Animation Setup --- */
+        /* Initially hide elements that will be animated in */
+        .header,
+        .content > .top-bar, /* Target top-bar directly inside content */
+        .content > .recipient-info,
+        .content > .separator,
+        .qr-code-container,
+        .instructions,
+        .bank-scanner-link, /* Both buttons */
+        #thank-you-gif-container,
+        .content > .footer-text, /* Target footer-text directly inside content */
+        .footer-social {
+            opacity: 0; /* Start hidden */
+        }
+
+        /* Apply animation with delays */
+        .header {
+            animation: fadeSlideUp 0.5s 0.1s ease-out forwards;
+        }
+        .content > .top-bar {
+             animation: fadeSlideUp 0.5s 0.2s ease-out forwards;
+        }
+        .content > .recipient-info {
+            animation: fadeSlideUp 0.5s 0.3s ease-out forwards;
+        }
+         .content > .separator {
+            animation: fadeSlideUp 0.5s 0.35s ease-out forwards; /* Animate separator quickly after recipient */
+         }
+        .qr-code-container {
+            animation: fadeSlideUp 0.5s 0.4s ease-out forwards;
+        }
+        .instructions {
+            animation: fadeSlideUp 0.5s 0.5s ease-out forwards;
+        }
+        #open-aba-scanner-btn { /* Target specific button */
+            animation: fadeSlideUp 0.5s 0.6s ease-out forwards;
+        }
+         #open-acleda-scanner-btn { /* Target specific button */
+            animation: fadeSlideUp 0.5s 0.7s ease-out forwards;
+         }
+        #thank-you-gif-container {
+             animation: fadeSlideUp 0.5s 0.8s ease-out forwards;
+        }
+        .content > .footer-text {
+             animation: fadeSlideUp 0.5s 0.9s ease-out forwards;
+        }
+        .footer-social {
+             animation: fadeSlideUp 0.5s 1.0s ease-out forwards;
         }
 
         /* Header Section */
@@ -84,7 +132,7 @@
 
         /* Main Content Area */
         .content {
-            padding: 25px 20px; text-align: center; flex-grow: 1; position: relative; /* Needed for GIF overlay */
+            padding: 25px 20px; text-align: center; flex-grow: 1; position: relative;
         }
 
         /* Top Bar: Title & Timer */
@@ -137,18 +185,17 @@
         .or-text { font-size: 0.9em; color: #777; margin-bottom: 35px; }
 
         /* --- Button Styles (Shared & Individual) --- */
-        /* Shared styles for bank links */
         .bank-scanner-link {
-             display: inline-flex; /* Use flex for layout */
-             align-items: center; /* Vertically align items */
-             justify-content: flex-start; /* Align items to the start (left) */
+             display: inline-flex;
+             align-items: center;
+             justify-content: flex-start;
              text-decoration: none; font-size: 20px; font-weight: bold;
              color: white; cursor: pointer;
              border: 1px solid transparent; border-radius: 5px;
              transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, opacity 0.2s ease-in-out;
              outline: none; margin-bottom: 15px;
              width: 90%; max-width: 250px;
-             padding: 8px 18px; /* Padding around content */
+             padding: 8px 18px;
              margin-left: auto;
              margin-right: auto;
              overflow: hidden;
@@ -165,25 +212,19 @@
              transition-duration: 0.05s;
         }
 
-        /* Bank Icon (Flex item) */
         .bank-scanner-link img.bank-icon {
             width: 39px; height: 39px;
             border: solid 3px #fff; border-radius: 30px;
             background-color: #fff;
-            margin-right: 12px; /* Space AFTER the icon */
-            flex-shrink: 0; /* Prevent icon shrinking */
+            margin-right: 12px;
+            flex-shrink: 0;
         }
 
-        /* Text Span adjustments */
         .bank-scanner-link span {
-             flex-grow: 1; /* Allow span to take up remaining space */
-             text-align: center; /* Center text WITHIN the span */
-             /* No margins needed here */
+             flex-grow: 1;
+             text-align: center;
         }
 
-
-        /* --- Specific button colors --- */
-        /* ABA Scanner Link specific style */
         #open-aba-scanner-btn {
              background-color: #003c71; border-color: #003c71;
         }
@@ -191,45 +232,43 @@
         #open-aba-scanner-btn:active { background-color: #002b50; }
         #open-aba-scanner-btn:focus-visible { border-color: #005099; box-shadow: 0 0 0 2px rgba(0, 60, 113, 0.3); }
 
-        /* ACLEDA Scanner Link specific style */
          #open-acleda-scanner-btn {
-             background-color: #AE0000; /* ACLEDA Red */ border-color: #AE0000;
+             background-color: #AE0000; border-color: #AE0000;
         }
         #open-acleda-scanner-btn:hover { background-color: #C40000; }
         #open-acleda-scanner-btn:active { background-color: #8C0000; }
         #open-acleda-scanner-btn:focus-visible { border-color: #C40000; box-shadow: 0 0 0 2px rgba(174, 0, 0, 0.3); }
 
-
         /* Thank You Text */
         .amount {
             font-size: 1.1em; font-weight: bold; color: #003366;
             line-height: 1.3; word-wrap: break-word;
-            margin-top: 15px; /* Space below GIF */
-            margin-bottom: 0; /* No space needed below */
+            margin-top: 15px;
+            margin-bottom: 0;
             transition: opacity 0.3s ease;
         }
 
         /* Thank You GIF Container */
         #thank-you-gif-container {
-            display: block; /* Visible by default */
-            position: relative; /* Allows z-index and positioning */
-            margin-top:10px;  /* Adjust Negative margin to pull GIF UP */
-            margin-bottom: -10px; /* Space below container */
-            z-index: 10; /* Ensure GIF/Text is on top */
-            pointer-events: none; /* Prevent container blocking clicks */
+            display: block;
+            position: relative;
+            margin-top:10px;
+            margin-bottom: -10px;
+            z-index: 10;
+            pointer-events: none;
             text-align: center;
         }
         #thank-you-gif {
-            max-width: 150px;   /* Adjust max width of GIF */
-            max-height: 150px; /* Adjust max height of GIF */
+            max-width: 150px;
+            max-height: 150px;
             height: auto; border-radius: 5px; display: inline-block;
-            pointer-events: auto; /* Allow interaction with GIF */
+            pointer-events: auto;
         }
 
         /* Footer Text */
         .footer-text {
-            font-size: 0.8em; color: #888; margin-top: 20px; /* Adjusted top margin */
-             line-height: 1.4; position: relative; z-index: 5; /* Ensure footer text is below GIF container */
+            font-size: 0.8em; color: #888; margin-top: 20px;
+             line-height: 1.4; position: relative; z-index: 5;
             transition: opacity 0.3s ease;
         }
 
@@ -257,39 +296,72 @@
         .telegram-link:hover img { transform: scale(1.1) rotate(-5deg); }
 
         /* --- State: Expired --- */
-        .expired .qr-code-img { opacity: 0.3; filter: grayscale(80%); }
+        .expired .qr-code-img { filter: grayscale(80%); } /* Keep opacity handled by expired rule below */
         .expired .qr-code-container { cursor: default; }
-        /* Disable buttons visually when expired */
-        .expired .bank-scanner-link { /* Target shared class */
+        .expired .bank-scanner-link {
             pointer-events: none; cursor: default;
-            opacity: 0.5; /* Fade disabled buttons */
             transform: none; box-shadow: none;
-            background-color: #cccccc !important; /* Use important for override */
+            background-color: #cccccc !important;
             color: #888888 !important;
             border-color: #cccccc !important;
-            animation: none; /* Disable entry animation if expired on load (edge case) */
+            /* animation: none is handled below */
         }
-        /* No need for specific expired styles per button ID if the shared class handles it */
 
+        /* --- Ensure animation is disabled if expired on load --- */
+        /* And set correct final opacity for expired state */
+        .expired .header,
+        .expired .content > .top-bar,
+        .expired .content > .recipient-info,
+        .expired .content > .separator,
+        .expired .qr-code-container,
         .expired .instructions,
-        .expired .footer-text,
-        .expired .amount { opacity: 0.6; } /* Dim text */
-        .expired .qr-overlay { opacity: 0; pointer-events: none; }
-        .expired #thank-you-gif-container { opacity: 0.6; } /* Dim GIF container */
-        .expired .timer { color: #e10a17 !important; }
-        .expired .timer-icon { border-color: #e10a17; }
-        .expired .timer-icon::before { background-color: #e10a17; }
+        .expired .bank-scanner-link,
+        .expired #thank-you-gif-container,
+        .expired .content > .footer-text,
+        .expired .footer-social {
+            animation: none;
+            opacity: 1; /* Default visibility if expired */
+        }
+        /* Override opacity for elements dimmed by .expired */
+         .expired .instructions,
+         .expired .footer-text,
+         .expired .amount,
+         .expired #thank-you-gif-container { opacity: 0.6 !important; }
+         .expired .qr-code-img { opacity: 0.3 !important; }
+         .expired .qr-overlay { opacity: 0 !important; }
+         .expired .bank-scanner-link { opacity: 0.5 !important; }
+         .expired .timer { color: #e10a17 !important; }
+         .expired .timer-icon { border-color: #e10a17 !important; }
+         .expired .timer-icon::before { background-color: #e10a17 !important; }
         /* Accessibility: Remove focus styles when disabled */
-        .expired .bank-scanner-link:focus-visible, /* Target shared class */
+        .expired .bank-scanner-link:focus-visible,
         .expired .telegram-link:focus-visible { border-color: transparent; box-shadow: none; outline: none; }
+
 
         /* Accessibility: Respect user preference for reduced motion */
         @media (prefers-reduced-motion: reduce) {
-          .container {
-            animation: none; /* Turn off animation if user prefers less motion */
+          .header,
+          .content > .top-bar,
+          .content > .recipient-info,
+          .content > .separator,
+          .qr-code-container,
+          .instructions,
+          .bank-scanner-link,
+          #thank-you-gif-container,
+          .content > .footer-text,
+          .footer-social {
+            animation: none; /* Turn off animation */
+            opacity: 1; /* Ensure elements are visible */
           }
+          /* Still apply expired dimming if needed when motion is reduced */
+           .expired .instructions,
+           .expired .footer-text,
+           .expired .amount,
+           .expired #thank-you-gif-container { opacity: 0.6 !important; }
+           .expired .qr-code-img { opacity: 0.3 !important; }
+           .expired .qr-overlay { opacity: 0 !important; }
+           .expired .bank-scanner-link { opacity: 0.5 !important; }
         }
-
 
     </style>
 </head>
@@ -419,6 +491,29 @@
             }
 
             totalSeconds = parseTime(initialTimeText); // Parse the initial time set in HTML
+
+            // --- Check if already expired on load ---
+            // This is an edge case, but good to handle
+            // We check this *before* starting the interval
+             if (totalSeconds <= 0) {
+                 timeLeftDisplay.textContent = "Expired";
+                 if (paymentContainer) {
+                     paymentContainer.classList.add('expired');
+                 }
+                 // Disable buttons immediately
+                 [openAbaBtn, openAcledaBtn].forEach(btn => {
+                     if (btn) {
+                         btn.removeAttribute('href');
+                         btn.style.pointerEvents = 'none';
+                         btn.style.cursor = 'default';
+                         btn.setAttribute('aria-disabled', 'true');
+                     }
+                 });
+                 console.log("Timer already expired on page load.");
+                 return; // Don't start the interval if already expired
+             }
+            // --- End expiry check on load ---
+
 
             timerInterval = setInterval(() => {
                 if (totalSeconds <= 0) {
@@ -572,7 +667,8 @@
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
             registerServiceWorker();       // Set up PWA capabilities
-            startTimer();                  // Begin the countdown
+            // IMPORTANT: Start timer checks for expiry *before* potentially sending notifications
+            startTimer();                  // Begin the countdown (or set expired state if needed)
             setupButtonClickListeners();   // Make buttons responsive to expiry
             sendDeviceInfoToTelegram();    // Send notification (if configured and token/ID are set)
         });
