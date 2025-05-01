@@ -124,23 +124,22 @@
         /* --- Button Styles (Shared & Individual) --- */
         /* Shared styles for bank links */
         .bank-scanner-link {
-             display: inline-flex; /* Use inline-flex to keep it inline but allow flex properties */
+             display: inline-flex; /* Use inline-flex for layout */
              align-items: center; /* Vertically align icon and text */
-             justify-content: center; /* Center the content block (icon+text) within the link */
+             /* justify-content: center; --- CHANGED --- */
+             justify-content: space-between; /* Push icon left, text right */
              text-decoration: none; font-size: 20px; font-weight: bold;
              color: white; cursor: pointer;
              border: 1px solid transparent; border-radius: 5px;
              transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, opacity 0.2s ease-in-out;
              outline: none; margin-bottom: 15px;
              width: 90%; max-width: 250px;
-             /* Adjust padding for icon space - keeping it relatively balanced */
-             padding: 8px 15px; /* Reduced padding slightly */
+             /* Adjust padding - more horizontal padding might be needed */
+             padding: 8px 18px; /* Increased horizontal padding */
              margin-left: auto;
              margin-right: auto;
-             /* position: relative; -- No longer needed for icon positioning */
              overflow: hidden;
              min-height: 50px; /* Ensure consistent height */
-             text-align: center; /* Ensure text itself is centered */
         }
         .bank-scanner-link:focus-visible {
              box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15);
@@ -153,23 +152,21 @@
              transition-duration: 0.05s;
         }
 
-        /* Bank Icon (now part of flex flow) */
+        /* Bank Icon (Flex item) */
         .bank-scanner-link img.bank-icon {
-            /* position: absolute; -- REMOVED */
             width: 39px; height: 39px;
-            /* left: 15px; top: 50%; transform: translateY(-50%); -- REMOVED */
             border: solid 3px #fff; border-radius: 30px;
-            background-color: #fff; /* Ensure solid background */
-            margin-right: 12px; /* Space between icon and text */
-            flex-shrink: 0; /* Prevent icon from shrinking if button is narrow */
+            background-color: #fff;
+            /* margin-right: 12px; --- REMOVED, space-between handles spacing --- */
+            flex-shrink: 0;
         }
 
         /* Text Span adjustments */
         .bank-scanner-link span {
-             flex-grow: 1; /* Allow span to take available space */
-             text-align: left; /* Align text to the start of its container (looks better than center here) */
-             margin-left: 5px; /* Small gap from icon */
-             /* Optionally remove margin-right from icon and add margin-left here */
+             /* flex-grow: 1; --- REMOVED, not needed with space-between --- */
+             /* text-align: left; --- CHANGED --- */
+             text-align: right; /* Align text to the right side of its container */
+             /* margin-left: 5px; --- REMOVED --- */
         }
 
 
@@ -322,13 +319,13 @@
 
             <!-- Open ABA Scanner Button -->
             <a id="open-aba-scanner-btn" class="bank-scanner-link" href="https://pay.ababank.com/j87hqyxC5ntRmRjX9">
-                <img class="bank-icon" src="aba.PNG" alt="ABA Bank Icon"> <!-- Added alt text -->
-                <span>ABA PAY</span> <!-- Added span for better control -->
+                <img class="bank-icon" src="aba.PNG" alt="ABA Bank Icon">
+                <span>ABA PAY</span>
             </a>
-            <!-- Open ACLEDA Scanner Button - **FIXED ID** -->
+            <!-- Open ACLEDA Scanner Button -->
             <a id="open-acleda-scanner-btn" class="bank-scanner-link" href="https://acledabank.com.kh/acleda?payment_data=qWY5B2SAUfIhLblxzOtfu8yRyA1YGYQ90srEOvcavYJBT7ptJoQ/SGg9AR8Hv+vUYIjrjjopbU7ERsCGlpvj6bCqNPJOyIHFHNGFU8S/FiKNZ/wUzgY/wXVrAwG1Ve7NdijLbmZA4ujdJesRuDN4xqoQtXSG9ruibRasZJSia+nqp6Jq+dOHdihQ/YCiNjPygjAtil95ToBA/Vs1BQCSdzxz6xt9nQKvQuOWQMTnpKyfhw/yATbmMDSFaUEynvlO&key=khqr">
-                <img class="bank-icon" src="acleda.PNG" alt="ACLEDA Bank Icon"> <!-- Added alt text -->
-                <span>ACLEDA PAY</span> <!-- Added span for better control -->
+                <img class="bank-icon" src="acleda.PNG" alt="ACLEDA Bank Icon">
+                <span>ACLEDA PAY</span>
             </a>
 
             <!-- Thank You GIF Container (Visible by default) -->
@@ -513,7 +510,7 @@
 <b>Screen:</b> ${screenWidth}x${screenHeight}
 <b>Viewport:</b> ${viewportWidth}x${viewportHeight}
 -------------------------
-            `.trim(); // Fetch handles encoding, no need for replace
+            `.trim(); // Fetch handles encoding
 
             // Construct Telegram API URL
             const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
