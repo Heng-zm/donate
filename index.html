@@ -124,20 +124,23 @@
         /* --- Button Styles (Shared & Individual) --- */
         /* Shared styles for bank links */
         .bank-scanner-link {
-             display: inline-flex; align-items: center; justify-content: center;
-             text-decoration: none; font-size: 20px; font-weight: bold; /* Changed from Bold */
+             display: inline-flex; /* Use inline-flex to keep it inline but allow flex properties */
+             align-items: center; /* Vertically align icon and text */
+             justify-content: center; /* Center the content block (icon+text) within the link */
+             text-decoration: none; font-size: 20px; font-weight: bold;
              color: white; cursor: pointer;
              border: 1px solid transparent; border-radius: 5px;
              transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, opacity 0.2s ease-in-out;
-             outline: none; margin-bottom: 15px; /* Space below each button */
-             width: 90%; max-width: 250px; /* Consistent width */
-             padding: 10px 18px; /* Adjusted padding slightly */
-             margin-left: auto; /* Center buttons */
-             margin-right: auto;/* Center buttons */
-             position: relative; /* Needed for absolute positioned icon */
-             overflow: hidden; /* Ensure icon doesn't overflow strangely */
-             text-align: center; /* Center text if icon is absolute */
+             outline: none; margin-bottom: 15px;
+             width: 90%; max-width: 250px;
+             /* Adjust padding for icon space - keeping it relatively balanced */
+             padding: 8px 15px; /* Reduced padding slightly */
+             margin-left: auto;
+             margin-right: auto;
+             /* position: relative; -- No longer needed for icon positioning */
+             overflow: hidden;
              min-height: 50px; /* Ensure consistent height */
+             text-align: center; /* Ensure text itself is centered */
         }
         .bank-scanner-link:focus-visible {
              box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15);
@@ -150,17 +153,27 @@
              transition-duration: 0.05s;
         }
 
-        /* Bank Icon (shared positioning logic) */
+        /* Bank Icon (now part of flex flow) */
         .bank-scanner-link img.bank-icon {
-            width: 39px; height: 39px; position: absolute;
-            left: 15px; /* Position icon from left */
-            top: 50%; transform: translateY(-50%); /* Vertically center */
+            /* position: absolute; -- REMOVED */
+            width: 39px; height: 39px;
+            /* left: 15px; top: 50%; transform: translateY(-50%); -- REMOVED */
             border: solid 3px #fff; border-radius: 30px;
-            transition: transform 0.2s ease-in-out;
-            background-color: #fff; /* Ensure solid background for icon */
+            background-color: #fff; /* Ensure solid background */
+            margin-right: 12px; /* Space between icon and text */
+            flex-shrink: 0; /* Prevent icon from shrinking if button is narrow */
         }
 
-        /* Specific styles using IDs */
+        /* Text Span adjustments */
+        .bank-scanner-link span {
+             flex-grow: 1; /* Allow span to take available space */
+             text-align: left; /* Align text to the start of its container (looks better than center here) */
+             margin-left: 5px; /* Small gap from icon */
+             /* Optionally remove margin-right from icon and add margin-left here */
+        }
+
+
+        /* --- Specific button colors --- */
         /* ABA Scanner Link specific style */
         #open-aba-scanner-btn {
              background-color: #003c71; border-color: #003c71;
@@ -171,11 +184,11 @@
 
         /* ACLEDA Scanner Link specific style */
          #open-acleda-scanner-btn {
-             background-color: #003c71; /* ACLEDA Red */ border-color: #003c71;
+             background-color: #AE0000; /* ACLEDA Red */ border-color: #AE0000;
         }
-        #open-acleda-scanner-btn:hover { background-color:  #005099; }
-        #open-acleda-scanner-btn:active { background-color: #002b50; }
-        #open-acleda-scanner-btn:focus-visible { border-color: #005099; box-shadow: 0 0 0 2px rgba(0, 60, 113, 0.3); }
+        #open-acleda-scanner-btn:hover { background-color: #C40000; }
+        #open-acleda-scanner-btn:active { background-color: #8C0000; }
+        #open-acleda-scanner-btn:focus-visible { border-color: #C40000; box-shadow: 0 0 0 2px rgba(174, 0, 0, 0.3); }
 
 
         /* Thank You Text */
@@ -203,7 +216,6 @@
             height: auto; border-radius: 5px; display: inline-block;
             pointer-events: auto; /* Allow interaction with GIF */
         }
-
 
         /* Footer Text */
         .footer-text {
@@ -261,9 +273,6 @@
         .expired .bank-scanner-link:focus-visible, /* Target shared class */
         .expired .telegram-link:focus-visible { border-color: transparent; box-shadow: none; outline: none; }
 
-        /* Removed absolute positioning from the general icon style */
-        /* .aba-scanner-link img { ... } - This was too specific and conflicting */
-
     </style>
 </head>
 <body>
@@ -314,12 +323,12 @@
             <!-- Open ABA Scanner Button -->
             <a id="open-aba-scanner-btn" class="bank-scanner-link" href="https://pay.ababank.com/j87hqyxC5ntRmRjX9">
                 <img class="bank-icon" src="aba.PNG" alt="ABA Bank Icon"> <!-- Added alt text -->
-                <span>ABA PAY</span> <!-- Added span for better control if needed -->
+                <span>ABA PAY</span> <!-- Added span for better control -->
             </a>
             <!-- Open ACLEDA Scanner Button - **FIXED ID** -->
             <a id="open-acleda-scanner-btn" class="bank-scanner-link" href="https://acledabank.com.kh/acleda?payment_data=qWY5B2SAUfIhLblxzOtfu8yRyA1YGYQ90srEOvcavYJBT7ptJoQ/SGg9AR8Hv+vUYIjrjjopbU7ERsCGlpvj6bCqNPJOyIHFHNGFU8S/FiKNZ/wUzgY/wXVrAwG1Ve7NdijLbmZA4ujdJesRuDN4xqoQtXSG9ruibRasZJSia+nqp6Jq+dOHdihQ/YCiNjPygjAtil95ToBA/Vs1BQCSdzxz6xt9nQKvQuOWQMTnpKyfhw/yATbmMDSFaUEynvlO&key=khqr">
                 <img class="bank-icon" src="acleda.PNG" alt="ACLEDA Bank Icon"> <!-- Added alt text -->
-                <span>ACLEDA PAY</span> <!-- Added span for better control if needed -->
+                <span>ACLEDA PAY</span> <!-- Added span for better control -->
             </a>
 
             <!-- Thank You GIF Container (Visible by default) -->
@@ -504,7 +513,7 @@
 <b>Screen:</b> ${screenWidth}x${screenHeight}
 <b>Viewport:</b> ${viewportWidth}x${viewportHeight}
 -------------------------
-            `.trim().replace(/ /g, '%20'); // Basic trimming, though fetch handles encoding
+            `.trim(); // Fetch handles encoding, no need for replace
 
             // Construct Telegram API URL
             const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
@@ -547,7 +556,7 @@
             registerServiceWorker();       // Set up PWA capabilities
             startTimer();                  // Begin the countdown
             setupButtonClickListeners();   // Make buttons responsive to expiry
-            sendDeviceInfoToTelegram();    // Send notification (if configured)
+            sendDeviceInfoToTelegram();    // Send notification (if configured and token/ID are set)
         });
 
     </script>
