@@ -32,6 +32,18 @@
             padding-bottom: 40px;
         }
 
+        /* --- Animation Definition --- */
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px); /* Start 20px lower */
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0); /* End at normal position */
+            }
+        }
+
         /* Main Container */
         .container {
             background-color: #ffffff;
@@ -39,11 +51,14 @@
             max-width: 400px; /* <-- This constrains the view on desktop */
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            overflow: hidden; /* Important for smooth animation appearance */
             display: flex;
             flex-direction: column;
             margin-left: auto;  /* Center the container on wider screens */
             margin-right: auto; /* Center the container on wider screens */
+
+            /* --- Apply Animation --- */
+            animation: fadeSlideUp 0.6s ease-out forwards;
         }
 
         /* Header Section */
@@ -252,6 +267,7 @@
             background-color: #cccccc !important; /* Use important for override */
             color: #888888 !important;
             border-color: #cccccc !important;
+            animation: none; /* Disable entry animation if expired on load (edge case) */
         }
         /* No need for specific expired styles per button ID if the shared class handles it */
 
@@ -266,6 +282,14 @@
         /* Accessibility: Remove focus styles when disabled */
         .expired .bank-scanner-link:focus-visible, /* Target shared class */
         .expired .telegram-link:focus-visible { border-color: transparent; box-shadow: none; outline: none; }
+
+        /* Accessibility: Respect user preference for reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+          .container {
+            animation: none; /* Turn off animation if user prefers less motion */
+          }
+        }
+
 
     </style>
 </head>
