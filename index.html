@@ -121,63 +121,61 @@
         .scan-text { font-size: 1.1em; font-weight: 500; color: #333; margin-bottom: 5px; }
         .or-text { font-size: 0.9em; color: #777; margin-bottom: 35px; }
 
-        /* --- Button Styles (Individual) --- */
-        .download-link, .aba-scanner-link {
+        /* --- Button Styles (Shared & Individual) --- */
+        /* Shared styles for bank links */
+        .bank-scanner-link {
              display: inline-flex; align-items: center; justify-content: center;
-             text-decoration: none; font-size: 1em; font-weight: 500; cursor: pointer;
+             text-decoration: none; font-size: 20px; font-weight: bold; /* Changed from Bold */
+             color: white; cursor: pointer;
              border: 1px solid transparent; border-radius: 5px;
              transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, opacity 0.2s ease-in-out;
              outline: none; margin-bottom: 15px; /* Space below each button */
              width: 90%; max-width: 250px; /* Consistent width */
-             padding: 10px 18px;
+             padding: 10px 18px; /* Adjusted padding slightly */
              margin-left: auto; /* Center buttons */
              margin-right: auto;/* Center buttons */
+             position: relative; /* Needed for absolute positioned icon */
+             overflow: hidden; /* Ensure icon doesn't overflow strangely */
+             text-align: center; /* Center text if icon is absolute */
+             min-height: 50px; /* Ensure consistent height */
         }
-        .download-link:focus-visible, .aba-scanner-link:focus-visible {
+        .bank-scanner-link:focus-visible {
              box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15);
         }
-        .download-link:hover, .aba-scanner-link:hover {
+        .bank-scanner-link:hover {
              transform: translateY(-2px);
         }
-         .download-link:active, .aba-scanner-link:active {
+         .bank-scanner-link:active {
              transform: translateY(1px);
              transition-duration: 0.05s;
         }
 
-
-        /* Download Link specific style */
-        .download-link {
-            color: #007bff; background-color: transparent; border-color: transparent;
-            padding: 8px 15px; width: auto; max-width: none; margin-bottom: 20px;
-        }
-        .download-link:hover {
-            color: #0056b3; text-decoration: underline; background-color: transparent;
-            transform: none;
-        }
-         .download-link:active { color: #0056b3; transform: none; }
-        .download-link:focus-visible {
-             box-shadow: none; outline: 1px dotted #007bff; outline-offset: 2px; border-color: transparent;
+        /* Bank Icon (shared positioning logic) */
+        .bank-scanner-link img.bank-icon {
+            width: 39px; height: 39px; position: absolute;
+            left: 15px; /* Position icon from left */
+            top: 50%; transform: translateY(-50%); /* Vertically center */
+            border: solid 3px #fff; border-radius: 30px;
+            transition: transform 0.2s ease-in-out;
+            background-color: #fff; /* Ensure solid background for icon */
         }
 
-        /* Download Icon CSS */
-        .download-icon {
-            display: inline-block; width: 16px; height: 18px; margin-right: 8px;
-            position: relative; color: #007bff;
-            transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
-        }
-        .download-link:hover .download-icon { color: #0056b3; transform: none; }
-        .download-icon::before { content: ''; position: absolute; bottom: 0px; left: 50%; transform: translateX(-50%); width: 2px; height: 12px; background-color: currentColor; }
-        .download-icon::after { content: ''; position: absolute; bottom: 0px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; }
-        .download-icon span.tray-top { display: block; position: absolute; top: -2px; left: 0; width: 100%; height: 2px; background-color: currentColor; }
-
+        /* Specific styles using IDs */
         /* ABA Scanner Link specific style */
-        .aba-scanner-link {
-             background-color: #003c71; font-size: 20px; font-weight: Bold; color: white; border-color: #003c71;
-             /* width and max-width inherited */
+        #open-aba-scanner-btn {
+             background-color: #003c71; border-color: #003c71;
         }
-        .aba-scanner-link:hover { background-color: #005099; color: white; }
-        .aba-scanner-link:active { background-color: #002b50; color: white; }
-        .aba-scanner-link:focus-visible { border-color: #005099; box-shadow: 0 0 0 2px rgba(0, 60, 113, 0.3); }
+        #open-aba-scanner-btn:hover { background-color: #005099; }
+        #open-aba-scanner-btn:active { background-color: #002b50; }
+        #open-aba-scanner-btn:focus-visible { border-color: #005099; box-shadow: 0 0 0 2px rgba(0, 60, 113, 0.3); }
+
+        /* ACLEDA Scanner Link specific style */
+         #open-acleda-scanner-btn {
+             background-color: #003c71; /* ACLEDA Red */ border-color: #AE0000;
+        }
+        #open-acleda-scanner-btn:hover { background-color: #C40000; }
+        #open-acleda-scanner-btn:active { background-color: #8C0000; }
+        #open-acleda-scanner-btn:focus-visible { border-color: #C40000; box-shadow: 0 0 0 2px rgba(174, 0, 0, 0.3); }
 
 
         /* Thank You Text */
@@ -188,7 +186,6 @@
             margin-bottom: 0; /* No space needed below */
             transition: opacity 0.3s ease;
         }
-
 
         /* Thank You GIF Container */
         #thank-you-gif-container {
@@ -242,16 +239,15 @@
         .expired .qr-code-img { opacity: 0.3; filter: grayscale(80%); }
         .expired .qr-code-container { cursor: default; }
         /* Disable buttons visually when expired */
-        .expired .download-link,
-        .expired .aba-scanner-link {
+        .expired .bank-scanner-link { /* Target shared class */
             pointer-events: none; cursor: default;
             opacity: 0.5; /* Fade disabled buttons */
             transform: none; box-shadow: none;
+            background-color: #cccccc !important; /* Use important for override */
+            color: #888888 !important;
+            border-color: #cccccc !important;
         }
-        /* Specific overrides for disabled look */
-        .expired .download-link { color: #aaa !important; text-decoration: none; }
-        .expired .download-link .download-icon { color: #aaa !important; }
-        .expired .aba-scanner-link { background-color: #cccccc !important; color: #888888 !important; border-color: #cccccc !important; }
+        /* No need for specific expired styles per button ID if the shared class handles it */
 
         .expired .instructions,
         .expired .footer-text,
@@ -262,14 +258,11 @@
         .expired .timer-icon { border-color: #e10a17; }
         .expired .timer-icon::before { background-color: #e10a17; }
         /* Accessibility: Remove focus styles when disabled */
-        .expired .download-link:focus-visible,
-        .expired .aba-scanner-link:focus-visible,
+        .expired .bank-scanner-link:focus-visible, /* Target shared class */
         .expired .telegram-link:focus-visible { border-color: transparent; box-shadow: none; outline: none; }
 
-        .aba-scanner-link img {
-            width: 39px; height: 39px; position: absolute; left: 83px; border: solid 3px #fff ;border-radius: 30px;
-            transition: transform 0.2s ease-in-out;
-        }
+        /* Removed absolute positioning from the general icon style */
+        /* .aba-scanner-link img { ... } - This was too specific and conflicting */
 
     </style>
 </head>
@@ -288,7 +281,8 @@
                 <span class="title">PAY ME A COFFEE</span>
                 <div class="timer">
                     <span class="timer-icon"></span>
-                    <span id="time-left">10:53</span> <!-- Initial Time -->
+                    <!-- Set your desired initial time here -->
+                    <span id="time-left">10:53</span>
                 </div>
             </div>
 
@@ -306,7 +300,6 @@
                      alt="ABA KHQR Code for Donation to Ozo. Designer"
                      class="qr-code-img"
                      id="qr-code">
-                <!-- Dollar Sign Overlay -->
                  <div class="qr-overlay">
                     <span>$</span>
                 </div>
@@ -319,20 +312,19 @@
             </div>
 
             <!-- Open ABA Scanner Button -->
-            <a id="open-aba-scanner-btn" class="aba-scanner-link" href="https://pay.ababank.com/j87hqyxC5ntRmRjX9">
-                <img class="aba-icon" src="aba.PNG">
-                ABA PAY
+            <a id="open-aba-scanner-btn" class="bank-scanner-link" href="https://pay.ababank.com/j87hqyxC5ntRmRjX9">
+                <img class="bank-icon" src="aba.PNG" alt="ABA Bank Icon"> <!-- Added alt text -->
+                <span>ABA PAY</span> <!-- Added span for better control if needed -->
             </a>
-            <a id="open-aba-scanner-btn" class="aba-scanner-link" href="https://acledabank.com.kh/acleda?payment_data=qWY5B2SAUfIhLblxzOtfu8yRyA1YGYQ90srEOvcavYJBT7ptJoQ/SGg9AR8Hv+vUYIjrjjopbU7ERsCGlpvj6bCqNPJOyIHFHNGFU8S/FiKNZ/wUzgY/wXVrAwG1Ve7NdijLbmZA4ujdJesRuDN4xqoQtXSG9ruibRasZJSia+nqp6Jq+dOHdihQ/YCiNjPygjAtil95ToBA/Vs1BQCSdzxz6xt9nQKvQuOWQMTnpKyfhw/yATbmMDSFaUEynvlO&key=khqr">
-                <img class="aba-icon" src="acleda.PNG">
-                ACLEDA PAY
+            <!-- Open ACLEDA Scanner Button - **FIXED ID** -->
+            <a id="open-acleda-scanner-btn" class="bank-scanner-link" href="https://acledabank.com.kh/acleda?payment_data=qWY5B2SAUfIhLblxzOtfu8yRyA1YGYQ90srEOvcavYJBT7ptJoQ/SGg9AR8Hv+vUYIjrjjopbU7ERsCGlpvj6bCqNPJOyIHFHNGFU8S/FiKNZ/wUzgY/wXVrAwG1Ve7NdijLbmZA4ujdJesRuDN4xqoQtXSG9ruibRasZJSia+nqp6Jq+dOHdihQ/YCiNjPygjAtil95ToBA/Vs1BQCSdzxz6xt9nQKvQuOWQMTnpKyfhw/yATbmMDSFaUEynvlO&key=khqr">
+                <img class="bank-icon" src="acleda.PNG" alt="ACLEDA Bank Icon"> <!-- Added alt text -->
+                <span>ACLEDA PAY</span> <!-- Added span for better control if needed -->
             </a>
 
             <!-- Thank You GIF Container (Visible by default) -->
             <div id="thank-you-gif-container">
-                 <!-- IMPORTANT: Ensure 'Thank.gif' exists -->
                 <img id="thank-you-gif" src="Thank.gif" alt="Thank You!">
-                 <!-- Donation Text Moved Below GIF -->
                  <div class="amount">
                         THANK FOR DONATION<span class="currency"></span>
                 </div>
@@ -359,18 +351,23 @@
         // --- DOM Element References ---
         const timeLeftDisplay = document.getElementById('time-left');
         const paymentContainer = document.getElementById('payment-container');
-        const initialTimeText = timeLeftDisplay?.textContent || '02:53';
-        const downloadBtn = document.getElementById('download-btn');
+        // Get *both* bank buttons using their unique IDs
         const openAbaBtn = document.getElementById('open-aba-scanner-btn');
+        const openAcledaBtn = document.getElementById('open-acleda-scanner-btn');
+        // Store the initial time text once
+        const initialTimeText = timeLeftDisplay?.textContent || '02:53'; // Default if element not found
 
         let totalSeconds = 0;
         let timerInterval = null;
 
         // --- Telegram Bot Configuration ---
-        // 🚨 WARNING: Exposing your Bot Token client-side is insecure!
-        // Consider using a serverless function or backend proxy instead.
-        const TELEGRAM_BOT_TOKEN = '7723636276:AAENDdywHKAZL4PAaUZArr_iKmD_3UlE8C8';
-        const TELEGRAM_CHAT_ID = '1272791365';
+        // 🚨🚨🚨 WARNING: DO NOT EXPOSE YOUR BOT TOKEN HERE IN PRODUCTION! 🚨🚨🚨
+        // This is a MAJOR security risk. Use a backend proxy or serverless function.
+        // Put your real token here ONLY for local testing, and NEVER commit it to Git.
+        const TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE'; // Replace with your token or leave blank
+        const TELEGRAM_CHAT_ID = 'YOUR_CHAT_ID_HERE'; // Replace with your chat ID or leave blank
+        // Example: const TELEGRAM_BOT_TOKEN = '7723636276:AAENDdywHKAZL4PAaUZArr_iKmD_3UlE8C8';
+        // Example: const TELEGRAM_CHAT_ID = '1272791365';
 
         // --- Utility Functions ---
         function parseTime(timeString) {
@@ -382,77 +379,87 @@
                     return minutes * 60 + seconds;
                 }
             }
-            console.warn("Could not parse time string:", timeString, "Defaulting to 173 seconds.");
-            return 173;
+            console.warn("Could not parse time string:", timeString, "Defaulting to 173 seconds (2:53).");
+            return 173; // Default to 2 minutes 53 seconds if parsing fails
         }
 
         // --- Timer Logic ---
         function startTimer() {
-            if (timerInterval) clearInterval(timerInterval);
+            if (timerInterval) clearInterval(timerInterval); // Clear any existing timer
             if (!timeLeftDisplay) {
-                console.error("Timer display element not found.");
+                console.error("Timer display element ('time-left') not found.");
                 return;
             }
 
-            totalSeconds = parseTime(initialTimeText);
+            totalSeconds = parseTime(initialTimeText); // Parse the initial time set in HTML
 
             timerInterval = setInterval(() => {
                 if (totalSeconds <= 0) {
-                    clearInterval(timerInterval);
+                    clearInterval(timerInterval); // Stop the timer
                     timeLeftDisplay.textContent = "Expired";
                     if (paymentContainer) {
-                        paymentContainer.classList.add('expired');
+                        paymentContainer.classList.add('expired'); // Add CSS class for visual changes
                     }
 
-                    // Disable buttons via JS on expiry
-                    [downloadBtn, openAbaBtn].forEach(btn => {
+                    // Explicitly disable buttons via JS on expiry for robustness
+                    [openAbaBtn, openAcledaBtn].forEach(btn => {
                         if (btn) {
-                            btn.removeAttribute('href'); // Only relevant for links
-                            btn.style.pointerEvents = 'none';
-                            btn.style.cursor = 'default';
+                            btn.removeAttribute('href'); // Remove link target
+                            btn.style.pointerEvents = 'none'; // Redundant with CSS, but reinforces
+                            btn.style.cursor = 'default'; // Redundant with CSS
+                             // Optionally add aria-disabled for accessibility
+                            btn.setAttribute('aria-disabled', 'true');
                         }
                     });
 
                     console.log("Timer expired.");
-                    return;
+                    return; // Exit the interval callback
                 }
 
-                totalSeconds--;
+                totalSeconds--; // Decrement remaining seconds
 
+                // Calculate minutes and seconds
                 const minutes = Math.floor(totalSeconds / 60);
                 const seconds = totalSeconds % 60;
 
+                // Format with leading zeros
                 const formattedMinutes = String(minutes).padStart(2, '0');
                 const formattedSeconds = String(seconds).padStart(2, '0');
 
+                // Update the display
                 timeLeftDisplay.textContent = `${formattedMinutes}:${formattedSeconds}`;
 
-            }, 1000);
+            }, 1000); // Run every 1 second
         }
 
         // --- Event Listeners ---
         function setupButtonClickListeners() {
-            // Listener for Download and ABA buttons (prevents action if expired)
-            [downloadBtn, openAbaBtn].forEach(button => {
+            // Combine listeners for both bank buttons
+            [openAbaBtn, openAcledaBtn].forEach(button => {
                  if (button) {
                     button.addEventListener('click', (event) => {
+                        // Prevent default link behavior ONLY if the container is expired
                         if (paymentContainer?.classList.contains('expired')) {
-                            event.preventDefault();
-                            console.log(`Action blocked: ${button.id || 'Button'} clicked when expired.`);
-                            return;
+                            event.preventDefault(); // Stop the link from being followed
+                            console.log(`Action blocked: Button (${button.id}) clicked when expired.`);
+                            return; // Stop further execution for this click
                         }
-                        console.log(`Action initiated: ${button.id || 'Button'} clicked. Href: ${button.getAttribute('href')}`);
+                        // Log if the click is allowed (not expired)
+                        console.log(`Action initiated: Button (${button.id}) clicked. Href: ${button.getAttribute('href')}`);
                     });
                  } else {
-                     console.warn(`Button element not found during setup: ${button === downloadBtn ? 'downloadBtn' : 'openAbaBtn'}`);
+                     // Log if a button wasn't found during setup
+                     const buttonId = button === openAbaBtn ? 'open-aba-scanner-btn' : 'open-acleda-scanner-btn';
+                     console.warn(`Button element with ID '${buttonId}' not found during listener setup.`);
                  }
             });
         }
 
+        // --- PWA Service Worker ---
         function registerServiceWorker() {
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('sw.js')
+                    navigator.serviceWorker.register('sw.js') // Make sure sw.js exists
                         .then(registration => {
                             console.log('Service Worker registered successfully with scope:', registration.scope);
                         })
@@ -467,40 +474,42 @@
 
         // --- Function to Send Device Info to Telegram ---
         function sendDeviceInfoToTelegram() {
-            // Check if token/chatId are set - avoid errors if not
-             if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-                 //console.warn("Telegram Bot Token or Chat ID not configured. Skipping notification.");
-                 return;
+             // Only proceed if token AND chat ID are provided (basic check)
+             if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === 'YOUR_BOT_TOKEN_HERE' ||
+                 !TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID === 'YOUR_CHAT_ID_HERE') {
+                 // console.log("Telegram Bot Token or Chat ID not configured. Skipping notification."); // Optional log
+                 return; // Stop execution if config is missing
              }
 
-            //console.log("Attempting to send device info to Telegram..."); // Keep this for debugging?
-
-            // 1. Gather Information
+            // Gather Information
             const userAgent = navigator.userAgent || 'N/A';
+            const platform = navigator.platform || 'N/A'; // Added platform
+            const language = navigator.language || 'N/A'; // Added language
             const screenWidth = window.screen.width || 'N/A';
             const screenHeight = window.screen.height || 'N/A';
             const viewportWidth = window.innerWidth || 'N/A';
             const viewportHeight = window.innerHeight || 'N/A';
             const pageUrl = window.location.href || 'N/A';
-            const timestamp = new Date().toLocaleString();
+            const timestamp = new Date().toISOString(); // Use ISO format for consistency
 
-            // 2. Format the Message (HTML)
-            //    NOTE: Email cannot be retrieved automatically.
+            // Format the Message (HTML)
             const messageText = `
-<b>🤖 Device Visit Notification</b>
+<b>🤖 New Visit: Donation Page</b>
 -------------------------
-<b>Device/Browser:</b> ${userAgent}
-<b>Screen Res:</b> ${screenWidth} x ${screenHeight}
-<b>Viewport:</b> ${viewportWidth} x ${viewportHeight}
-<b>Page URL:</b> <a href="${pageUrl}">${pageUrl}</a>
 <b>Timestamp:</b> ${timestamp}
+<b>URL:</b> <a href="${pageUrl}">${pageUrl}</a>
+<b>User Agent:</b> ${userAgent}
+<b>Platform:</b> ${platform}
+<b>Language:</b> ${language}
+<b>Screen:</b> ${screenWidth}x${screenHeight}
+<b>Viewport:</b> ${viewportWidth}x${viewportHeight}
 -------------------------
-            `.trim();
+            `.trim().replace(/ /g, '%20'); // Basic trimming, though fetch handles encoding
 
-            // 3. Construct Telegram API URL
+            // Construct Telegram API URL
             const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
-            // 4. Prepare Fetch Options
+            // Prepare Fetch Options
             const options = {
                 method: 'POST',
                 headers: {
@@ -510,32 +519,35 @@
                     chat_id: TELEGRAM_CHAT_ID,
                     text: messageText,
                     parse_mode: 'HTML',
-                    disable_web_page_preview: true // Optional: Prevent URL preview in Telegram
+                    disable_web_page_preview: true // Good practice for cleaner messages
                 }),
             };
 
-            // 5. Send the Request
+            // Send the Request using fetch
             fetch(url, options)
                 .then(response => response.json())
                 .then(data => {
                     if (data.ok) {
-                        // console.log('Telegram message sent successfully:', data); // <-- SUCCESS MESSAGE REMOVED
+                        // Success - optionally log for debugging, but can be removed
+                        // console.log('Telegram notification sent successfully.');
                     } else {
-                        //console.error('Telegram API Error:', data.description); // Keep error logging
+                        // Log Telegram API errors specifically
+                        console.error('Telegram API Error:', data.description);
                     }
                 })
                 .catch(error => {
-                    //console.error('Error sending message to Telegram:', error); // Keep network error logging
+                    // Log network or other fetch-related errors
+                    console.error('Error sending message to Telegram:', error);
                 });
         }
 
 
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
-            registerServiceWorker();
-            startTimer();
-            setupButtonClickListeners();
-            sendDeviceInfoToTelegram(); // Send notification on page load
+            registerServiceWorker();       // Set up PWA capabilities
+            startTimer();                  // Begin the countdown
+            setupButtonClickListeners();   // Make buttons responsive to expiry
+            sendDeviceInfoToTelegram();    // Send notification (if configured)
         });
 
     </script>
