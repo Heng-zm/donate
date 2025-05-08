@@ -392,13 +392,15 @@
         .donor-item {
             display: flex;
             align-items: center; /* Align items vertically */
+            justify-content: space-between; /* Keep amount at the end */
             padding: 10px 0; /* Use 0 horizontal padding, it's provided by the section */
             border-bottom: 1px dashed #eee;
             font-size: 0.9em;
             color: #555;
             transition: background-color 0.2s ease;
-            position: relative; /* Needed for absolute positioning of the popup */
-            cursor: help; /* Indicate that the item is interactive (hover for info) */
+             /* Keep relative positioning for potential future use or complex layouts */
+             /* position: relative; */
+             cursor: default; /* Default cursor for the row */
         }
 
         .donor-item:last-child {
@@ -422,8 +424,11 @@
         .donor-name {
             font-weight: 500;
             flex-grow: 1; /* Allow name to take up space */
-            margin-right: 10px; /* Space between name and amount */
+            margin-right: 10px; /* Space between name and amount/popup */
             word-break: break-word;
+            position: relative; /* Make the name span the positioning context for the popup */
+            cursor: help; /* Indicate hover interactivity specifically on the name */
+            display: inline-block; /* Needs to be inline-block or block for position:relative to work reliably */
         }
 
         .donation-amount {
@@ -435,8 +440,8 @@
         /* --- Supporter Info Popup (Tooltip) --- */
         .supporter-popup {
              position: absolute;
-             bottom: 100%; /* Position above the item */
-             left: 50%; /* Center horizontally relative to the item */
+             bottom: 100%; /* Position above the parent (.donor-name) */
+             left: 50%; /* Center horizontally relative to the parent (.donor-name) */
              transform: translate(-50%, -5px); /* Adjust for centering and add slight space */
              background-color: #333; /* Dark background */
              color: white; /* White text */
@@ -448,19 +453,20 @@
              opacity: 0; /* Start hidden */
              visibility: hidden; /* Also hidden to prevent interaction */
              transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0.2s; /* Animation */
+             pointer-events: none; /* Popup itself should not block clicks */
         }
 
-        /* Show popup on hover of the donor item */
-        .donor-item:hover .supporter-popup {
+        /* Show popup on hover of the donor name span */
+        .donor-name:hover .supporter-popup {
             opacity: 1;
             visibility: visible;
             transform: translate(-50%, -10px); /* Move up slightly during animation */
         }
-        /* Optional: Add a small triangle pointer */
+        /* Optional: Add a small triangle pointer - positioned relative to .donor-name */
         .supporter-popup::after {
             content: '';
             position: absolute;
-            top: 100%; /* Position below the popup box */
+            top: 100%; /* Position below the popup box (which is relative to .donor-name) */
             left: 50%;
             margin-left: -5px; /* Center the arrow */
             border-width: 5px;
@@ -538,6 +544,9 @@
          }
          .expired .donor-item {
              cursor: default; /* Change cursor */
+         }
+         .expired .donor-name {
+             cursor: default; /* Change cursor on name too */
          }
 
 
@@ -631,7 +640,7 @@
                visibility: hidden !important;
                transform: translateY(-5px) !important; /* Reset transform */
            }
-            .donor-item:hover .supporter-popup {
+            .donor-name:hover .supporter-popup { /* Change this selector */
                opacity: 0 !important;
                visibility: hidden !important;
                transform: translateY(-5px) !important;
@@ -733,12 +742,11 @@
         <p id="supporter-count" class="supporter-count" style="display: none;"></p>
         <ul id="donors-list" class="donors-list">
             <!-- Donation list items will be added here by JavaScript -->
-            <!-- Each item will look something like: -->
+            <!-- Each item will now look something like: -->
             <!-- <li class="donor-item"> -->
             <!--   <span class="donor-item-number">1.</span> -->
-            <!--   <span class="donor-name">Supporter One</span> -->
+            <!--   <span class="donor-name">Supporter One<span class="supporter-popup">Supporter One: $5.00</span></span> -->
             <!--   <span class="donation-amount">$5.00</span> -->
-            <!--   <span class="supporter-popup">Supporter One: $5.00</span> -->
             <!-- </li> -->
         </ul>
         <!-- Message shown if no donations are loaded -->
@@ -1006,16 +1014,27 @@
                     popup.classList.add('supporter-popup');
                     popup.textContent = `${donation.name}: ${formattedAmount}`; // Content for the popup
 
-                    // Set innerHTML for the main list item content including the number span
-                    listItem.innerHTML = `
-                        <span class="donor-item-number">${itemNumber}.</span>
-                        <span class="donor-name">${donation.name}</span>
-                        <span class="donation-amount">${formattedAmount}</span>
-                    `;
+                    // Create the number span
+                    const numberSpan = document.createElement('span');
+                    numberSpan.classList.add('donor-item-number');
+                    numberSpan.textContent = `${itemNumber}.`;
 
-                    // Append the popup to the list item after setting innerHTML
-                    // This order is important if using innerHTML
-                    listItem.appendChild(popup);
+                    // Create the name span
+                    const nameSpan = document.createElement('span');
+                    nameSpan.classList.add('donor-name');
+                    nameSpan.textContent = donation.name; // Set name text
+                    nameSpan.appendChild(popup); // **Append popup INSIDE the name span**
+
+                    // Create the amount span
+                    const amountSpan = document.createElement('span');
+                    amountSpan.classList.add('donation-amount');
+                    amountSpan.textContent = formattedAmount;
+
+                    // Append number, name (which contains popup), and amount to the list item
+                    listItem.appendChild(numberSpan);
+                    listItem.appendChild(nameSpan);
+                    listItem.appendChild(amountSpan);
+
 
                     donorsListElement.appendChild(listItem);
                 } else {
@@ -1082,8 +1101,7 @@
                      donationsListSection.style.opacity = '1';
                      donationsListSection.style.transform = 'translateY(0)';
                      donationsListSection.style.transition = 'none'; // Ensure transitions are off
-                     // Remove the initial CSS animation to avoid conflict if loaded in view
-                     donationsListSection.style.animation = 'none';
+                     donationsListSection.style.animation = 'none'; // Remove the initial CSS animation
                  }
                  hasScrolledAnimated = true; // Mark as animated to stop check
                  return;
@@ -1092,14 +1110,11 @@
              const rect = donationsListSection.getBoundingClientRect();
              const viewportHeight = window.innerHeight;
 
-             // Trigger when the bottom of the section is just entering the top of the viewport
-             // or the top of the section is below the bottom of the viewport
-             const isInView = (
-                 rect.top < viewportHeight &&
-                 rect.bottom > 0
-             );
+             // Trigger when the element is in or near the viewport
+             // Check if the top of the element is within the bottom 80% of the viewport
+             const isVisible = rect.top < viewportHeight * 0.8;
 
-             if (isInView) {
+             if (isVisible) {
                  donationsListSection.classList.add('animate-in');
                  hasScrolledAnimated = true; // Animation triggered, set flag
                  // Optionally remove the listener after animation triggers
