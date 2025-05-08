@@ -19,7 +19,8 @@
             padding: 0;
         }
         html {
-            scroll-behavior: smooth; /* This handles the smooth scrolling for the 'View Supporters' link */
+            /* Removed smooth scroll as there's no specific anchor link anymore */
+            /* scroll-behavior: smooth; */
         }
 
         body {
@@ -82,7 +83,7 @@
         .bank-scanner-link,
         #thank-you-gif-container,
         .content > .footer-text,
-        .scroll-to-supporters, /* Added for animation */
+        /* .scroll-to-supporters removed */
         .donations-list-section, /* Added for animation */
         .footer-social {
             opacity: 0; /* Start hidden */
@@ -120,16 +121,12 @@
         .content > .footer-text {
              animation: fadeSlideUp 0.5s 1.1s ease-out forwards;
         }
-        /* Animation for the new scroll link */
-        .scroll-to-supporters {
+         /* Animation for the new donation list section - takes previous link spot */
+        .donations-list-section {
              animation: fadeSlideUp 0.5s 1.2s ease-out forwards; /* Delay after footer text */
         }
-         /* Animation for the new donation list section */
-        .donations-list-section {
-             animation: fadeSlideUp 0.5s 1.3s ease-out forwards; /* Delay after scroll link */
-        }
         .footer-social {
-             animation: fadeSlideUp 0.5s 1.4s ease-out forwards; /* Delay after the new section */
+             animation: fadeSlideUp 0.5s 1.3s ease-out forwards; /* Delay after the new section */
         }
 
 
@@ -290,7 +287,7 @@
             display: block;
             position: relative;
             margin-top:10px;
-            margin-bottom: 10px; /* Increased bottom margin to make space for the new link */
+            margin-bottom: 20px; /* Adjusted margin */
             z-index: 10;
             pointer-events: none;
             text-align: center;
@@ -302,79 +299,50 @@
             pointer-events: auto;
         }
 
-        /* Footer Text */
+        /* Footer Text (acts as text divider now) */
         .footer-text {
-            font-size: 0.8em; color: #888; margin-top: 20px;
+            font-size: 0.8em; color: #888; margin-top: 20px; /* Adjusted margin */
              line-height: 1.4; position: relative; z-index: 5;
             transition: opacity 0.3s ease;
+             padding: 0 20px; /* Add horizontal padding to align with content */
+             text-align: center; /* Ensure text is centered */
+             margin-bottom: 20px; /* Space between text and the list section */
         }
 
-        /* --- New Style for Scroll Link --- */
-        .scroll-to-supporters {
-            display: inline-block; /* Allows margin/padding and centering */
-            font-size: 0.9em;
-            color: #0077cc; /* Link color */
-            text-decoration: none;
-            margin-top: 15px; /* Space above the link */
-            margin-bottom: 25px; /* Space below the link */
-            padding: 8px 15px;
-            border: 1px solid transparent;
-            border-radius: 20px;
-            transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
-            outline: none; /* Handled by :focus-visible */
-            position: relative; /* Needed for focus outline */
-            z-index: 6; /* Ensure it's above footer text */
-        }
-        .scroll-to-supporters:hover {
-            color: #005599;
-            background-color: #f0f0f0;
-            border-color: #ddd;
-        }
-        .scroll-to-supporters:active {
-            transform: translateY(1px); /* Simple active effect */
-            transition-duration: 0.05s;
-        }
-         .scroll-to-supporters:focus-visible {
-             border-color: #0077cc;
-             box-shadow: 0 0 0 2px rgba(0, 119, 204, 0.2);
-         }
-        /* --- End New Style for Scroll Link --- */
 
-
-        /* --- New Styles for Donation List Section --- */
+        /* --- New Styles for Donation List Section (Integrated Look) --- */
         .donations-list-section {
-            margin-top: 30px; /* Space from elements above (the new scroll link) */
-            padding: 20px; /* Internal padding */
-            border-top: 1px solid #eee; /* Optional separator line */
+            margin-top: 0; /* Remove top margin */
+            padding: 0 20px 20px 20px; /* Adjust padding - match content horizontal, space at bottom */
+            border-top: none; /* Remove top border */
+            background-color: transparent; /* Remove background color */
             text-align: left; /* Align content left */
-            background-color: #f8f9fa; /* Slightly different background */
-            position: relative; /* Needed for relative positioning */
-            z-index: 4; /* Below footer social but above footer text */
+            position: relative;
+            z-index: 4;
         }
 
         /* --- Enhanced Style for Recent Supporters Title --- */
         .donations-list-title {
-            font-size: 1.3em; /* Slightly larger */
+            font-size: 1.3em;
             font-weight: bold;
-            color: #e10a17; /* Use the theme color */
+            color: #e10a17;
             margin: 0 auto 20px auto; /* Center and add margin below */
-            padding-bottom: 8px; /* Space between text and border */
-            border-bottom: 3px solid #e10a17; /* A solid border below the text */
-            display: inline-block; /* Make the element width fit its content */
-            width: auto; /* Override default h3 width */
-            max-width: calc(100% - 10px); /* Prevent overflow on tiny screens */
-            text-align: center; /* Ensure text is centered within the block */
+            padding-bottom: 8px;
+            border-bottom: 3px solid #e10a17;
+            display: inline-block;
+            width: auto;
+            max-width: calc(100% - 10px);
+            text-align: center;
         }
         /* --- End Enhanced Style for Recent Supporters Title --- */
 
         /* --- Style to Add Internal Scroll to the List --- */
         .donors-list {
-            list-style: none; /* Remove default list bullets */
+            list-style: none;
             padding: 0;
             margin: 0;
             max-height: 200px; /* Set a maximum height */
             overflow-y: auto; /* Add vertical scrollbar if content exceeds max-height */
-            /* Optional: style the scrollbar for webkit browsers if you like */
             scrollbar-width: thin; /* Firefox */
             scrollbar-color: #e10a17 #f0f0f0; /* Firefox */
         }
@@ -385,7 +353,7 @@
         .donors-list::-webkit-scrollbar-thumb {
             background-color: #e10a17;
             border-radius: 4px;
-            border: 2px solid #f8f9fa; /* Match list background */
+            border: 2px solid #ffffff; /* Match list background */
         }
         .donors-list::-webkit-scrollbar-track {
             background: #f0f0f0;
@@ -394,35 +362,35 @@
 
 
         .donor-item {
-            display: flex; /* Use flexbox for Name | Amount layout */
-            justify-content: space-between; /* Space out Name and Amount */
+            display: flex;
+            justify-content: space-between;
             align-items: center;
             padding: 10px 0; /* Adjusted padding to fit within section padding */
-            border-bottom: 1px dashed #eee; /* Separator between items */
+            border-bottom: 1px dashed #eee;
             font-size: 0.9em;
             color: #555;
-            transition: background-color 0.2s ease; /* Subtle hover effect */
+            transition: background-color 0.2s ease;
         }
 
         .donor-item:last-child {
-            border-bottom: none; /* No border after the last item */
+            border-bottom: none;
         }
 
         .donor-item:hover {
-             background-color: #f1f1f1; /* Darker hover for section background */
+             background-color: #f9f9f9; /* Subtle hover */
         }
 
         .donor-name {
             font-weight: 500;
-            flex-grow: 1; /* Allow name to take up space */
-            margin-right: 10px; /* Space between name and amount */
-             word-break: break-word; /* Prevent long names from overflowing */
+            flex-grow: 1;
+            margin-right: 10px;
+             word-break: break-word;
         }
 
         .donation-amount {
             font-weight: bold;
-            color: #007700; /* Green color for amount */
-            flex-shrink: 0; /* Prevent amount from shrinking */
+            color: #007700;
+            flex-shrink: 0;
         }
 
         .no-donations-message {
@@ -431,6 +399,7 @@
             font-style: italic;
             margin-top: 20px;
             font-size: 0.9em;
+             padding: 0 10px; /* Add some padding */
         }
         /* --- End New Styles for Donation List --- */
 
@@ -439,8 +408,8 @@
         .footer-social {
             background-color: #f8f9fa; padding: 15px 20px; text-align: center;
             border-top: 1px solid #eee; flex-shrink: 0;
-            position: relative; /* Needed for z-index */
-            z-index: 5; /* Above donation list section */
+            position: relative;
+            z-index: 5;
         }
 
         /* Telegram Link */
@@ -463,8 +432,8 @@
         /* --- State: Expired --- */
         .expired .qr-code-img { filter: grayscale(80%); }
         .expired .qr-code-container { cursor: default; }
-        .expired .bank-scanner-link,
-        .expired .scroll-to-supporters /* Dim the scroll link too */
+        /* Removed .scroll-to-supporters from this rule */
+        .expired .bank-scanner-link
         {
             pointer-events: none; cursor: default;
             transform: none !important; /* Override active state */
@@ -488,7 +457,7 @@
         .expired .bank-scanner-link,
         #thank-you-gif-container,
         .expired .content > .footer-text,
-        .expired .scroll-to-supporters, /* Added for expired state */
+        /* Removed .scroll-to-supporters from this rule */
         .expired .donations-list-section, /* Added for expired state */
         .expired .footer-social {
             animation: none;
@@ -498,9 +467,9 @@
          .expired .instructions,
          .expired .footer-text,
          .expired .amount,
-         .expired #thank-you-gif-container,
-         .expired .scroll-to-supporters, /* Dim the scroll link */
-         .expired .donations-list-section /* Dim the donation list too */
+         #thank-you-gif-container,
+         /* Removed .scroll-to-supporters from this rule */
+         .donations-list-section /* Dim the donation list too */
           { opacity: 0.6 !important; }
          .expired .qr-code-img { opacity: 0.3 !important; }
          .expired .qr-overlay { opacity: 0 !important; } /* Explicitly hide overlay when expired */
@@ -510,8 +479,8 @@
          /* timer-icon::before animation/color handled separately */
         /* Accessibility: Remove focus styles when disabled */
         .expired .bank-scanner-link:focus-visible,
-        .expired .telegram-link:focus-visible,
-        .expired .scroll-to-supporters:focus-visible /* Added for expired state */
+        .expired .telegram-link:focus-visible
+        /* Removed .scroll-to-supporters from this rule */
          { border-color: transparent; box-shadow: none; outline: none; }
 
 
@@ -527,7 +496,7 @@
           .bank-scanner-link,
           #thank-you-gif-container,
           .content > .footer-text,
-          .scroll-to-supporters, /* Added for reduced motion */
+          /* Removed .scroll-to-supporters from this rule */
           .donations-list-section, /* Added for reduced motion */
           .footer-social {
             animation: none; /* Turn off animation */
@@ -540,8 +509,8 @@
            .expired .instructions,
            .expired .footer-text,
            .expired .amount,
-           .expired #thank-you-gif-container,
-           .expired .scroll-to-supporters, /* Added for reduced motion */
+           #thank-you-gif-container,
+           /* Removed .scroll-to-supporters from this rule */
             .expired .donations-list-section /* Added for reduced motion */
             { opacity: 0.6 !important; }
            .expired .qr-code-img { opacity: 0.3 !important; }
@@ -614,20 +583,18 @@
             </div>
         </div>
 
-        <!-- Footer Text -->
+        <!-- Footer Text (Acts as a divider/signature now) -->
         <p class="footer-text">
             by Ozo. Designer
         </p>
 
-         <!-- --- New Scroll Link --- -->
-         <!-- Placed here within main, after the thank you/footer text, before the actual list section -->
-         <a href="#supporter-list-section" class="scroll-to-supporters">View Recent Supporters</a>
-         <!-- --- End New Scroll Link --- -->
+        <!-- --- Removed Scroll Link --- -->
+        <!-- The link <a href="#supporter-list-section" class="scroll-to-supporters">View Recent Supporters</a> has been removed -->
 
     </main> <!-- End of main content -->
 
-    <!-- --- New Donation List Section --- -->
-    <!-- Added id="supporter-list-section" to this section -->
+    <!-- --- New Donation List Section (Now feels more integrated) --- -->
+    <!-- Added id="supporter-list-section" for potential future use or reference -->
     <section id="supporter-list-section" class="donations-list-section">
         <!-- The title is styled with .donations-list-title -->
         <h3 class="donations-list-title">Recent Supporters</h3>
@@ -638,6 +605,7 @@
         <p id="no-donations-message" class="no-donations-message" style="display: none;">No donations yet. Be the first!</p>
     </section>
     <!-- --- End New Donation List Section --- -->
+
 
     <!-- Footer with Social Icon -->
     <footer class="footer-social">
@@ -664,7 +632,7 @@
         // --- New DOM Element References for Donation List ---
         const donorsListElement = document.getElementById('donors-list');
         const noDonationsMessageElement = document.getElementById('no-donations-message');
-        const scrollToSupportersLink = document.querySelector('.scroll-to-supporters');
+        // Removed reference to scrollToSupportersLink
         // --- End New DOM Element References ---
 
 
@@ -714,14 +682,7 @@
                          btn.setAttribute('tabindex', '-1'); // Make inaccessible to keyboard
                      }
                  });
-                 // Also disable the scroll-to-supporters link when expired
-                 if (scrollToSupportersLink) {
-                    scrollToSupportersLink.removeAttribute('href');
-                    scrollToSupportersLink.style.pointerEvents = 'none';
-                    scrollToSupportersLink.style.cursor = 'default';
-                    scrollToSupportersLink.setAttribute('aria-disabled', 'true');
-                    scrollToSupportersLink.setAttribute('tabindex', '-1'); // Make inaccessible to keyboard
-                 }
+                 // Removed disabling logic for the scroll-to-supporters link
 
                  console.log("Timer already expired on page load.");
                  return;
@@ -744,14 +705,7 @@
                              btn.setAttribute('tabindex', '-1'); // Make inaccessible to keyboard
                         }
                     });
-                     // Also disable the scroll-to-supporters link when expired
-                     if (scrollToSupportersLink) {
-                        scrollToSupportersLink.removeAttribute('href');
-                        scrollToSupportersLink.style.pointerEvents = 'none';
-                        scrollToSupportersLink.style.cursor = 'default';
-                        scrollToSupportersLink.setAttribute('aria-disabled', 'true');
-                         scrollToSupportersLink.setAttribute('tabindex', '-1'); // Make inaccessible to keyboard
-                    }
+                     // Removed disabling logic for the scroll-to-supporters link
 
                     console.log("Timer expired.");
                     return;
@@ -884,14 +838,13 @@
             if (!donations || !Array.isArray(donations) || donations.length === 0) {
                 noDonationsMessageElement.style.display = 'block'; // Show "No donations" message
                 donorsListElement.style.display = 'none'; // Hide the list
-                 // Also hide the scroll link if there are no donations to show
-                 if(scrollToSupportersLink) scrollToSupportersLink.style.display = 'none';
+                // Removed hiding logic for the scroll link
                 return;
             }
 
             noDonationsMessageElement.style.display = 'none'; // Hide "No donations" message
             donorsListElement.style.display = 'block'; // Ensure list is visible
-             if(scrollToSupportersLink) scrollToSupportersLink.style.display = 'inline-block'; // Ensure scroll link is visible
+            // Removed showing logic for the scroll link
 
 
             donations.forEach(donation => {
@@ -970,20 +923,7 @@
             // Load and display the donations list from the JSON file
             loadDonations();
 
-            // Add click listener for the scroll link (optional, smooth scroll is handled by CSS)
-            if (scrollToSupportersLink) {
-                scrollToSupportersLink.addEventListener('click', (event) => {
-                     // Check if the payment container is marked as expired
-                     if (paymentContainer?.classList.contains('expired')) {
-                         event.preventDefault(); // Prevent scrolling if expired
-                         console.log("Action blocked: Scroll link clicked when expired.");
-                     }
-                    // CSS handles the smooth scroll if not prevented
-                });
-            } else {
-                 console.warn("Scroll-to-supporters link not found.");
-            }
-
+            // Removed click listener for the scroll link
         });
 
         // --- Original script.js content ends here ---
