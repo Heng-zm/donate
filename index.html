@@ -391,8 +391,7 @@
 
         .donor-item {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            align-items: center; /* Align items vertically */
             padding: 10px 0; /* Use 0 horizontal padding, it's provided by the section */
             border-bottom: 1px dashed #eee;
             font-size: 0.9em;
@@ -410,17 +409,27 @@
              background-color: #f1f1f1; /* Hover effect slightly darker than section background */
         }
 
+        /* Style for the new number span */
+        .donor-item-number {
+             font-size: 0.8em; /* Slightly smaller than name */
+             color: #999; /* Muted color */
+             margin-right: 8px; /* Space between number and name */
+             flex-shrink: 0; /* Prevent number from shrinking */
+             min-width: 20px; /* Give it a minimum width for alignment (adjust as needed) */
+             text-align: right; /* Align number to the right */
+        }
+
         .donor-name {
             font-weight: 500;
-            flex-grow: 1;
-            margin-right: 10px;
+            flex-grow: 1; /* Allow name to take up space */
+            margin-right: 10px; /* Space between name and amount */
             word-break: break-word;
         }
 
         .donation-amount {
             font-weight: bold;
             color: #007700;
-            flex-shrink: 0;
+            flex-shrink: 0; /* Prevent amount from shrinking */
         }
 
         /* --- Supporter Info Popup (Tooltip) --- */
@@ -512,7 +521,7 @@
              outline: none !important; /* Ensure no outline when disabled */
         }
 
-        /* Ensure expired state overrides scroll animation state */
+        /* Ensure expired state overrides scroll animation state and disables interaction */
         .expired .donations-list-section {
             animation: none !important; /* Disable animation when expired */
             opacity: 0.6 !important; /* Apply dimmed opacity */
@@ -720,9 +729,17 @@
     <section id="supporter-list-section" class="donations-list-section">
         <!-- Supporter Count and Title -->
         <h3 class="donations-list-title">Recent Supporters</h3>
+        <!-- Supporter Count -->
         <p id="supporter-count" class="supporter-count" style="display: none;"></p>
         <ul id="donors-list" class="donors-list">
             <!-- Donation list items will be added here by JavaScript -->
+            <!-- Each item will look something like: -->
+            <!-- <li class="donor-item"> -->
+            <!--   <span class="donor-item-number">1.</span> -->
+            <!--   <span class="donor-name">Supporter One</span> -->
+            <!--   <span class="donation-amount">$5.00</span> -->
+            <!--   <span class="supporter-popup">Supporter One: $5.00</span> -->
+            <!-- </li> -->
         </ul>
         <!-- Message shown if no donations are loaded -->
         <p id="no-donations-message" class="no-donations-message" style="display: none;">No donations yet. Be the first!</p>
@@ -972,11 +989,14 @@
             noDonationsMessageElement.style.display = 'none'; // Hide "No donations" message
             donorsListElement.style.display = 'block'; // Ensure list is visible
 
-            donations.forEach(donation => {
+            donations.forEach((donation, index) => { // Added index here
                 // Basic check if donation object has expected properties
                 if (donation && typeof donation.name === 'string' && typeof donation.amount === 'number') {
                     const listItem = document.createElement('li');
                     listItem.classList.add('donor-item'); // Class for styling
+
+                    // Get the sequence number (1-based)
+                    const itemNumber = index + 1;
 
                     // Format amount to 2 decimal places with a dollar sign
                     const formattedAmount = `$${donation.amount.toFixed(2)}`;
@@ -986,16 +1006,18 @@
                     popup.classList.add('supporter-popup');
                     popup.textContent = `${donation.name}: ${formattedAmount}`; // Content for the popup
 
-                    // Set innerHTML for the main list item content
+                    // Set innerHTML for the main list item content including the number span
                     listItem.innerHTML = `
+                        <span class="donor-item-number">${itemNumber}.</span>
                         <span class="donor-name">${donation.name}</span>
                         <span class="donation-amount">${formattedAmount}</span>
                     `;
 
                     // Append the popup to the list item after setting innerHTML
+                    // This order is important if using innerHTML
                     listItem.appendChild(popup);
 
-                     donorsListElement.appendChild(listItem);
+                    donorsListElement.appendChild(listItem);
                 } else {
                      console.warn("Skipping invalid donation data:", donation);
                 }
@@ -1029,7 +1051,10 @@
                       return; // Exit the function
                  }
 
-                 // Display the fetched data
+                 // Sort donations by amount descending (highest first)
+                 data.sort((a, b) => b.amount - a.amount);
+
+                 // Display the fetched and sorted data
                  displayDonations(data);
 
              } catch (error) {
@@ -1057,6 +1082,8 @@
                      donationsListSection.style.opacity = '1';
                      donationsListSection.style.transform = 'translateY(0)';
                      donationsListSection.style.transition = 'none'; // Ensure transitions are off
+                     // Remove the initial CSS animation to avoid conflict if loaded in view
+                     donationsListSection.style.animation = 'none';
                  }
                  hasScrolledAnimated = true; // Mark as animated to stop check
                  return;
@@ -1065,14 +1092,14 @@
              const rect = donationsListSection.getBoundingClientRect();
              const viewportHeight = window.innerHeight;
 
-             // Check if the element is in or near the viewport
-             // Trigger when 80% of the element height is visible, or 80% of viewport height from the top
-             const isVisible = (
-                 rect.top <= viewportHeight * 0.8 &&
-                 rect.bottom >= 0 // As long as any part is below the top edge of the viewport
+             // Trigger when the bottom of the section is just entering the top of the viewport
+             // or the top of the section is below the bottom of the viewport
+             const isInView = (
+                 rect.top < viewportHeight &&
+                 rect.bottom > 0
              );
 
-             if (isVisible) {
+             if (isInView) {
                  donationsListSection.classList.add('animate-in');
                  hasScrolledAnimated = true; // Animation triggered, set flag
                  // Optionally remove the listener after animation triggers
@@ -1103,15 +1130,20 @@
                     // Check visibility once on load (in case it's already in view)
                     checkDonationListVisibility();
                     // Add the scroll listener *only if* it wasn't already animated
-                    if (!hasScrolledAnimated) {
+                    // Check again for reduced motion/expired state after loadDonations completes
+                    if (!hasScrolledAnimated && !paymentContainer?.classList.contains('expired') && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
                        window.addEventListener('scroll', checkDonationListVisibility);
+                    } else {
+                         // If animation is skipped, ensure the section is visible
+                          if (donationsListSection) {
+                            donationsListSection.style.opacity = '1';
+                            donationsListSection.style.transform = 'translateY(0)';
+                            donationsListSection.style.transition = 'none';
+                            donationsListSection.style.animation = 'none'; // Remove the initial CSS animation
+                         }
                     }
                 }, 200); // Slightly longer delay to be safe
-
-
             });
-
-
         });
 
          // --- Optional: Re-check visibility after window resize in case element enters view ---
@@ -1121,6 +1153,13 @@
                  checkDonationListVisibility();
              }
          });
+
+        // --- Ensure check runs on load even if there's no scroll ---
+        // Added a separate check that runs reliably after DOM ready and data load
+        window.addEventListener('load', () => {
+             // Check visibility once on page load completion (after images etc.)
+             checkDonationListVisibility();
+        });
 
 
         // --- Original script.js content ends here ---
