@@ -846,26 +846,7 @@
         }
 
         // --- Function to Display Donations ---
-        // Mock data (replace with fetch from API in a real application)
-        const mockDonations = [
-             { name: "Anonymous Supporter", amount: 5.00 },
-             { name: "Coffee Enthusiast", amount: 2.50 },
-             { name: "Happy Developer", amount: 10.00 },
-             { name: "Generous Human", amount: 3.75 },
-             { name: "Fan of the Design", amount: 7.00 },
-             { name: "Small Contribution", amount: 1.00 },
-             { name: "Ozo's Pal", amount: 4.20 },
-             { name: "Another Donor", amount: 6.00 },
-             { name: "Testing Scroll", amount: 1.50 },
-             { name: "Long List Item Example Name", amount: 8.88 },
-             { name: "More Coffee Please", amount: 3.00 },
-             { name: "Supporter #12", amount: 2.00 },
-        ];
-
-        // Uncomment the line below to test the "No donations yet" message
-        // const mockDonations = [];
-
-
+        // This function now expects an array of donations fetched from JSON
         function displayDonations(donations) {
             if (!donorsListElement || !noDonationsMessageElement) {
                 console.error("Donation list elements not found.");
@@ -874,7 +855,7 @@
 
             donorsListElement.innerHTML = ''; // Clear existing list
 
-            if (!donations || donations.length === 0) {
+            if (!donations || !Array.isArray(donations) || donations.length === 0) {
                 noDonationsMessageElement.style.display = 'block';
                 donorsListElement.style.display = 'none';
                 return;
@@ -886,17 +867,61 @@
             donations.forEach(donation => {
                 const listItem = document.createElement('li');
                 listItem.classList.add('donor-item'); // Class for styling
-                // Format amount to 2 decimal places
-                const formattedAmount = `$${donation.amount.toFixed(2)}`;
-                listItem.innerHTML = `
-                    <span class="donor-name">${donation.name}</span>
-                    <span class="donation-amount">${formattedAmount}</span>
-                `;
+                 // Basic check if donation object has expected properties
+                if (donation && typeof donation.name === 'string' && typeof donation.amount === 'number') {
+                    // Format amount to 2 decimal places
+                    const formattedAmount = `$${donation.amount.toFixed(2)}`;
+                    listItem.innerHTML = `
+                        <span class="donor-name">${donation.name}</span>
+                        <span class="donation-amount">${formattedAmount}</span>
+                    `;
+                     donorsListElement.appendChild(listItem);
+                } else {
+                     console.warn("Skipping invalid donation data:", donation);
+                }
 
-                donorsListElement.appendChild(listItem);
+
             });
         }
-        // --- End New Function to Display Donations ---
+        // --- End Function to Display Donations ---
+
+        // --- New Function to Load Donations from JSON ---
+        async function loadDonations() {
+             const jsonUrl = 'supporters.json'; // Path to your JSON file
+
+             try {
+                 const response = await fetch(jsonUrl); // Fetch the file
+
+                 // Check if the request was successful (status code 2xx)
+                 if (!response.ok) {
+                     // If file is not found (404) or other error, treat as no donations
+                     console.warn(`Failed to fetch donations from ${jsonUrl}: ${response.status} ${response.statusText}`);
+                      // Display the "No donations yet" message
+                     displayDonations([]);
+                     return;
+                 }
+
+                 const data = await response.json(); // Parse JSON
+
+                 // Optional: Add a check to ensure data is an array if needed
+                 if (!Array.isArray(data)) {
+                      console.error("Fetched data from", jsonUrl, "is not an array:", data);
+                      // Display the "No donations yet" message
+                      displayDonations([]);
+                      return;
+                 }
+
+                 // Display the fetched data
+                 displayDonations(data);
+
+             } catch (error) {
+                 // Catch network errors, parsing errors etc.
+                 console.error('Error loading donations:', error);
+                 // Display the "No donations yet" message
+                 displayDonations([]);
+             }
+         }
+        // --- End New Function to Load Donations ---
 
 
         // --- Initialization ---
@@ -906,8 +931,8 @@
             setupButtonClickListeners();
             sendDeviceInfoToTelegram(); // This requires TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID
 
-            // Display the donations list when the DOM is ready
-            displayDonations(mockDonations);
+            // Load and display the donations list from the JSON file
+            loadDonations();
         });
 
         // --- Original script.js content ends here ---
