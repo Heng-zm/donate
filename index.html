@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donation</title>
     <meta name="theme-color" content="#e10a17"/>
-    <!-- The original style.css content is now embedded here -->
     <link rel="icon" type="image/x-icon" href="icon-01.png">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="192.png">
@@ -323,6 +322,8 @@
             border-radius: 20px;
             transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
             outline: none; /* Handled by :focus-visible */
+            position: relative; /* Needed for focus outline */
+            z-index: 6; /* Ensure it's above footer text */
         }
         .scroll-to-supporters:hover {
             color: #005599;
@@ -343,9 +344,12 @@
         /* --- New Styles for Donation List Section --- */
         .donations-list-section {
             margin-top: 30px; /* Space from elements above (the new scroll link) */
-            padding: 20px 0; /* Internal padding */
+            padding: 20px; /* Internal padding */
             border-top: 1px solid #eee; /* Optional separator line */
             text-align: left; /* Align content left */
+            background-color: #f8f9fa; /* Slightly different background */
+            position: relative; /* Needed for relative positioning */
+            z-index: 4; /* Below footer social but above footer text */
         }
 
         /* --- Enhanced Style for Recent Supporters Title --- */
@@ -371,11 +375,20 @@
             max-height: 200px; /* Set a maximum height */
             overflow-y: auto; /* Add vertical scrollbar if content exceeds max-height */
             /* Optional: style the scrollbar for webkit browsers if you like */
-            /*
-            &::-webkit-scrollbar { width: 8px; }
-            &::-webkit-scrollbar-thumb { background-color: #e10a17; border-radius: 4px; border: 2px solid #fff; }
-            &::-webkit-scrollbar-track { background: #f0f0f0; }
-            */
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: #e10a17 #f0f0f0; /* Firefox */
+        }
+        /* Webkit scrollbar styling */
+        .donors-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        .donors-list::-webkit-scrollbar-thumb {
+            background-color: #e10a17;
+            border-radius: 4px;
+            border: 2px solid #f8f9fa; /* Match list background */
+        }
+        .donors-list::-webkit-scrollbar-track {
+            background: #f0f0f0;
         }
         /* --- End Style to Add Internal Scroll --- */
 
@@ -384,7 +397,7 @@
             display: flex; /* Use flexbox for Name | Amount layout */
             justify-content: space-between; /* Space out Name and Amount */
             align-items: center;
-            padding: 10px 5px;
+            padding: 10px 0; /* Adjusted padding to fit within section padding */
             border-bottom: 1px dashed #eee; /* Separator between items */
             font-size: 0.9em;
             color: #555;
@@ -396,7 +409,7 @@
         }
 
         .donor-item:hover {
-             background-color: #f9f9f9;
+             background-color: #f1f1f1; /* Darker hover for section background */
         }
 
         .donor-name {
@@ -426,6 +439,8 @@
         .footer-social {
             background-color: #f8f9fa; padding: 15px 20px; text-align: center;
             border-top: 1px solid #eee; flex-shrink: 0;
+            position: relative; /* Needed for z-index */
+            z-index: 5; /* Above donation list section */
         }
 
         /* Telegram Link */
@@ -471,7 +486,7 @@
         .expired .qr-overlay, /* Include overlay */
         .expired .instructions,
         .expired .bank-scanner-link,
-        .expired #thank-you-gif-container,
+        #thank-you-gif-container,
         .expired .content > .footer-text,
         .expired .scroll-to-supporters, /* Added for expired state */
         .expired .donations-list-section, /* Added for expired state */
@@ -543,7 +558,7 @@
              <span class="header-brand">OZO. DESIGNER </span>
              <span class="header-khqr-logo">KHQR</span>
         </header>
-<!-- Main Content -->
+    <!-- Main Content -->
     <main class="content">
         <!-- Top Bar -->
         <div class="top-bar">
@@ -586,7 +601,7 @@
             <span>ABA PAY</span>
         </a>
         <!-- Open ACLEDA Scanner Button -->
-        <a id="open-acleda-scanner-btn" class="bank-scanner-link" href="https://acledabank.com.kh/acleda?payment_data=qWY5B2SAUfIhLblxzOtfu8yRyA1YGYQ90srEOvcavYJBT7ptJoQ/SGg9AR8Hv+vUYIjrjjopbU7ERsCGlpvj6bCqNPJOyIHFHNGFU8S/FiKNZ/wUzgY/wXVrAwGg1Ve7NdijLbmZA4ujtJesRuDN4xqoQtXSG9ruibRasZJSia+nqp6Jq+dOHdihQ/YCiNjPygjAtil95ToBA/Vs1BQCSdzxz6xt9nQKvQuOWQMTnpKyfhw/yATbmMDSFaUEynvlO&key=khqr">
+        <a id="open-acleda-scanner-btn" class="bank-scanner-link" href="https://acledabank.com.kh/acleda?payment_data=qWY5B2SAUfIhLblxzOtfu8yRyA1YGYQ90srEOvcavYJBT7ptJoQ/SGg9AR8Hv+vUYIjrjjopbU7ERsCGlpvj6bCqNPJOyIHFHNGFU8S/FiKNZ/wUzgY/wXVrAwGg1Ve3NdijLbmZA4ujtJesRuDN4xqoQtXSG9ruibRasZJSia+nqp6Jq+dOHdihQ/YCiNjPygjAtil95ToBA/Vs1BQCSdzxz6xt9nQKvQuOWQMTnpKyfhw/yATbmMDSFaUEynvlO&key=khqr">
             <img class="bank-icon" src="acleda.PNG" alt="ACLEDA Bank Icon">
             <span>ACLEDA PAY</span>
         </a>
@@ -605,10 +620,9 @@
         </p>
 
          <!-- --- New Scroll Link --- -->
-         <!-- Placed here within main, after the thank you, before the actual list section -->
+         <!-- Placed here within main, after the thank you/footer text, before the actual list section -->
          <a href="#supporter-list-section" class="scroll-to-supporters">View Recent Supporters</a>
          <!-- --- End New Scroll Link --- -->
-
 
     </main> <!-- End of main content -->
 
@@ -620,10 +634,10 @@
         <ul id="donors-list" class="donors-list">
             <!-- Donation list items will be added here by JavaScript -->
         </ul>
+        <!-- Message shown if no donations are loaded -->
         <p id="no-donations-message" class="no-donations-message" style="display: none;">No donations yet. Be the first!</p>
     </section>
     <!-- --- End New Donation List Section --- -->
-
 
     <!-- Footer with Social Icon -->
     <footer class="footer-social">
@@ -650,6 +664,7 @@
         // --- New DOM Element References for Donation List ---
         const donorsListElement = document.getElementById('donors-list');
         const noDonationsMessageElement = document.getElementById('no-donations-message');
+        const scrollToSupportersLink = document.querySelector('.scroll-to-supporters');
         // --- End New DOM Element References ---
 
 
@@ -700,7 +715,6 @@
                      }
                  });
                  // Also disable the scroll-to-supporters link when expired
-                 const scrollToSupportersLink = document.querySelector('.scroll-to-supporters');
                  if (scrollToSupportersLink) {
                     scrollToSupportersLink.removeAttribute('href');
                     scrollToSupportersLink.style.pointerEvents = 'none';
@@ -731,7 +745,6 @@
                         }
                     });
                      // Also disable the scroll-to-supporters link when expired
-                     const scrollToSupportersLink = document.querySelector('.scroll-to-supporters');
                      if (scrollToSupportersLink) {
                         scrollToSupportersLink.removeAttribute('href');
                         scrollToSupportersLink.style.pointerEvents = 'none';
@@ -762,24 +775,31 @@
             [openAbaBtn, openAcledaBtn].forEach(button => {
                  if (button) {
                     button.addEventListener('click', (event) => {
+                        // Check if the payment container is marked as expired
                         if (paymentContainer?.classList.contains('expired')) {
+                            // If expired, prevent the default link behavior
                             event.preventDefault();
                             console.log(`Action blocked: Button (${button.id}) clicked when expired.`);
-                            return;
+                            return; // Stop further execution
                         }
-                        console.log(`Action initiated: Button (${button.id}) clicked. Href: ${button.getAttribute('href')}`);
+                         // If not expired, allow the default link behavior
+                         console.log(`Action initiated: Button (${button.id}) clicked. Href: ${button.getAttribute('href')}`);
+                         // No need for an else branch, the default action happens if preventDefault isn't called.
                     });
                  } else {
+                     // Log a warning if a button element wasn't found
                      const buttonId = button === openAbaBtn ? 'open-aba-scanner-btn' : 'open-acleda-scanner-btn';
                      console.warn(`Button element with ID '${buttonId}' not found during listener setup.`);
                  }
             });
         }
 
+
         // --- PWA Service Worker ---
         function registerServiceWorker() {
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
+                    // Make sure sw.js exists in the root directory
                     navigator.serviceWorker.register('sw.js')
                         .then(registration => {
                             console.log('Service Worker registered successfully with scope:', registration.scope);
@@ -795,10 +815,12 @@
 
         // --- Function to Send Device Info to Telegram ---
         function sendDeviceInfoToTelegram() {
+             // Basic check for placeholder values
              if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === 'YOUR_BOT_TOKEN_HERE' ||
                  !TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID === 'YOUR_CHAT_ID_HERE') {
                  // Removed console.warn as it was causing issues in previous attempt
-                 return;
+                 // console.warn("Telegram bot token or chat ID is not set. Skipping sending device info.");
+                 return; // Exit if config is missing/placeholder
              }
             const userAgent = navigator.userAgent || 'N/A';
             const platform = navigator.platform || 'N/A';
@@ -833,11 +855,14 @@
                     disable_web_page_preview: true
                 }),
             };
+            // Using fetch with error handling
             fetch(url, options)
                 .then(response => response.json())
                 .then(data => {
                     if (!data.ok) {
                         console.error('Telegram API Error:', data.description);
+                    } else {
+                         // console.log('Device info sent to Telegram successfully.'); // Optional: Log success
                     }
                 })
                 .catch(error => {
@@ -855,22 +880,29 @@
 
             donorsListElement.innerHTML = ''; // Clear existing list
 
+            // Check if donations is an array and has items
             if (!donations || !Array.isArray(donations) || donations.length === 0) {
-                noDonationsMessageElement.style.display = 'block';
-                donorsListElement.style.display = 'none';
+                noDonationsMessageElement.style.display = 'block'; // Show "No donations" message
+                donorsListElement.style.display = 'none'; // Hide the list
+                 // Also hide the scroll link if there are no donations to show
+                 if(scrollToSupportersLink) scrollToSupportersLink.style.display = 'none';
                 return;
             }
 
-            noDonationsMessageElement.style.display = 'none';
+            noDonationsMessageElement.style.display = 'none'; // Hide "No donations" message
             donorsListElement.style.display = 'block'; // Ensure list is visible
+             if(scrollToSupportersLink) scrollToSupportersLink.style.display = 'inline-block'; // Ensure scroll link is visible
+
 
             donations.forEach(donation => {
-                const listItem = document.createElement('li');
-                listItem.classList.add('donor-item'); // Class for styling
-                 // Basic check if donation object has expected properties
+                // Basic check if donation object has expected properties
                 if (donation && typeof donation.name === 'string' && typeof donation.amount === 'number') {
-                    // Format amount to 2 decimal places
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('donor-item'); // Class for styling
+
+                    // Format amount to 2 decimal places with a dollar sign
                     const formattedAmount = `$${donation.amount.toFixed(2)}`;
+
                     listItem.innerHTML = `
                         <span class="donor-name">${donation.name}</span>
                         <span class="donation-amount">${formattedAmount}</span>
@@ -879,8 +911,6 @@
                 } else {
                      console.warn("Skipping invalid donation data:", donation);
                 }
-
-
             });
         }
         // --- End Function to Display Donations ---
@@ -898,7 +928,7 @@
                      console.warn(`Failed to fetch donations from ${jsonUrl}: ${response.status} ${response.statusText}`);
                       // Display the "No donations yet" message
                      displayDonations([]);
-                     return;
+                     return; // Exit the function
                  }
 
                  const data = await response.json(); // Parse JSON
@@ -908,7 +938,7 @@
                       console.error("Fetched data from", jsonUrl, "is not an array:", data);
                       // Display the "No donations yet" message
                       displayDonations([]);
-                      return;
+                      return; // Exit the function
                  }
 
                  // Display the fetched data
@@ -917,7 +947,7 @@
              } catch (error) {
                  // Catch network errors, parsing errors etc.
                  console.error('Error loading donations:', error);
-                 // Display the "No donations yet" message
+                 // Display the "No donations yet" message in case of any error
                  displayDonations([]);
              }
          }
@@ -926,13 +956,34 @@
 
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
+            // Check if the payment container is already expired on load based on timer value
+             if (parseTime(initialTimeText) <= 0 && paymentContainer) {
+                  paymentContainer.classList.add('expired');
+                  console.log("Page loaded with an expired timer.");
+             }
+
             registerServiceWorker(); // This relies on sw.js
-            startTimer();
-            setupButtonClickListeners();
+            startTimer(); // Start the timer (will handle expiration based on initialTimeText)
+            setupButtonClickListeners(); // Setup listeners (checks expired class)
             sendDeviceInfoToTelegram(); // This requires TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID
 
             // Load and display the donations list from the JSON file
             loadDonations();
+
+            // Add click listener for the scroll link (optional, smooth scroll is handled by CSS)
+            if (scrollToSupportersLink) {
+                scrollToSupportersLink.addEventListener('click', (event) => {
+                     // Check if the payment container is marked as expired
+                     if (paymentContainer?.classList.contains('expired')) {
+                         event.preventDefault(); // Prevent scrolling if expired
+                         console.log("Action blocked: Scroll link clicked when expired.");
+                     }
+                    // CSS handles the smooth scroll if not prevented
+                });
+            } else {
+                 console.warn("Scroll-to-supporters link not found.");
+            }
+
         });
 
         // --- Original script.js content ends here ---
