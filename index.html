@@ -265,9 +265,9 @@
         }
         .supporter-count { display: block; font-size: 0.9em; color: var(--text-muted); text-align: center; margin-bottom: 15px; }
         .donations-list-title {
-            font-size: 1.3em; font-weight: bold; color: var(--primary-color); margin: 0 auto 10px auto;
-            padding-bottom: 8px; border-bottom: 3px solid var(--primary-color);
-            display: inline-block; width: auto; max-width: calc(100% - 20px); text-align: center;
+            font-size: 1.3em; font-weight: bold; color: #000000; margin: 0 auto 10px auto;
+            padding-bottom: 8px; border-bottom: 2px solid #b9b9b9;
+            width: auto; max-width: calc(100% - 20px); text-align: center;
         }
         .donors-list {
             list-style: none; padding: 0; margin: 0; max-height: 200px; overflow-y: auto;
@@ -292,7 +292,7 @@
         }
         .donor-name[tabindex="0"] { cursor: help; }
         .donor-name[tabindex="0"]:focus-visible { box-shadow: 0 0 0 2px var(--primary-color-focus-shadow); border-radius: 3px; }
-        .donation-amount { font-weight: bold; color: var(--text-success); flex-shrink: 0; }
+        .donation-amount { font-weight: bold; color: #333333; flex-shrink: 0; }
 
         /* --- Supporter Info Popup (Tooltip) --- UPDATED */
         .supporter-popup {
@@ -471,8 +471,7 @@
 
     <!-- Donation List Section -->
     <section id="supporter-list-section" class="donations-list-section">
-        <h3 class="donations-list-title">Recent Supporters</h3>
-        <p id="supporter-count" class="supporter-count" style="display: none;" aria-live="polite"></p>
+        <h3 class="donations-list-title">SUPPORTERS</h3>
         <ul id="donors-list" class="donors-list">
             <!-- Dynamically populated -->
         </ul>
