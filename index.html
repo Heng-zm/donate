@@ -42,15 +42,14 @@
             --text-muted: #777777;
             --text-very-muted: #888888;
             --text-heading-blue: #003366; /* For 'THANK FOR DONATION' */
-            --text-success: #007700; /* Donation amounts in list */
-            --text-black: #000000; /* For QR overlay $ */
+            --text-success: #007700; /* Original green for donation amounts */
+            --text-black: #000000; /* For QR overlay $ and new title color */
             --text-popup-amount: var(--text-dark); /* Or var(--text-success) for green in popup */
 
 
             --bg-page: #f0f2f5;
             --bg-container: #ffffff;
             --bg-alt-section: #f8f9fa; /* Donations list, footer social */
-            /* --bg-tooltip: #333333;  Replaced by popup specific bg */
             --bg-hover-light: #f1f1f1; /* Donor item hover */
 
             --border-color-main: #dddddd;
@@ -58,6 +57,8 @@
             --border-color-qr: #eeeeee;
             --border-color-icon-overlay: #f0f0f0; /* QR overlay border */
             --border-color-disabled: #cccccc;
+            --border-color-title-underline: #b9b9b9; /* New title underline color */
+
 
             --disabled-bg-color: #cccccc;
             --disabled-text-color: #888888;
@@ -263,11 +264,18 @@
             animation: fadeSlideUp var(--transition-duration-page-load) ease-out forwards;
             opacity: 1; transform: translateY(0); transition: none;
         }
-        .supporter-count { display: block; font-size: 0.9em; color: var(--text-muted); text-align: center; margin-bottom: 15px; }
-        .donations-list-title {
-            font-size: 1.3em; font-weight: bold; color: #000000; margin: 0 auto 10px auto;
-            padding-bottom: 8px; border-bottom: 2px solid #b9b9b9;
-            width: auto; max-width: calc(100% - 20px); text-align: center;
+        /* .supporter-count removed */
+        .donations-list-title { /* UPDATED */
+            font-size: 1.3em;
+            font-weight: bold;
+            color: var(--text-black); /* Changed to black */
+            margin: 0 auto 10px auto; /* Keeps it centered if it's an inline-block or block with auto margins */
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--border-color-title-underline); /* Changed border */
+            display: inline-block; /* Or block if you prefer full-width block centering */
+            width: auto;
+            max-width: calc(100% - 20px);
+            text-align: center; /* Ensures text inside is centered */
         }
         .donors-list {
             list-style: none; padding: 0; margin: 0; max-height: 200px; overflow-y: auto;
@@ -292,9 +300,13 @@
         }
         .donor-name[tabindex="0"] { cursor: help; }
         .donor-name[tabindex="0"]:focus-visible { box-shadow: 0 0 0 2px var(--primary-color-focus-shadow); border-radius: 3px; }
-        .donation-amount { font-weight: bold; color: #333333; flex-shrink: 0; }
+        .donation-amount { /* UPDATED */
+            font-weight: bold;
+            color: var(--text-dark); /* Changed from var(--text-success) */
+            flex-shrink: 0;
+        }
 
-        /* --- Supporter Info Popup (Tooltip) --- UPDATED */
+        /* --- Supporter Info Popup (Tooltip) --- */
         .supporter-popup {
             position: absolute; bottom: 100%; left: 50%;
             transform: translate(-50%, -5px);
@@ -471,7 +483,8 @@
 
     <!-- Donation List Section -->
     <section id="supporter-list-section" class="donations-list-section">
-        <h3 class="donations-list-title">SUPPORTERS</h3>
+        <h3 class="donations-list-title">SUPPORTERS</h3> <!-- UPDATED TEXT -->
+        <!-- Supporter count <p> element REMOVED -->
         <ul id="donors-list" class="donors-list">
             <!-- Dynamically populated -->
         </ul>
@@ -506,7 +519,7 @@
         const initialTimeText = timeLeftDisplay?.textContent || '02:53';
 
         const donationsListSection = document.getElementById('supporter-list-section');
-        const supporterCountElement = document.getElementById('supporter-count');
+        // const supporterCountElement = document.getElementById('supporter-count'); // REMOVED
         const donorsListElement = document.getElementById('donors-list');
         const noDonationsMessageElement = document.getElementById('no-donations-message');
 
@@ -651,19 +664,15 @@
 
         // --- Function to Display Donations ---
         function displayDonations(donations) {
-            if (!donorsListElement || !noDonationsMessageElement || !supporterCountElement) {
-                console.error("Critical donation list UI elements not found.");
+            // UPDATED: Removed supporterCountElement from critical check
+            if (!donorsListElement || !noDonationsMessageElement) {
+                console.error("Donors list or no-donations message element not found.");
                 return;
             }
             donorsListElement.innerHTML = ''; // Clear before re-populating
             const count = donations ? donations.length : 0;
 
-            if (count > 0) {
-                supporterCountElement.textContent = `${count} ${count === 1 ? 'supporter' : 'supporters'}`;
-                supporterCountElement.style.display = 'block';
-            } else {
-                supporterCountElement.style.display = 'none';
-            }
+            // Supporter count logic REMOVED
 
             if (noDonationsMessageElement) {
                 if (count === 0) {
@@ -695,7 +704,7 @@
                     nameSpan.setAttribute('role', 'button');
                     nameSpan.setAttribute('aria-describedby', popupId);
 
-                    const popup = document.createElement('div'); // Changed to div for flex
+                    const popup = document.createElement('div');
                     popup.classList.add('supporter-popup');
                     popup.id = popupId;
                     popup.setAttribute('role', 'tooltip');
@@ -728,8 +737,8 @@
 
         // --- Function to Load Donations from JSON ---
         async function loadDonations() {
-             const jsonUrl = 'supporters.json'; // Ensure supporters.json exists or handle 404
-             if (noDonationsMessageElement) { // Set loading text
+             const jsonUrl = 'supporters.json';
+             if (noDonationsMessageElement) {
                 noDonationsMessageElement.textContent = UI_TEXT.LOADING_SUPPORTERS;
                 noDonationsMessageElement.style.display = 'block';
                 if (donorsListElement) donorsListElement.style.display = 'none';
@@ -750,7 +759,7 @@
                       displayDonations([]);
                       return;
                  }
-                 data.sort((a, b) => b.amount - a.amount); // Sort: highest first
+                 data.sort((a, b) => b.amount - a.amount);
                  displayDonations(data);
              } catch (error) {
                  console.error('Error loading or parsing donations:', error);
@@ -773,14 +782,12 @@
                      donationsListSection.classList.remove('animate-in');
                  }
                  hasScrolledAnimated = true;
-                 // Clean up listeners if animation is skipped early
                  window.removeEventListener('scroll', checkDonationListVisibility);
                  window.removeEventListener('resize', checkDonationListVisibilityThrottled);
                  return;
              }
 
              const rect = donationsListSection.getBoundingClientRect();
-             // Trigger when top of element is within bottom 90% of viewport AND bottom is within viewport
              const isVisible = rect.top < window.innerHeight * 0.9 && rect.bottom >= 0;
 
              if (isVisible) {
@@ -790,7 +797,6 @@
                  window.removeEventListener('resize', checkDonationListVisibilityThrottled);
              }
         }
-        // Throttled version for resize
         let resizeTimeout;
         function checkDonationListVisibilityThrottled() {
             clearTimeout(resizeTimeout);
@@ -813,7 +819,7 @@
             loadDonations().then(() => {
                 setTimeout(() => {
                     checkDonationListVisibility();
-                    if (!hasScrolledAnimated) { // Only add listeners if not already animated/skipped
+                    if (!hasScrolledAnimated) {
                        window.addEventListener('scroll', checkDonationListVisibility, { passive: true });
                        window.addEventListener('resize', checkDonationListVisibilityThrottled, { passive: true });
                     }
