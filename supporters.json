@@ -1,15 +1,13 @@
 [
-  { "name": "Chuo Kimheng", "amount": 5.00 },
-  { "name": "Coffee Enthusiast", "amount": 2.50 },
-  { "name": "Happy Developer", "amount": 10.00 },
-  { "name": "Generous Human", "amount": 3.75 },
-  { "name": "Fan of the Design", "amount": 7.00 },
-  { "name": "Small Contribution", "amount": 1.00 },
-  { "name": "Ozo's Pal", "amount": 4.20 },
-  { "name": "Another Donor", "amount": 6.00 },
-  { "name": "Testing Scroll", "amount": 1.50 },
-  { "name": "Long List Item Example Name", "amount": 8.88 },
-  { "name": "More Coffee Please", "amount": 3.00 },
-  { "name": "Supporter #12", "amount": 2.00 },
-  { "name": "Last One For Now", "amount": 9.99 }
+  { "name": "KAN KIMHENG",
+    "amount": 0.50 },
+  { "name": "SONG SOPHEA",
+    "amount": 1.00 },
+  { "name": "CHAN SOVAN",
+    "amount": 0.30 },
+  { "name": "HONG ROTHA",
+    "amount": 2.00 },
+  { "name": "EAN PHANET",
+    "amount": 1.25 },
+  
 ]
