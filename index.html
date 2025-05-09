@@ -10,9 +10,63 @@
     <link rel="apple-touch-icon" href="192.png">
 
     <style>
-        /* --- Combined CSS Styles --- */
+        /* --- CSS Custom Properties (Variables) --- */
+        :root {
+            --primary-color: #e10a17;
+            --primary-color-hover: #c40915;
+            --primary-color-active: #a80811;
+            --primary-color-focus-shadow: rgba(174, 0, 0, 0.3);
 
-         /* Basic Reset & Body Styles */
+            --secondary-color: #003c71; /* ABA Button */
+            --secondary-color-hover: #005099;
+            --secondary-color-active: #002b50;
+            --secondary-color-focus-shadow: rgba(0, 60, 113, 0.3);
+
+            --accent-color: #00a2e8;   /* Timer Icon default state */
+
+            --text-light: #ffffff;
+            --text-dark: #333333;
+            --text-medium: #555555;
+            --text-muted: #777777;
+            --text-very-muted: #888888;
+            --text-heading-blue: #003366; /* For 'THANK FOR DONATION' */
+            --text-success: #007700; /* Donation amounts */
+            --text-black: #000000; /* For QR overlay $ */
+
+            --bg-page: #f0f2f5;
+            --bg-container: #ffffff;
+            --bg-alt-section: #f8f9fa; /* Donations list, footer social */
+            --bg-tooltip: #333333;
+            --bg-hover-light: #f1f1f1; /* Donor item hover */
+
+            --border-color-main: #dddddd;
+            --border-color-light: #eeeeee;
+            --border-color-qr: #eeeeee;
+            --border-color-icon-overlay: #f0f0f0; /* QR overlay border */
+            --border-color-disabled: #cccccc;
+
+            --disabled-bg-color: #cccccc;
+            --disabled-text-color: #888888;
+
+            --shadow-main: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.12);
+            --shadow-focus: 0 0 0 2px; /* Base for focus rings, color added per element */
+            --shadow-qr-img: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-qr-overlay: 0 0 5px rgba(0,0,0,0.2);
+
+            --border-radius-container: 8px;
+            --border-radius-button: 45px;
+            --border-radius-qr: 10px;
+            --border-radius-tooltip: 5px;
+            --border-radius-scrollbar: 4px;
+
+            --font-family-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --transition-duration-fast: 0.15s;
+            --transition-duration-normal: 0.2s;
+            --transition-duration-page-load: 0.5s;
+        }
+
+        /* Basic Reset & Body Styles */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -23,8 +77,8 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f0f2f5;
+            font-family: var(--font-family-main);
+            background-color: var(--bg-page);
             display: flex;
             justify-content: center;
             align-items: flex-start;
@@ -35,45 +89,29 @@
 
         /* --- Animation Definitions --- */
         @keyframes fadeSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(15px); /* Start slightly lower */
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0); /* End at normal position */
-            }
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
          @keyframes fadeScaleIn {
-             from {
-                 opacity: 0;
-                 transform: scale(0.8); /* Start slightly smaller */
-             }
-             to {
-                 opacity: 1;
-                 transform: scale(1); /* End at normal size */
-             }
+             from { opacity: 0; transform: scale(0.8); }
+             to { opacity: 1; transform: scale(1); }
          }
-
-
         @keyframes pulse {
             0%, 100% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.3); opacity: 0.7; }
         }
-
         @keyframes scaleIn {
              from { transform: translate(-50%, -50%) scale(0); opacity: 0; }
              to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
 
-
         /* Main Container */
         .container {
-            background-color: #ffffff;
+            background-color: var(--bg-container);
             width: 100%;
             max-width: 400px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius-container);
+            box-shadow: var(--shadow-main);
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -82,63 +120,37 @@
         }
 
         /* --- Initial Hidden State for Elements Animated on Load --- */
-        /* These elements animate in immediately after page load */
         .header,
         .content > .top-bar,
         .content > .recipient-info,
         .content > .separator,
         .qr-code-container,
-        .qr-overlay, /* Hide overlay initially for its own animation */
+        .qr-overlay,
         .instructions,
         .bank-scanner-link,
         #thank-you-gif-container,
         .content > .footer-text,
-        /* .donations-list-section is now animated on scroll, remove from here */
         .footer-social {
-            opacity: 0; /* Start hidden */
+            opacity: 0;
         }
 
         /* --- Staggered Animation (on page load) --- */
-        .header {
-            animation: fadeSlideUp 0.5s 0.1s ease-out forwards;
-        }
-        .content > .top-bar {
-             animation: fadeSlideUp 0.5s 0.2s ease-out forwards;
-        }
-        .content > .recipient-info {
-            animation: fadeSlideUp 0.5s 0.3s ease-out forwards;
-        }
-         .content > .separator {
-            animation: fadeSlideUp 0.5s 0.35s ease-out forwards;
-         }
-        .qr-code-container {
-            animation: fadeSlideUp 0.5s 0.4s ease-out forwards;
-        }
-         /* QR Overlay animation defined directly below */
-        .instructions {
-            animation: fadeSlideUp 0.5s 0.7s ease-out forwards; /* Delay slightly more after QR overlay */
-        }
-        #open-aba-scanner-btn {
-            animation: fadeSlideUp 0.5s 0.8s ease-out forwards;
-        }
-         #open-acleda-scanner-btn {
-            animation: fadeSlideUp 0.5s 0.9s ease-out forwards;
-         }
-        #thank-you-gif-container {
-             animation: fadeSlideUp 0.5s 1.0s ease-out forwards;
-        }
-        .content > .footer-text {
-             animation: fadeSlideUp 0.5s 1.1s ease-out forwards;
-        }
-         /* .donations-list-section is animated on scroll, remove from here */
-        .footer-social {
-             /* Delay adjusted for scroll-animated list section */
-             animation: fadeSlideUp 0.5s 0.5s ease-out forwards; /* Will be applied when section.animate-in is added */
-        }
+        .header { animation: fadeSlideUp var(--transition-duration-page-load) 0.1s ease-out forwards; }
+        .content > .top-bar { animation: fadeSlideUp var(--transition-duration-page-load) 0.2s ease-out forwards; }
+        .content > .recipient-info { animation: fadeSlideUp var(--transition-duration-page-load) 0.3s ease-out forwards; }
+        .content > .separator { animation: fadeSlideUp var(--transition-duration-page-load) 0.35s ease-out forwards; }
+        .qr-code-container { animation: fadeSlideUp var(--transition-duration-page-load) 0.4s ease-out forwards; }
+        /* QR Overlay animation defined directly with .qr-overlay */
+        .instructions { animation: fadeSlideUp var(--transition-duration-page-load) 0.7s ease-out forwards; }
+        #open-aba-scanner-btn { animation: fadeSlideUp var(--transition-duration-page-load) 0.8s ease-out forwards; }
+        #open-acleda-scanner-btn { animation: fadeSlideUp var(--transition-duration-page-load) 0.9s ease-out forwards; }
+        #thank-you-gif-container { animation: fadeSlideUp var(--transition-duration-page-load) 1.0s ease-out forwards; }
+        .content > .footer-text { animation: fadeSlideUp var(--transition-duration-page-load) 1.1s ease-out forwards; }
+        .footer-social { animation: fadeSlideUp var(--transition-duration-page-load) 0.5s ease-out forwards; }
 
         /* Header Section */
         .header {
-            background-color: #e10a17; color: white; padding: 15px 20px;
+            background-color: var(--primary-color); color: var(--text-light); padding: 15px 20px;
             display: flex; justify-content: space-between; align-items: center;
             min-height: 55px; flex-shrink: 0;
         }
@@ -152,516 +164,331 @@
         }
         .header-khqr-logo::before, .header-khqr-logo::after {
             content: ''; position: absolute; right: 0; height: 2px;
-            background-color: white; width: 12px;
+            background-color: var(--text-light); width: 12px;
         }
         .header-khqr-logo::before { transform: translateY(-4px); }
         .header-khqr-logo::after { transform: translateY(4px); }
 
         /* Main Content Area */
-        .content {
-            padding: 25px 20px; text-align: center; flex-grow: 1; position: relative;
-        }
+        .content { padding: 25px 20px; text-align: center; flex-grow: 1; position: relative; }
 
         /* Top Bar: Title & Timer */
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .title { font-weight: bold; font-size: 1.4em; color: #333; text-align: left; }
-        .timer { display: flex; align-items: center; font-size: 1em; font-weight: 500; color: #555; transition: color 0.3s ease; }
+        .title { font-weight: bold; font-size: 1.4em; color: var(--text-dark); text-align: left; }
+        .timer { display: flex; align-items: center; font-size: 1em; font-weight: 500; color: var(--text-medium); transition: color 0.3s ease; }
         .timer-icon {
-            width: 20px; height: 20px; border: 3px solid #00a2e8; border-radius: 50%;
+            width: 20px; height: 20px; border: 3px solid var(--accent-color); border-radius: 50%;
             margin-right: 8px; position: relative; display: flex; justify-content: center;
             align-items: center; transition: border-color 0.3s ease;
         }
         .timer-icon::before {
-            content: ''; display: block; width: 8px; height: 8px; background-color: #00a2e8;
+            content: ''; display: block; width: 8px; height: 8px; background-color: var(--accent-color);
             border-radius: 50%; transition: background-color 0.3s ease;
-            /* Add pulse animation */
             animation: pulse 2s infinite ease-in-out;
         }
-        /* Stop pulsing when expired */
-        .expired .timer-icon::before {
-            animation: none; /* Stop the pulse */
-            background-color: #e10a17; /* Ensure color stays red */
-        }
+        .expired .timer-icon::before { animation: none; background-color: var(--primary-color); }
 
         /* Recipient Info */
         .recipient-info { margin-bottom: 20px; }
-        .recipient-name { font-size: 0.9em; color: #666; margin-bottom: 8px; text-transform: uppercase; }
+        .recipient-name { font-size: 0.9em; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; }
 
         /* Separator */
-        .separator { border: none; border-top: 2px dashed #ddd; margin: 20px 0; }
+        .separator { border: none; border-top: 2px dashed var(--border-color-main); margin: 20px auto; width: 80%; }
 
         /* QR Code */
         .qr-code-container {
-            margin-bottom: 20px; position: relative; display: inline-block;
+            margin-bottom: 15px; /* Adjusted spacing */
+            position: relative; display: inline-block;
             max-width: 250px; width: 80%; cursor: pointer;
         }
         .qr-code-img {
-            display: block; border-radius:10px; width: 100%; height: auto; border: 1px solid #eee;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: opacity 0.3s ease, filter 0.3s ease, transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+            display: block; border-radius: var(--border-radius-qr); width: 100%; height: auto; border: 1px solid var(--border-color-qr);
+            box-shadow: var(--shadow-qr-img);
+            transition: opacity 0.3s ease, filter 0.3s ease, transform var(--transition-duration-normal) ease-in-out, box-shadow var(--transition-duration-normal) ease-in-out;
         }
         .container:not(.expired) .qr-code-container:hover .qr-code-img {
             transform: scale(1.03);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); /* Enhanced shadow */
+            box-shadow: var(--shadow-hover);
         }
         .container.expired .qr-code-container:hover .qr-code-img { transform: none; box-shadow: none; }
         .qr-overlay {
              position: absolute; top: 50%; left: 50%;
-             transform: translate(-50%, -50%); /* Base transform */
-             background-color: white; border-radius: 50%; width: 30px; height: 30px;
+             transform: translate(-50%, -50%);
+             background-color: var(--bg-container); border-radius: 50%; width: 30px; height: 30px;
              display: flex; justify-content: center; align-items: center;
-             box-shadow: 0 0 5px rgba(0,0,0,0.2); border: 3px solid #f0f0f0;
+             box-shadow: var(--shadow-qr-overlay); border: 3px solid var(--border-color-icon-overlay);
              transition: opacity 0.3s ease; pointer-events: none;
-             /* Animated in via keyframes */
-             opacity: 0; /* Already set above, but good to keep explicit */
+             opacity: 0;
              animation: scaleIn 0.4s 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
-        .qr-overlay span { font-size: 14px; font-weight: bold; color: black; }
+        .qr-overlay span { font-size: 14px; font-weight: bold; color: var(--text-black); }
 
         /* Instructions */
-        .instructions { margin-top: -10px; margin-bottom: -25px; transition: opacity 0.3s ease; }
-        .scan-text { font-size: 1.1em; font-weight: 500; color: #333; margin-bottom: 5px; }
-        .or-text { font-size: 0.9em; color: #777; margin-bottom: 35px; }
+        .instructions {
+            margin-bottom: 25px; /* Positive margin for spacing before buttons */
+            transition: opacity 0.3s ease;
+        }
+        .scan-text { font-size: 1.1em; font-weight: 500; color: var(--text-dark); margin-bottom: 8px; }
+        .or-text { font-size: 0.9em; color: var(--text-muted); }
 
         /* --- Button Styles (Shared & Individual) --- */
         .bank-scanner-link {
-             display: inline-flex;
-             align-items: center;
-             justify-content: flex-start;
+             display: inline-flex; align-items: center; justify-content: flex-start;
              text-decoration: none; font-size: 20px; font-weight: bold;
-             color: white; cursor: pointer;
-             border: 1px solid transparent; border-radius: 45px;
-             transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, opacity 0.2s ease-in-out;
+             color: var(--text-light); cursor: pointer;
+             border: 1px solid transparent; border-radius: var(--border-radius-button);
+             transition: background-color var(--transition-duration-normal) ease-in-out, color var(--transition-duration-normal) ease-in-out, transform var(--transition-duration-fast) ease-in-out, border-color var(--transition-duration-normal) ease-in-out, box-shadow var(--transition-duration-normal) ease-in-out, opacity var(--transition-duration-normal) ease-in-out;
              outline: none; margin-bottom: 15px;
              width: 90%; max-width: 250px;
-             padding: 8px 18px;
-             margin-left: auto;
-             margin-right: auto;
-             overflow: hidden;
-             min-height: 50px;
+             padding: 8px 18px; margin-left: auto; margin-right: auto;
+             overflow: hidden; min-height: 50px;
         }
         .bank-scanner-link:focus-visible {
-             box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15);
+             box-shadow: var(--shadow-focus) /* color set by specific button */;
         }
-        .bank-scanner-link:hover {
-             transform: translateY(-2px);
-        }
-         .bank-scanner-link:active {
-             transform: translateY(1px) scale(0.98); /* Added scale */
+        .bank-scanner-link:hover { transform: translateY(-2px); }
+        .bank-scanner-link:active {
+             transform: translateY(1px) scale(0.98);
              transition-duration: 0.05s;
         }
 
         .bank-scanner-link img.bank-icon {
             width: 39px; height: 39px;
-            border: solid 3px #fff; border-radius: 30px;
-            background-color: #fff;
-            margin-right: 12px;
-            flex-shrink: 0;
+            border: solid 3px var(--text-light); border-radius: 30px;
+            background-color: var(--text-light);
+            margin-right: 12px; flex-shrink: 0;
         }
-
-        .bank-scanner-link span {
-             flex-grow: 1;
-             text-align: center;
-        }
+        .bank-scanner-link span { flex-grow: 1; text-align: center; }
 
         #open-aba-scanner-btn {
-             background-color: #003c71; border-color: #003c71;
+             background-color: var(--secondary-color); border-color: var(--secondary-color);
         }
-        #open-aba-scanner-btn:hover { background-color: #005099; }
-        #open-aba-scanner-btn:active { background-color: #002b50; }
-        #open-aba-scanner-btn:focus-visible { border-color: #005099; box-shadow: 0 0 0 2px rgba(0, 60, 113, 0.3); }
+        #open-aba-scanner-btn:hover { background-color: var(--secondary-color-hover); }
+        #open-aba-scanner-btn:active { background-color: var(--secondary-color-active); }
+        #open-aba-scanner-btn:focus-visible { border-color: var(--secondary-color-hover); box-shadow: var(--shadow-focus) var(--secondary-color-focus-shadow); }
 
-         #open-acleda-scanner-btn {
-             background-color: #e10a17; border-color: #e10a17; /* Changed ACLEDA to match theme */
+        #open-acleda-scanner-btn {
+             background-color: var(--primary-color); border-color: var(--primary-color);
         }
-        #open-acleda-scanner-btn:hover { background-color: #c40915; } /* Darker red on hover */
-        #open-acleda-scanner-btn:active { background-color: #a80811; } /* Even darker red on active */
-        #open-acleda-scanner-btn:focus-visible { border-color: #C40000; box-shadow: 0 0 0 2px rgba(174, 0, 0, 0.3); }
+        #open-acleda-scanner-btn:hover { background-color: var(--primary-color-hover); }
+        #open-acleda-scanner-btn:active { background-color: var(--primary-color-active); }
+        #open-acleda-scanner-btn:focus-visible { border-color: var(--primary-color-hover); box-shadow: var(--shadow-focus) var(--primary-color-focus-shadow); }
 
-
-        /* Thank You Text */
+        /* Thank You Text & GIF */
         .amount {
-            font-size: 1.1em; font-weight: bold; color: #003366;
+            font-size: 1.1em; font-weight: bold; color: var(--text-heading-blue);
             line-height: 1.3; word-wrap: break-word;
-            margin-top: 15px;
-            margin-bottom: 0;
+            margin-top: 15px; margin-bottom: 0;
             transition: opacity 0.3s ease;
         }
-
-        /* Thank You GIF Container */
         #thank-you-gif-container {
-            display: block;
-            position: relative;
-            margin-top:10px;
-            margin-bottom: 20px; /* Space before footer text */
-            z-index: 10;
-            pointer-events: none;
-            text-align: center;
+            display: block; position: relative; margin-top:10px;
+            margin-bottom: 20px; z-index: 10;
+            pointer-events: none; text-align: center;
         }
         #thank-you-gif {
-            max-width: 150px;
-            max-height: 150px;
-            height: auto; border-radius: 5px; display: inline-block;
-            pointer-events: auto;
+            max-width: 150px; max-height: 150px; height: auto;
+            border-radius: 5px; display: inline-block; pointer-events: auto;
         }
 
-        /* Footer Text (acts as text divider/signature) */
+        /* Footer Text (Signature) */
         .footer-text {
-            font-size: 0.8em; color: #888; margin-top: 20px;
+            font-size: 0.8em; color: var(--text-very-muted); margin-top: 20px;
             line-height: 1.4; position: relative; z-index: 5;
-            transition: opacity 0.3s ease;
-            padding: 0 20px;
-            text-align: center;
-            margin-bottom: 30px; /* Space before the distinct list section */
+            transition: opacity 0.3s ease; padding: 0 20px;
+            text-align: center; margin-bottom: 30px;
         }
 
-
-        /* --- Styles for Donation List Section (Distinct Block, animated on scroll) --- */
+        /* --- Donation List Section --- */
         .donations-list-section {
-            margin-top: 0; /* Keep it flowing immediately after the main content/footer text */
-            padding: 20px; /* Padding inside the block */
-            border-top: 1px solid #eee; /* Top border for separation */
-            background-color: #f8f9fa; /* Light background color for distinct block */
-            text-align: left; /* Align content left */
-            position: relative;
-            z-index: 4;
-             /* Initial hidden state for scroll animation */
-            opacity: 0;
-            transform: translateY(15px); /* Start slightly lower */
-            transition: opacity 0.1s, transform 0.1s; /* Small transition to prevent flicker before JS */
+            margin-top: 0; padding: 20px;
+            border-top: 1px solid var(--border-color-light);
+            background-color: var(--bg-alt-section);
+            text-align: left; position: relative; z-index: 4;
+            opacity: 0; transform: translateY(15px);
+            transition: opacity 0.1s, transform 0.1s;
         }
-
-        /* Animation state applied by JS when scrolled into view */
         .donations-list-section.animate-in {
-            animation: fadeSlideUp 0.5s ease-out forwards;
-            /* Override base opacity/transform for animation */
-            opacity: 1;
-            transform: translateY(0);
-            transition: none; /* Disable the flicker transition during animation */
+            animation: fadeSlideUp var(--transition-duration-page-load) ease-out forwards;
+            opacity: 1; transform: translateY(0);
+            transition: none;
         }
-
-        /* Supporter Count Style */
         .supporter-count {
-            display: block; /* Takes its own line */
-            font-size: 0.9em;
-            color: #666;
-            text-align: center; /* Center the count text */
-            margin-bottom: 15px; /* Space between count and list */
+            display: block; font-size: 0.9em; color: var(--text-muted);
+            text-align: center; margin-bottom: 15px;
         }
-
-        /* --- Enhanced Style for Recent Supporters Title --- */
         .donations-list-title {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: #e10a17;
-            margin: 0 auto 10px auto; /* Center title and reduce margin below, count goes here */
-            padding-bottom: 8px;
-            border-bottom: 3px solid #e10a17;
-            display: inline-block;
-            width: auto;
-            max-width: calc(100% - 10px);
-            text-align: center;
+            font-size: 1.3em; font-weight: bold; color: var(--primary-color);
+            margin: 0 auto 10px auto; padding-bottom: 8px;
+            border-bottom: 3px solid var(--primary-color);
+            display: inline-block; width: auto;
+            max-width: calc(100% - 20px); text-align: center;
         }
-        /* --- End Enhanced Style for Recent Supporters Title --- */
-
-        /* --- Style to Add Internal Scroll to the List --- */
         .donors-list {
-            list-style: none;
-            padding: 0; /* Padding handled by the section container */
-            margin: 0;
-            max-height: 200px; /* Set a maximum height */
-            overflow-y: auto; /* Add vertical scrollbar if content exceeds max-height */
-            scrollbar-width: thin; /* Firefox */
-            scrollbar-color: #e10a17 #f0f0f0; /* Firefox */
+            list-style: none; padding: 0; margin: 0;
+            max-height: 200px; overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) var(--bg-page);
         }
-        /* Webkit scrollbar styling */
-        .donors-list::-webkit-scrollbar {
-            width: 8px;
-        }
+        .donors-list::-webkit-scrollbar { width: 8px; }
         .donors-list::-webkit-scrollbar-thumb {
-            background-color: #e10a17;
-            border-radius: 4px;
-            border: 2px solid #f8f9fa; /* Match section background color */
+            background-color: var(--primary-color);
+            border-radius: var(--border-radius-scrollbar);
+            border: 2px solid var(--bg-alt-section);
         }
-        .donors-list::-webkit-scrollbar-track {
-            background: #f0f0f0;
-        }
-        /* --- End Style to Add Internal Scroll --- */
-
+        .donors-list::-webkit-scrollbar-track { background: var(--bg-page); }
 
         .donor-item {
-            display: flex;
-            align-items: center; /* Align items vertically */
-            justify-content: space-between; /* Keep amount at the end */
-            padding: 10px 0; /* Use 0 horizontal padding, it's provided by the section */
-            border-bottom: 1px dashed #eee;
-            font-size: 0.9em;
-            color: #555;
-            transition: background-color 0.2s ease;
-             /* Keep relative positioning for potential future use or complex layouts */
-             /* position: relative; */
-             cursor: default; /* Default cursor for the row */
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 0; border-bottom: 1px dashed var(--border-color-light);
+            font-size: 0.9em; color: var(--text-medium);
+            transition: background-color var(--transition-duration-normal) ease;
+            cursor: default;
         }
+        .donor-item:last-child { border-bottom: none; }
+        .donor-item:hover:not(.expired .donor-item) { background-color: var(--bg-hover-light); }
 
-        .donor-item:last-child {
-            border-bottom: none;
-        }
-
-        .donor-item:hover {
-             background-color: #f1f1f1; /* Hover effect slightly darker than section background */
-        }
-
-        /* Style for the new number span */
         .donor-item-number {
-             font-size: 0.8em; /* Slightly smaller than name */
-             color: #999; /* Muted color */
-             margin-right: 8px; /* Space between number and name */
-             flex-shrink: 0; /* Prevent number from shrinking */
-             min-width: 20px; /* Give it a minimum width for alignment (adjust as needed) */
-             text-align: right; /* Align number to the right */
+            font-size: 0.8em; color: var(--text-very-muted); /* Darker than general muted */
+            margin-right: 8px; flex-shrink: 0;
+            min-width: 20px; text-align: right;
         }
-
         .donor-name {
-            font-weight: 500;
-            flex-grow: 1; /* Allow name to take up space */
-            margin-right: 10px; /* Space between name and amount/popup */
-            word-break: break-word;
-            position: relative; /* Make the name span the positioning context for the popup */
-            cursor: help; /* Indicate hover interactivity specifically on the name */
-            display: inline-block; /* Needs to be inline-block or block for position:relative to work reliably */
+            font-weight: 500; flex-grow: 1; margin-right: 10px;
+            word-break: break-word; position: relative;
+            outline: none; /* For programmatic focus without default ring if desired, :focus-visible handles visual */
+        }
+        /* Make donor name interactive for tooltip, allow focus */
+        .donor-name[tabindex="0"] {
+            cursor: help;
+        }
+        .donor-name[tabindex="0"]:focus-visible {
+            /* Subtle focus ring if needed, or rely on popup appearing */
+             box-shadow: 0 0 0 2px var(--primary-color-focus-shadow);
+             border-radius: 3px; /* Rounded focus outline */
         }
 
-        .donation-amount {
-            font-weight: bold;
-            color: #007700;
-            flex-shrink: 0; /* Prevent amount from shrinking */
-        }
+        .donation-amount { font-weight: bold; color: var(--text-success); flex-shrink: 0; }
 
         /* --- Supporter Info Popup (Tooltip) --- */
         .supporter-popup {
-             position: absolute;
-             bottom: 100%; /* Position above the parent (.donor-name) */
-             left: 50%; /* Center horizontally relative to the parent (.donor-name) */
-             transform: translate(-50%, -5px); /* Adjust for centering and add slight space */
-             background-color: #333; /* Dark background */
-             color: white; /* White text */
-             padding: 8px 12px;
-             border-radius: 5px;
-             font-size: 0.8em;
-             white-space: nowrap; /* Prevent text wrapping */
-             z-index: 10; /* Ensure it's above other elements */
-             opacity: 0; /* Start hidden */
-             visibility: hidden; /* Also hidden to prevent interaction */
-             transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0.2s; /* Animation */
-             pointer-events: none; /* Popup itself should not block clicks */
+             position: absolute; bottom: 100%; left: 50%;
+             transform: translate(-50%, -5px);
+             background-color: var(--bg-tooltip); color: var(--text-light);
+             padding: 8px 12px; border-radius: var(--border-radius-tooltip);
+             font-size: 0.8em; white-space: nowrap; z-index: 10;
+             opacity: 0; visibility: hidden;
+             transition: opacity var(--transition-duration-normal) ease-out, transform var(--transition-duration-normal) ease-out, visibility var(--transition-duration-normal);
+             pointer-events: none;
         }
-
-        /* Show popup on hover of the donor name span */
-        .donor-name:hover .supporter-popup {
-            opacity: 1;
-            visibility: visible;
-            transform: translate(-50%, -10px); /* Move up slightly during animation */
+        .donor-name:hover .supporter-popup,
+        .donor-name:focus .supporter-popup, /* Show on focus */
+        .donor-name:focus-within .supporter-popup { /* Fallback for nested focus */
+            opacity: 1; visibility: visible;
+            transform: translate(-50%, -10px);
         }
-        /* Optional: Add a small triangle pointer - positioned relative to .donor-name */
         .supporter-popup::after {
-            content: '';
-            position: absolute;
-            top: 100%; /* Position below the popup box (which is relative to .donor-name) */
-            left: 50%;
-            margin-left: -5px; /* Center the arrow */
-            border-width: 5px;
-            border-style: solid;
-            border-color: #333 transparent transparent transparent; /* Pointing down */
+            content: ''; position: absolute; top: 100%; left: 50%;
+            margin-left: -5px; border-width: 5px; border-style: solid;
+            border-color: var(--bg-tooltip) transparent transparent transparent;
         }
-        /* --- End Supporter Info Popup --- */
-
 
         .no-donations-message {
-            text-align: center;
-            color: #777;
-            font-style: italic;
-            margin-top: 20px;
-            font-size: 0.9em;
-            padding: 0 10px; /* Add some padding */
+            text-align: center; color: var(--text-muted); font-style: italic;
+            margin-top: 20px; font-size: 0.9em; padding: 0 10px;
         }
-        /* --- End Styles for Donation List --- */
-
 
         /* Footer Social Section */
         .footer-social {
-            background-color: #f8f9fa; padding: 15px 20px; text-align: center;
-            border-top: 1px solid #eee; flex-shrink: 0;
-            position: relative;
-            z-index: 5;
+            background-color: var(--bg-alt-section); padding: 15px 20px; text-align: center;
+            border-top: 1px solid var(--border-color-light); flex-shrink: 0;
+            position: relative; z-index: 5;
         }
-
-        /* Telegram Link */
         .telegram-link {
             display: inline-flex; align-items: center; text-decoration: none;
-            color: #0088cc; font-size: 0.9em; font-weight: 500;
+            color: #0088cc; font-size: 0.9em; font-weight: 500; /* Telegram specific blue */
             padding: 8px 12px; border: 1px solid transparent; border-radius: 5px;
-            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-in-out, border-color 0.2s ease-in-out;
+            transition: background-color var(--transition-duration-normal) ease-in-out, color var(--transition-duration-normal) ease-in-out, transform var(--transition-duration-fast) ease-in-out, border-color var(--transition-duration-normal) ease-in-out;
             outline: none;
         }
-        .telegram-link:focus-visible { border-color: #0088cc; box-shadow: 0 0 0 2px rgba(0, 136, 204, 0.25); }
+        .telegram-link:focus-visible { border-color: #0088cc; box-shadow: var(--shadow-focus) rgba(0, 136, 204, 0.25); }
         .telegram-link:hover { background-color: #e9f5ff; color: #0077b3; transform: translateY(-2px); }
         .telegram-link:active { transform: translateY(1px); background-color: #d5effc; transition-duration: 0.05s; }
         .telegram-link img {
             width: 22px; height: 22px; margin-right: 8px; vertical-align: middle;
-            transition: transform 0.2s ease-in-out;
+            transition: transform var(--transition-duration-normal) ease-in-out;
         }
         .telegram-link:hover img { transform: scale(1.1) rotate(-5deg); }
 
         /* --- State: Expired --- */
         .expired .qr-code-img { filter: grayscale(80%); }
         .expired .qr-code-container { cursor: default; }
-        /* Ensure the bank buttons are dimmed/disabled when expired */
-        .expired .bank-scanner-link
-        {
-            pointer-events: none; cursor: default;
-            transform: none !important; /* Override active state */
-            box-shadow: none !important;
-            background-color: #cccccc !important;
-            color: #888888 !important;
-            border-color: #cccccc !important;
-             outline: none !important; /* Ensure no outline when disabled */
+        .expired .bank-scanner-link {
+            pointer-events: none; cursor: default; transform: none !important; box-shadow: none !important;
+            background-color: var(--disabled-bg-color) !important;
+            color: var(--disabled-text-color) !important;
+            border-color: var(--disabled-bg-color) !important;
+            outline: none !important;
         }
-
-        /* Ensure expired state overrides scroll animation state and disables interaction */
         .expired .donations-list-section {
-            animation: none !important; /* Disable animation when expired */
-            opacity: 0.6 !important; /* Apply dimmed opacity */
-            transform: translateY(0) !important; /* Ensure no transform */
-            transition: opacity 0.3s ease !important; /* Allow smooth dimming/undimming */
-            pointer-events: none; /* Disable interaction on list items */
+            animation: none !important; opacity: 0.6 !important; transform: translateY(0) !important;
+            transition: opacity 0.3s ease !important; pointer-events: none;
         }
-         /* Also ensure popup doesn't show on expired items */
-         .expired .donor-item:hover .supporter-popup {
-             opacity: 0 !important;
-             visibility: hidden !important;
-             transform: translateY(-5px) !important; /* Reset transform */
-             transition: none !important; /* Disable transition */
-         }
-         .expired .donor-item {
-             cursor: default; /* Change cursor */
-         }
-         .expired .donor-name {
-             cursor: default; /* Change cursor on name too */
-         }
-
-
-        /* --- Ensure animation is disabled if expired on load or prefers reduced motion --- */
-        /* Apply animation none and initial opacity 1 to elements that *would* animate on load */
-        .header,
-        .content > .top-bar,
-        .content > .recipient-info,
-        .content > .separator,
-        .qr-code-container,
-        .qr-overlay,
-        .instructions,
-        .bank-scanner-link,
-        #thank-you-gif-container,
-        .content > .footer-text,
-        .footer-social {
-             /* Animation property is applied by default.
-                Will be overridden by .expired or prefers-reduced-motion */
-             /* Opacity is 0 by default, then animated to 1 */
+        .expired .donor-item:hover .supporter-popup,
+        .expired .donor-item:focus .supporter-popup,
+        .expired .donor-item:focus-within .supporter-popup {
+             opacity: 0 !important; visibility: hidden !important;
+             transform: translateY(-5px) !important; transition: none !important;
         }
+        .expired .donor-item, .expired .donor-name, .expired .donor-name[tabindex="0"] { cursor: default; }
+        .expired .donor-name[tabindex="0"]:focus-visible { box-shadow: none; }
 
-        /* Specific rule for the scroll-animated section to be hidden initially */
-         .donations-list-section {
-            /* Initial hidden state already defined above */
-         }
 
-        /* When expired, remove animations and apply dimmed opacity */
-        .expired .header,
-        .expired .content > .top-bar,
-        .expired .content > .recipient-info,
-        .expired .content > .separator,
-        .expired .qr-code-container,
-        .expired .qr-overlay,
-        .expired .instructions,
-        .expired .bank-scanner-link,
-        .expired #thank-you-gif-container,
-        .expired .content > .footer-text,
-        /* .expired .donations-list-section handled separately above */
-        .expired .footer-social {
-            animation: none !important; /* Disable animation */
-            opacity: 1 !important; /* Reset opacity before dimming */
-            transform: translateY(0) !important; /* Reset transform */
+        .expired .header, .expired .content > .top-bar, .expired .content > .recipient-info,
+        .expired .content > .separator, .expired .qr-code-container, .expired .qr-overlay,
+        .expired .instructions, .expired .bank-scanner-link, .expired #thank-you-gif-container,
+        .expired .content > .footer-text, .expired .footer-social {
+            animation: none !important; opacity: 1 !important; transform: translateY(0) !important;
         }
+        .expired .instructions, .expired .footer-text, .expired .amount,
+        .expired #thank-you-gif-container, .expired .footer-social { opacity: 0.6 !important; }
+        .expired .qr-code-img { opacity: 0.3 !important; }
+        .expired .qr-overlay { opacity: 0 !important; }
+        .expired .bank-scanner-link { opacity: 0.5 !important; } /* Further dim the disabled style slightly */
+        .expired .timer { color: var(--primary-color) !important; }
+        .expired .timer-icon { border-color: var(--primary-color) !important; }
 
-        /* Apply dimmed opacity to elements *within* the container when expired */
-         .expired .instructions,
-         .expired .footer-text,
-         .expired .amount,
-         .expired #thank-you-gif-container,
-         .expired .footer-social /* Dim footer social as well */
-          { opacity: 0.6 !important; }
-         .expired .qr-code-img { opacity: 0.3 !important; }
-         .expired .qr-overlay { opacity: 0 !important; } /* Explicitly hide overlay when expired */
-         .expired .bank-scanner-link { opacity: 0.5 !important; }
-         .expired .timer { color: #e10a17 !important; }
-         .expired .timer-icon { border-color: #e10a17 !important; }
-         /* timer-icon::before animation/color handled separately */
-
-        /* Accessibility: Remove focus styles when disabled */
         .expired .bank-scanner-link:focus-visible,
-        .expired .telegram-link:focus-visible
-         { border-color: transparent; box-shadow: none; outline: none; }
-
+        .expired .telegram-link:focus-visible {
+            border-color: transparent; box-shadow: none; outline: none;
+        }
 
         /* Accessibility: Respect user preference for reduced motion */
         @media (prefers-reduced-motion: reduce) {
-          /* Turn off ALL animations and transitions when reduced motion is preferred */
-          * {
-            animation: none !important;
-            transition: none !important;
-          }
-           /* Ensure elements that were initially hidden for animation are now visible */
-           .header,
-           .content > .top-bar,
-           .content > .recipient-info,
-           .content > .separator,
-           .qr-code-container,
-           .instructions,
-           .bank-scanner-link,
-           #thank-you-gif-container,
-           .content > .footer-text,
-           .donations-list-section, /* Ensure this is visible */
-           .footer-social {
-               opacity: 1 !important; /* Force visibility */
-               transform: translateY(0) !important; /* Remove any initial transform */
+          * { animation: none !important; transition: none !important; }
+          .header, .content > .top-bar, .content > .recipient-info,
+          .content > .separator, .qr-code-container, .instructions,
+          .bank-scanner-link, #thank-you-gif-container, .content > .footer-text,
+          .donations-list-section, .footer-social {
+               opacity: 1 !important; transform: translateY(0) !important;
            }
-           .qr-overlay { opacity: 0 !important; /* Keep overlay hidden */ } /* Or handle differently based on design choice */
-           /* Ensure popup is hidden and non-interactive */
-           .supporter-popup {
-               opacity: 0 !important;
-               visibility: hidden !important;
-               transform: translateY(-5px) !important; /* Reset transform */
-           }
-            .donor-name:hover .supporter-popup { /* Change this selector */
-               opacity: 0 !important;
-               visibility: hidden !important;
+           .qr-overlay { opacity: 0 !important; }
+           .supporter-popup,
+           .donor-name:hover .supporter-popup,
+           .donor-name:focus .supporter-popup,
+           .donor-name:focus-within .supporter-popup {
+               opacity: 0 !important; visibility: hidden !important;
                transform: translateY(-5px) !important;
            }
-
-
-           /* Still apply expired dimming if needed when motion is reduced */
-            .expired .instructions,
-            .expired .footer-text,
-            .expired .amount,
-            .expired #thank-you-gif-container,
-            .expired .donations-list-section,
-            .expired .footer-social
-             { opacity: 0.6 !important; }
+            .expired .instructions, .expired .footer-text, .expired .amount,
+            .expired #thank-you-gif-container, .expired .donations-list-section,
+            .expired .footer-social { opacity: 0.6 !important; }
             .expired .qr-code-img { opacity: 0.3 !important; }
             .expired .qr-overlay { opacity: 0 !important; }
             .expired .bank-scanner-link { opacity: 0.5 !important; }
-             .expired .timer { color: #e10a17 !important; }
-            .expired .timer-icon { border-color: #e10a17 !important; }
+            .expired .timer { color: var(--primary-color) !important; }
+            .expired .timer-icon { border-color: var(--primary-color) !important; }
         }
-         /* --- Original style.css content ends here --- */
     </style>
 </head>
 <body>
@@ -678,7 +505,6 @@
             <span class="title">PAY ME A COFFEE</span>
             <div class="timer">
                 <span class="timer-icon"></span>
-                <!-- Set your desired initial time here -->
                 <span id="time-left">10:53</span>
             </div>
         </div>
@@ -719,7 +545,7 @@
             <span>ACLEDA PAY</span>
         </a>
 
-        <!-- Thank You GIF Container (Visible by default) -->
+        <!-- Thank You GIF Container -->
         <div id="thank-you-gif-container">
             <img id="thank-you-gif" src="Thank.gif" alt="Thank You!">
              <div class="amount">
@@ -727,37 +553,26 @@
             </div>
         </div>
 
-        <!-- Footer Text (Acts as a divider/signature now) -->
+        <!-- Footer Text (Signature) -->
         <p class="footer-text">
             by Ozo. Designer
         </p>
 
     </main> <!-- End of main content -->
 
-    <!-- --- Donation List Section (Now a distinct block, animated on scroll) --- -->
+    <!-- Donation List Section -->
     <section id="supporter-list-section" class="donations-list-section">
-        <!-- Supporter Count and Title -->
         <h3 class="donations-list-title">Recent Supporters</h3>
-        <!-- Supporter Count -->
-        <p id="supporter-count" class="supporter-count" style="display: none;"></p>
+        <p id="supporter-count" class="supporter-count" style="display: none;"></p> <!-- aria-live could be added if count updates dynamically -->
         <ul id="donors-list" class="donors-list">
-            <!-- Donation list items will be added here by JavaScript -->
-            <!-- Each item will now look something like: -->
-            <!-- <li class="donor-item"> -->
-            <!--   <span class="donor-item-number">1.</span> -->
-            <!--   <span class="donor-name">Supporter One<span class="supporter-popup">Supporter One: $5.00</span></span> -->
-            <!--   <span class="donation-amount">$5.00</span> -->
-            <!-- </li> -->
+            <!-- Dynamically populated -->
         </ul>
-        <!-- Message shown if no donations are loaded -->
         <p id="no-donations-message" class="no-donations-message" style="display: none;">No donations yet. Be the first!</p>
     </section>
-    <!-- --- End Donation List Section --- -->
-
 
     <!-- Footer with Social Icon -->
     <footer class="footer-social">
-        <a href="https://t.me/m11mmm112" target="_blank" rel="noopener noreferrer" class="telegram-link" aria-label="Contact us on Telegram">
+        <a href="https://t.me/m11mmm112" target="_blank" rel="noopener noreferrer" class="telegram-link" aria-label="Contact Ozo. Designer on Telegram">
             <img src="telegram.png" alt="Telegram Icon">
             <span>Join on Telegram</span>
         </a>
@@ -773,24 +588,20 @@
         const paymentContainer = document.getElementById('payment-container');
         const openAbaBtn = document.getElementById('open-aba-scanner-btn');
         const openAcledaBtn = document.getElementById('open-acleda-scanner-btn');
-        const initialTimeText = timeLeftDisplay?.textContent || '02:53'; // Default if element not found
+        const initialTimeText = timeLeftDisplay?.textContent || '02:53';
 
-        // --- New DOM Element References for Donation List ---
-        const donationsListSection = document.getElementById('supporter-list-section'); // Reference the section element
-        const supporterCountElement = document.getElementById('supporter-count'); // Reference the count element
+        const donationsListSection = document.getElementById('supporter-list-section');
+        const supporterCountElement = document.getElementById('supporter-count');
         const donorsListElement = document.getElementById('donors-list');
         const noDonationsMessageElement = document.getElementById('no-donations-message');
-        // --- End New DOM Element References ---
 
         let totalSeconds = 0;
         let timerInterval = null;
-        let hasScrolledAnimated = false; // Flag to prevent re-triggering scroll animation
-
+        let hasScrolledAnimated = false;
 
         // --- Telegram Bot Configuration ---
-        // 🚨🚨🚨 WARNING: DO NOT EXPOSE YOUR BOT TOKEN HERE IN PRODUCTION! 🚨🚨🚨
-        const TELEGRAM_BOT_TOKEN = '7723636276:AAENDdywHKAZL4PAaUZArr_iKmD_3UlE8C8'; // Replace with your token or leave blank
-        const TELEGRAM_CHAT_ID = '1272791365'; // Replace with your chat ID or leave blank
+        const TELEGRAM_BOT_TOKEN = '7723636276:AAENDdywHKAZL4PAaUZArr_iKmD_3UlE8C8'; // 🚨 WARNING: DO NOT EXPOSE IN PRODUCTION!
+        const TELEGRAM_CHAT_ID = '1272791365'; // 🚨 WARNING: DO NOT EXPOSE IN PRODUCTION!
 
 
         // --- Utility Functions ---
@@ -807,6 +618,24 @@
             return 173;
         }
 
+        function setExpiredState() {
+            if (paymentContainer) {
+                paymentContainer.classList.add('expired');
+            }
+            if (timeLeftDisplay) timeLeftDisplay.textContent = "Expired";
+
+            [openAbaBtn, openAcledaBtn].forEach(btn => {
+                if (btn) {
+                    btn.removeAttribute('href');
+                    btn.style.pointerEvents = 'none';
+                    btn.style.cursor = 'default';
+                    btn.setAttribute('aria-disabled', 'true');
+                    btn.setAttribute('tabindex', '-1');
+                }
+            });
+            console.log("Timer has expired or was expired on load.");
+        }
+
         // --- Timer Logic ---
         function startTimer() {
             if (timerInterval) clearInterval(timerInterval);
@@ -817,57 +646,21 @@
 
             totalSeconds = parseTime(initialTimeText);
 
-             if (totalSeconds <= 0) {
-                 timeLeftDisplay.textContent = "Expired";
-                 if (paymentContainer) {
-                     paymentContainer.classList.add('expired'); // Adds the expired class
-                 }
-                 // Disable bank buttons when expired
-                 [openAbaBtn, openAcledaBtn].forEach(btn => {
-                     if (btn) {
-                         btn.removeAttribute('href');
-                         btn.style.pointerEvents = 'none'; // Disable clicks
-                         btn.style.cursor = 'default';
-                         btn.setAttribute('aria-disabled', 'true');
-                         btn.setAttribute('tabindex', '-1'); // Make inaccessible to keyboard
-                     }
-                 });
-                 console.log("Timer already expired on page load.");
-                 return;
-             }
+            if (totalSeconds <= 0) {
+                setExpiredState();
+                return;
+            }
 
             timerInterval = setInterval(() => {
                 if (totalSeconds <= 0) {
                     clearInterval(timerInterval);
-                    timeLeftDisplay.textContent = "Expired";
-                     if (paymentContainer) {
-                        paymentContainer.classList.add('expired'); // Adds the expired class
-                    }
-                    // Disable bank buttons when expired
-                    [openAbaBtn, openAcledaBtn].forEach(btn => {
-                        if (btn) {
-                            btn.removeAttribute('href');
-                            btn.style.pointerEvents = 'none'; // Disable clicks
-                            btn.style.cursor = 'default';
-                            btn.setAttribute('aria-disabled', 'true');
-                             btn.setAttribute('tabindex', '-1'); // Make inaccessible to keyboard
-                        }
-                    });
-
-                    console.log("Timer expired.");
+                    setExpiredState();
                     return;
                 }
-
                 totalSeconds--;
-
                 const minutes = Math.floor(totalSeconds / 60);
                 const seconds = totalSeconds % 60;
-
-                const formattedMinutes = String(minutes).padStart(2, '0');
-                const formattedSeconds = String(seconds).padStart(2, '0');
-
-                timeLeftDisplay.textContent = `${formattedMinutes}:${formattedSeconds}`;
-
+                timeLeftDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
             }, 1000);
         }
 
@@ -876,18 +669,14 @@
             [openAbaBtn, openAcledaBtn].forEach(button => {
                  if (button) {
                     button.addEventListener('click', (event) => {
-                        // Check if the payment container is marked as expired
                         if (paymentContainer?.classList.contains('expired')) {
-                            // If expired, prevent the default link behavior
                             event.preventDefault();
                             console.log(`Action blocked: Button (${button.id}) clicked when expired.`);
-                            return; // Stop further execution
+                            return;
                         }
-                         // If not expired, allow the default link behavior
                          console.log(`Action initiated: Button (${button.id}) clicked. Href: ${button.getAttribute('href')}`);
                     });
                  } else {
-                     // Log a warning if a button element wasn't found
                      const buttonId = button === openAbaBtn ? 'open-aba-scanner-btn' : 'open-acleda-scanner-btn';
                      console.warn(`Button element with ID '${buttonId}' not found during listener setup.`);
                  }
@@ -898,14 +687,9 @@
         function registerServiceWorker() {
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                    // Make sure sw.js exists in the root directory
                     navigator.serviceWorker.register('sw.js')
-                        .then(registration => {
-                            console.log('Service Worker registered successfully with scope:', registration.scope);
-                        })
-                        .catch(error => {
-                            console.error('Service Worker registration failed:', error);
-                        });
+                        .then(registration => console.log('Service Worker registered successfully with scope:', registration.scope))
+                        .catch(error => console.error('Service Worker registration failed:', error));
                 });
             } else {
                 console.log('Service Worker not supported in this browser.');
@@ -914,270 +698,188 @@
 
         // --- Function to Send Device Info to Telegram ---
         function sendDeviceInfoToTelegram() {
-             // Basic check for placeholder values
-             if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === 'YOUR_BOT_TOKEN_HERE' ||
-                 !TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID === 'YOUR_CHAT_ID_HERE') {
-                 // console.warn("Telegram bot token or chat ID is not set. Skipping sending device info."); // Optional warning
-                 return; // Exit if config is missing/placeholder
+             if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN.startsWith('YOUR_BOT_TOKEN') || TELEGRAM_BOT_TOKEN.length < 20 ||
+                 !TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID.startsWith('YOUR_CHAT_ID') || TELEGRAM_CHAT_ID.length < 5 ) {
+                 // console.warn("Telegram bot token or chat ID is not (properly) set. Skipping sending device info.");
+                 return;
              }
-            const userAgent = navigator.userAgent || 'N/A';
-            const platform = navigator.platform || 'N/A';
-            const language = navigator.language || 'N/A';
-            const screenWidth = window.screen.width || 'N/A';
-            const screenHeight = window.screen.height || 'N/A';
-            const viewportWidth = window.innerWidth || 'N/A';
-            const viewportHeight = window.innerHeight || 'N/height';
-            const pageUrl = window.location.href || 'N/A';
-            const timestamp = new Date().toISOString();
-            const messageText = `
+            const deviceInfo = `
 <b>🤖 New Visit: Donation Page</b>
-<b>Timestamp:</b> ${timestamp}
-<b>URL:</b> <a href="${pageUrl}">${pageUrl}</a>
-<b>User Agent:</b> ${userAgent}
-<b>Platform:</b> ${platform}
-<b>Language:</b> ${language}
-<b>Screen:</b> ${screenWidth}x${screenHeight}
-<b>Viewport:</b> ${viewportWidth}x${viewportHeight}
-`.trim();
+<b>Timestamp:</b> ${new Date().toISOString()}
+<b>URL:</b> <a href="${window.location.href}">${window.location.href}</a>
+<b>User Agent:</b> ${navigator.userAgent || 'N/A'}
+<b>Platform:</b> ${navigator.platform || 'N/A'}
+<b>Language:</b> ${navigator.language || 'N/A'}
+<b>Screen:</b> ${window.screen.width || 'N/A'}x${window.screen.height || 'N/A'}
+<b>Viewport:</b> ${window.innerWidth || 'N/A'}x${window.innerHeight || 'N/A'}`;
 
-            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-            const options = {
+            fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     chat_id: TELEGRAM_CHAT_ID,
-                    text: messageText,
+                    text: deviceInfo.trim(),
                     parse_mode: 'HTML',
                     disable_web_page_preview: true
                 }),
-            };
-            // Using fetch with error handling
-            fetch(url, options)
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.ok) {
-                        console.error('Telegram API Error:', data.description);
-                    } else {
-                         // console.log('Device info sent to Telegram successfully.'); // Optional: Log success
-                    }
-                })
-                .catch(error => {
-                    console.error('Error sending message to Telegram:', error);
-                });
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.ok) console.error('Telegram API Error:', data.description);
+                // else console.log('Device info sent to Telegram successfully.');
+            })
+            .catch(error => console.error('Error sending message to Telegram:', error));
         }
 
         // --- Function to Display Donations ---
         function displayDonations(donations) {
             if (!donorsListElement || !noDonationsMessageElement || !supporterCountElement) {
-                console.error("Donation list elements or count element not found.");
+                console.error("Critical donation list UI elements not found.");
                 return;
             }
-
-            donorsListElement.innerHTML = ''; // Clear existing list
-
-            // Update supporter count
+            donorsListElement.innerHTML = '';
             const count = donations ? donations.length : 0;
+
             if (count > 0) {
                 supporterCountElement.textContent = `${count} ${count === 1 ? 'supporter' : 'supporters'}`;
-                supporterCountElement.style.display = 'block'; // Show the count
+                supporterCountElement.style.display = 'block';
+                // If this count could change dynamically post-load, add:
+                // supporterCountElement.setAttribute('aria-live', 'polite');
             } else {
-                supporterCountElement.style.display = 'none'; // Hide the count if zero
+                supporterCountElement.style.display = 'none';
             }
 
-
-            // Check if donations is an array and has items
             if (count === 0) {
-                noDonationsMessageElement.style.display = 'block'; // Show "No donations" message
-                donorsListElement.style.display = 'none'; // Hide the list
+                noDonationsMessageElement.style.display = 'block';
+                donorsListElement.style.display = 'none';
                 return;
             }
+            noDonationsMessageElement.style.display = 'none';
+            donorsListElement.style.display = 'block';
 
-            noDonationsMessageElement.style.display = 'none'; // Hide "No donations" message
-            donorsListElement.style.display = 'block'; // Ensure list is visible
-
-            donations.forEach((donation, index) => { // Added index here
-                // Basic check if donation object has expected properties
+            donations.forEach((donation, index) => {
                 if (donation && typeof donation.name === 'string' && typeof donation.amount === 'number') {
                     const listItem = document.createElement('li');
-                    listItem.classList.add('donor-item'); // Class for styling
-
-                    // Get the sequence number (1-based)
+                    listItem.classList.add('donor-item');
                     const itemNumber = index + 1;
-
-                    // Format amount to 2 decimal places with a dollar sign
                     const formattedAmount = `$${donation.amount.toFixed(2)}`;
+                    const popupId = `supporter-popup-${index}`;
 
-                    // Create the popup element
-                    const popup = document.createElement('span');
-                    popup.classList.add('supporter-popup');
-                    popup.textContent = `${donation.name}: ${formattedAmount}`; // Content for the popup
-
-                    // Create the number span
                     const numberSpan = document.createElement('span');
                     numberSpan.classList.add('donor-item-number');
                     numberSpan.textContent = `${itemNumber}.`;
 
-                    // Create the name span
                     const nameSpan = document.createElement('span');
                     nameSpan.classList.add('donor-name');
-                    nameSpan.textContent = donation.name; // Set name text
-                    nameSpan.appendChild(popup); // **Append popup INSIDE the name span**
+                    nameSpan.textContent = donation.name;
+                    nameSpan.setAttribute('tabindex', '0'); // Make focusable for tooltip
+                    nameSpan.setAttribute('role', 'button'); // Indicate interactivity
+                    nameSpan.setAttribute('aria-describedby', popupId);
 
-                    // Create the amount span
+                    const popup = document.createElement('span');
+                    popup.classList.add('supporter-popup');
+                    popup.id = popupId;
+                    popup.setAttribute('role', 'tooltip');
+                    popup.textContent = `${donation.name}: ${formattedAmount}`;
+                    nameSpan.appendChild(popup);
+
                     const amountSpan = document.createElement('span');
                     amountSpan.classList.add('donation-amount');
                     amountSpan.textContent = formattedAmount;
 
-                    // Append number, name (which contains popup), and amount to the list item
                     listItem.appendChild(numberSpan);
                     listItem.appendChild(nameSpan);
                     listItem.appendChild(amountSpan);
-
-
                     donorsListElement.appendChild(listItem);
                 } else {
                      console.warn("Skipping invalid donation data:", donation);
                 }
             });
         }
-        // --- End Function to Display Donations ---
 
         // --- Function to Load Donations from JSON ---
         async function loadDonations() {
-             const jsonUrl = 'supporters.json'; // Path to your JSON file
-
+             const jsonUrl = 'supporters.json';
              try {
-                 const response = await fetch(jsonUrl); // Fetch the file
-
-                 // Check if the request was successful (status code 2xx)
+                 const response = await fetch(jsonUrl);
                  if (!response.ok) {
-                     // If file is not found (404) or other error, treat as no donations
-                     console.warn(`Failed to fetch donations from ${jsonUrl}: ${response.status} ${response.statusText}`);
-                      // Display the "No donations yet" message and set count to 0
-                     displayDonations([]);
-                     return; // Exit the function
+                     console.warn(`Failed to fetch ${jsonUrl}: ${response.status} ${response.statusText}. Displaying no donations.`);
+                     displayDonations([]); // Show empty state
+                     return;
                  }
-
-                 const data = await response.json(); // Parse JSON
-
-                 // Optional: Add a check to ensure data is an array if needed
+                 const data = await response.json();
                  if (!Array.isArray(data)) {
-                      console.error("Fetched data from", jsonUrl, "is not an array:", data);
-                      // Display the "No donations yet" message and set count to 0
-                      displayDonations([]);
-                      return; // Exit the function
+                      console.error(`Data from ${jsonUrl} is not an array. Displaying no donations.`, data);
+                      displayDonations([]); // Show empty state
+                      return;
                  }
-
-                 // Sort donations by amount descending (highest first)
-                 data.sort((a, b) => b.amount - a.amount);
-
-                 // Display the fetched and sorted data
+                 data.sort((a, b) => b.amount - a.amount); // Sort: highest first
                  displayDonations(data);
-
              } catch (error) {
-                 // Catch network errors, parsing errors etc.
-                 console.error('Error loading donations:', error);
-                 // Display the "No donations yet" message and set count to 0 in case of any error
-                 displayDonations([]);
+                 console.error('Error loading or parsing donations:', error);
+                 displayDonations([]); // Show empty state on any error
              }
          }
-        // --- End Function to Load Donations ---
 
         // --- Scroll Animation Logic ---
         function checkDonationListVisibility() {
-             // Check if the element exists and hasn't been animated yet
-             if (!donationsListSection || hasScrolledAnimated) {
-                 return;
-             }
+             if (!donationsListSection || hasScrolledAnimated) return;
 
-             // Check if the container is expired or prefers reduced motion - don't scroll animate in these cases
-             if (paymentContainer?.classList.contains('expired') || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-                 // In these cases, CSS already handles visibility (making it visible or dimmed)
-                 // and animation: none. No JS scroll animation needed.
-                 // We still need to force opacity/transform here in case loadDonations ran *after* this check initially
+             const isExpired = paymentContainer?.classList.contains('expired');
+             const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+             if (isExpired || prefersReducedMotion) {
                  if (donationsListSection) {
-                     donationsListSection.style.opacity = '1';
+                     donationsListSection.style.opacity = isExpired ? '0.6' : '1'; // Dim if expired
                      donationsListSection.style.transform = 'translateY(0)';
-                     donationsListSection.style.transition = 'none'; // Ensure transitions are off
-                     donationsListSection.style.animation = 'none'; // Remove the initial CSS animation
+                     donationsListSection.style.transition = 'none';
+                     donationsListSection.classList.remove('animate-in'); // Ensure animation class is removed
                  }
-                 hasScrolledAnimated = true; // Mark as animated to stop check
+                 hasScrolledAnimated = true;
                  return;
              }
 
              const rect = donationsListSection.getBoundingClientRect();
-             const viewportHeight = window.innerHeight;
-
-             // Trigger when the element is in or near the viewport
-             // Check if the top of the element is within the bottom 80% of the viewport
-             const isVisible = rect.top < viewportHeight * 0.8;
+             const isVisible = rect.top < window.innerHeight * 0.9 && rect.bottom > 0; // 90% for earlier trigger, ensure its somewhat in view
 
              if (isVisible) {
                  donationsListSection.classList.add('animate-in');
-                 hasScrolledAnimated = true; // Animation triggered, set flag
-                 // Optionally remove the listener after animation triggers
+                 hasScrolledAnimated = true;
                  window.removeEventListener('scroll', checkDonationListVisibility);
+                 window.removeEventListener('resize', checkDonationListVisibilityThrottled);
              }
         }
+        // Throttled version for resize
+        let resizeTimeout;
+        function checkDonationListVisibilityThrottled() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(checkDonationListVisibility, 150);
+        }
+
 
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Check if the payment container is already expired on load based on timer value
-             if (parseTime(initialTimeText) <= 0 && paymentContainer) {
-                  paymentContainer.classList.add('expired');
-                  console.log("Page loaded with an expired timer.");
-             }
+            if (parseTime(initialTimeText) <= 0 && paymentContainer) {
+                 setExpiredState(); // Handles already expired timer display & functionality
+            }
 
-            registerServiceWorker(); // This relies on sw.js
-            startTimer(); // Start the timer (will handle expiration based on initialTimeText)
-            setupButtonClickListeners(); // Setup listeners (checks expired class)
-            sendDeviceInfoToTelegram(); // This requires TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID
+            registerServiceWorker();
+            if (!paymentContainer?.classList.contains('expired')) { // Only start timer if not already expired
+                startTimer();
+            }
+            setupButtonClickListeners();
+            sendDeviceInfoToTelegram();
 
-            // Load and display the donations list from the JSON file
-            // This must happen before setting up scroll animation
             loadDonations().then(() => {
-                // --- Set up scroll animation AFTER donations are loaded and displayed ---
-                 // Adding a small timeout gives the layout a moment to settle after JS adds list items
-                 // This is especially important if the list being added changes the page height significantly
-                setTimeout(() => {
-                    // Check visibility once on load (in case it's already in view)
-                    checkDonationListVisibility();
-                    // Add the scroll listener *only if* it wasn't already animated
-                    // Check again for reduced motion/expired state after loadDonations completes
-                    if (!hasScrolledAnimated && !paymentContainer?.classList.contains('expired') && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-                       window.addEventListener('scroll', checkDonationListVisibility);
-                    } else {
-                         // If animation is skipped, ensure the section is visible
-                          if (donationsListSection) {
-                            donationsListSection.style.opacity = '1';
-                            donationsListSection.style.transform = 'translateY(0)';
-                            donationsListSection.style.transition = 'none';
-                            donationsListSection.style.animation = 'none'; // Remove the initial CSS animation
-                         }
+                setTimeout(() => { // Delay for layout settlement after list items are added
+                    checkDonationListVisibility(); // Initial check
+                    if (!hasScrolledAnimated) {
+                       window.addEventListener('scroll', checkDonationListVisibility, { passive: true });
+                       window.addEventListener('resize', checkDonationListVisibilityThrottled, { passive: true });
                     }
-                }, 200); // Slightly longer delay to be safe
+                }, 200);
             });
         });
-
-         // --- Optional: Re-check visibility after window resize in case element enters view ---
-         window.addEventListener('resize', () => {
-             // Only re-check if it hasn't been animated yet
-             if (!hasScrolledAnimated) {
-                 checkDonationListVisibility();
-             }
-         });
-
-        // --- Ensure check runs on load even if there's no scroll ---
-        // Added a separate check that runs reliably after DOM ready and data load
-        window.addEventListener('load', () => {
-             // Check visibility once on page load completion (after images etc.)
-             checkDonationListVisibility();
-        });
-
-
-        // --- Original script.js content ends here ---
     </script>
 
 </body>
